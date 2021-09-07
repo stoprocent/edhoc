@@ -5,8 +5,8 @@
 Network Working Group                                        G. Selander
 Internet-Draft                                       J.P. Preuß Mattsson
 Intended status: Standards Track                            F. Palombini
-Expires: 10 March 2022                                          Ericsson
-                                                        6 September 2021
+Expires: 11 March 2022                                          Ericsson
+                                                        7 September 2021
 
 
                Ephemeral Diffie-Hellman Over COSE (EDHOC)
@@ -50,7 +50,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 10 March 2022.
+   This Internet-Draft will expire on 11 March 2022.
 
 Copyright Notice
 
