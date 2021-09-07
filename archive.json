@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-09-05T01:03:31.921172+00:00",
+  "timestamp": "2021-09-07T00:59:24.261453+00:00",
   "repo": "lake-wg/edhoc",
   "labels": [
     {
@@ -62,6 +62,11 @@
       "name": "v-05",
       "description": "",
       "color": "d93f0b"
+    },
+    {
+      "name": "Close?",
+      "description": "",
+      "color": "E33AA3"
     }
   ],
   "issues": [
@@ -437,10 +442,12 @@
       "assignees": [
         "gselander"
       ],
-      "labels": [],
+      "labels": [
+        "Close?"
+      ],
       "body": "Extracted from https://arxiv.org/abs/2007.11427\r\nhttps://www.ietf.org/proceedings/108/slides/slides-108-lake-tamarin-study-of-edhoc-00\r\n\r\n\"Section 3.2 of the specification states that a parties are required to be configured with a policy restricting the set of peers an they are allowed to run EDHOC with.\"\r\n\r\n\"the initiator is not required to verify that the ID CRED R received in message 2 is the same as the one the application intended when initiating the EDHOC run\"\r\n\r\n\"the initiator [need] to match ID CRED R to the intended identity provided by the application\"\r\n\r\n\"the application must be able to instruct EDHOC to not accept the same identity in the next attempt\"\r\n",
       "createdAt": "2020-08-01T09:20:53Z",
-      "updatedAt": "2021-08-26T16:47:18Z",
+      "updatedAt": "2021-09-05T06:31:24Z",
       "closedAt": null,
       "comments": [
         {
@@ -1784,9 +1791,9 @@
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
-      "body": "as requested from interop 11/12:\r\n\r\n- [x] obsolete PSK test vectors\r\n- [x] add TH4 output\r\n- [x] add exporter, exporter outputs, keyupdate, to all test vectors\r\n- [x] add KEYSTREAM_2\r\n- [x] print out public keys.\r\n- [ ] add real certificates to test vectors - 0:CBOR native and DER (and possibly later 1:ASN.1 translated)\r\n- [ ] Add ciphersuites 2 and 3 to test vectors, ECDSA keys should print out full y coordinate\r\n- [ ] Add error message\r\n- [ ] Add message_4\r\n- [ ] Add message_1 C_1 dummy null byte\r\n- [ ] Change format to JSON\r\n- [ ] Change transcript hash calculation (If PR is merged)\r\n- [ ] Change connevtion id encoding (If PR is merged)",
+      "body": "as requested from interop:\r\n\r\n- [x] obsolete PSK test vectors\r\n- [x] add TH4 output\r\n- [x] add exporter, exporter outputs, keyupdate, to all test vectors\r\n- [x] add KEYSTREAM_2\r\n- [x] print out public keys.\r\n- [x] Add error message\r\n- [x] Add message_4\r\n- [x] Add ead\r\n- [x] Update test vectors to -10\r\n- [ ] add real certificates to test vectors - 0:CBOR native and DER (and possibly later 1:ASN.1 translated)\r\n- [ ] Add ciphersuites 2 and 3 to test vectors, ECDSA keys should print out full y coordinate\r\n- [ ] Change format to JSON\r\n",
       "createdAt": "2020-12-14T12:41:48Z",
-      "updatedAt": "2021-04-22T08:59:43Z",
+      "updatedAt": "2021-09-05T06:29:39Z",
       "closedAt": null,
       "comments": [
         {
@@ -1802,6 +1809,13 @@
           "body": "Thanks @TimothyClaeys, good point!",
           "createdAt": "2020-12-14T14:00:07Z",
           "updatedAt": "2020-12-14T14:00:07Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I have updated the list. The new test vectors add ead, error messages, and message_4 and aligns with -10.\r\n\r\nI have not added real certificates yet. But I made them a sequence 00 01 02 03 ...  to make it easy to see they are not real. The old one were random strings and several people tried to parse them",
+          "createdAt": "2021-09-05T06:29:03Z",
+          "updatedAt": "2021-09-05T06:29:03Z"
         }
       ]
     },
@@ -3127,7 +3141,7 @@
       "labels": [],
       "body": "We have gotten feedback that the test vectors should be in JSON intead (or in addition) of a text file. I plan to fix this. ",
       "createdAt": "2021-02-25T10:22:57Z",
-      "updatedAt": "2021-04-27T12:59:18Z",
+      "updatedAt": "2021-09-06T14:46:38Z",
       "closedAt": null,
       "comments": [
         {
@@ -3157,6 +3171,13 @@
           "body": "Do we need to compile somewhere the CBOR used to create this data? For example, that \"eph_key\" = {1: 1, -1: 4, -2: h' ... ', -4: h' ... '} in this case?\r\n\r\n(Section 3.5 already says:\r\n\"The ECDH ephemeral public keys are formatted as a COSE_Key of type EC2 or OKP according to Sections 7.1 and 7.2 of [I-D.ietf-cose-rfc8152bis-algs] \" but may not be obvious on first encounter with the test vector.)\r\n\r\n",
           "createdAt": "2021-04-27T12:59:18Z",
           "updatedAt": "2021-04-27T12:59:18Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I very quickly transformed my -10 test vectors to JSON (or almost JSON as JSON forbids a trailing comma.....)\r\n\r\nhttps://github.com/lake-wg/edhoc/tree/master/test-vectors-10-json\r\n\r\nI just quickly tried to convert my test vecors to JSON. I tried to somewhat align with Timothy, but there are differences. In my test vectors, names ending with _raw and not CBOR and everything else are CBOR sequences. \r\n\r\nHappy to change my JSON test vectors to any format implementors would want.",
+          "createdAt": "2021-09-06T13:41:25Z",
+          "updatedAt": "2021-09-06T14:46:38Z"
         }
       ]
     },
@@ -3450,10 +3471,12 @@
       "author": "chrysn",
       "authorAssociation": "NONE",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "Close?"
+      ],
       "body": "Given we're now moving towards that EDHOC needs to know the application (with its applicability statement), it would make sense to move the definition of the .well-known/edhoc resource over to @fpalombini's draft on EDHOC/OSCORE.\r\n\r\nThe general mechanisms of EDHOC-over-CoAP could stay here (which eg. say which corr to use, and which content format), but using it for OSCORE key extraction could be the exclusive user of .well-known/edhoc (which may get a different name in the course of this). Other applications would then be indicated with different paths.",
       "createdAt": "2021-03-04T16:23:53Z",
-      "updatedAt": "2021-08-26T16:44:39Z",
+      "updatedAt": "2021-09-05T06:31:25Z",
       "closedAt": null,
       "comments": [
         {
@@ -5441,10 +5464,12 @@
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "Close?"
+      ],
       "body": "The current definition of SUITES_I is that the Initiator can chose any truncation of the list of supported cipher suites as long as the selected cipher suite is included. This works and allows the Initiator to give the Responder information about the full list. This is however a bit complex and has led to misunderstandings of the test vectors where several people thought the test vectors were wrong.\r\n\r\ni.e. the following are all valid\r\n\r\n```\r\nSUITES_I = [6, 5, 6]\r\nSUITES_I = [6, 5, 6, 7]\r\nSUITES_I = [6, 5, 6, 7, 8]\r\n```\r\n\r\nI think we should simplify SUITES_I by mandating that the last suite in the list is the selected. This makes SUITES_I much easier to understand and lowers message size when an array is used. Giving the Responder info is not so important.\r\n\r\n`SUITES_I = [5, 6] `\r\n\r\nCDDL\r\n\r\n`SUITES_I : [ 2* suite ] / suite`",
       "createdAt": "2021-08-31T05:39:55Z",
-      "updatedAt": "2021-09-01T15:19:43Z",
+      "updatedAt": "2021-09-05T06:23:35Z",
       "closedAt": null,
       "comments": [
         {
@@ -5486,10 +5511,12 @@
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "Close?"
+      ],
       "body": "Current specification could give the impression that there is a single mac_length. But the mac length in message_2 and message_3 may be different.",
       "createdAt": "2021-08-31T15:00:31Z",
-      "updatedAt": "2021-09-03T07:04:17Z",
+      "updatedAt": "2021-09-05T06:23:35Z",
       "closedAt": null,
       "comments": [
         {
@@ -5510,10 +5537,12 @@
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "Close?"
+      ],
       "body": "The new definition of info in th ecurrent specification is.\r\n\r\n```\r\n   OKM = EDHOC-KDF( PRK, transcript_hash, label, context, length )\r\n       = Expand( PRK, info, length )\r\n\r\nwhere info is the CBOR encoding of\r\n\r\ninfo = [\r\n   edhoc_aead_id : int / tstr,\r\n   transcript_hash : bstr,\r\n   label : tstr,\r\n   * context : any,\r\n   length : uint,\r\n]\r\n```\r\n\r\nI noticed two problems with this while implementing.\r\n1. To create the array you need to parse context to see how many items it contains. \r\n2. Unless context is validated, length is not strictly defined (an attacker could create collisions)\r\n\r\nI suggest that info is changed to:\r\n\r\n```\r\ninfo = (\r\n   edhoc_aead_id : int / tstr,\r\n   transcript_hash : bstr,\r\n   label : tstr,\r\n   length : uint,\r\n   * context : any,\r\n)\r\n\r\n```\r\n\r\n",
       "createdAt": "2021-09-01T12:47:05Z",
-      "updatedAt": "2021-09-03T09:42:39Z",
+      "updatedAt": "2021-09-05T06:23:35Z",
       "closedAt": null,
       "comments": [
         {
@@ -5541,10 +5570,12 @@
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "Close?"
+      ],
       "body": "SUITES_R is a name. The type needs to be defined and the table changed. This can be done in PR #152 \r\n\r\n`suites = [ 2* suite ] / suite,`\r\n\r\n```\r\n   +----------+---------------+----------------------------------------+\r\n   | ERR_CODE | ERR_INFO Type | Description                            |\r\n   +==========+===============+========================================+\r\n   |        0 | any           | Success                                |\r\n   +----------+---------------+----------------------------------------+\r\n   |        1 | tstr          | Unspecified                            |\r\n   +----------+---------------+----------------------------------------+\r\n   |        2 | suites        | Wrong selected cipher suite            |\r\n   +----------+---------------+----------------------------------------+\r\n```",
       "createdAt": "2021-09-01T15:17:41Z",
-      "updatedAt": "2021-09-01T15:17:41Z",
+      "updatedAt": "2021-09-05T06:23:36Z",
       "closedAt": null,
       "comments": []
     },
@@ -5557,10 +5588,12 @@
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "Close?"
+      ],
       "body": "-08 contained a definition of CRED_x including an example when kid is used. -09 removed that example and replaces it with a RPK by value example.\r\n\r\nNow it seems like the most important use case `ID_CRED_x = { 4 : key_id_x }` is not well specified. This is the use case that leads to message_2 being 45 bytes. ",
       "createdAt": "2021-09-02T11:28:01Z",
-      "updatedAt": "2021-09-03T07:02:51Z",
+      "updatedAt": "2021-09-05T06:23:36Z",
       "closedAt": null,
       "comments": [
         {
@@ -5595,10 +5628,12 @@
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "Close?"
+      ],
       "body": "https://www.iana.org/assignments/cwt/cwt.xhtml",
       "createdAt": "2021-09-02T12:01:01Z",
-      "updatedAt": "2021-09-03T14:46:36Z",
+      "updatedAt": "2021-09-05T06:23:36Z",
       "closedAt": null,
       "comments": [
         {
