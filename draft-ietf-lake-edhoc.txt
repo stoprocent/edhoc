@@ -393,7 +393,7 @@ Table of Contents
    message_2, message_3) between Initiator and Responder, an optional
    fourth message (message_4), plus an error message.  EDHOC messages
    are CBOR Sequences [RFC8742].  Figure 3 illustrates an EDHOC message
-   flow thee messages.  The protocol elements in the figure are
+   flow with three messages.  The protocol elements in the figure are
    introduced in the following sections.  Message formatting and
    processing is specified in Section 5 and Section 6.  An
    implementation may support only Initiator or only Responder.
@@ -728,9 +728,9 @@ Table of Contents
       identities in the 'sub'(subject) claim of the CWT to determine if
       it is allowed to communicate with.
 
-   *  When PKI is not use (UCCS, self-signed certificate/CWT), the trust
-      anchor is the authentication key of the other party.  In this
-      case, the identity is typically directly associated to the
+   *  When PKI is not used (UCCS, self-signed certificate/CWT), the
+      trust anchor is the authentication key of the other party.  In
+      this case, the identity is typically directly associated to the
       authentication key of the other party.  For example, the name of
       the subject may be a canonical representation of the public key.
       Alternatively, if identities can be expressed in the form of
@@ -849,7 +849,7 @@ Table of Contents
 
    The following CCM cipher suites are for constrained IoT where message
    overhead is a very important factor.  Cipher suites 1 and 3 use a
-   larger tag length (128-bit) in the EDHOC than in the Application AEAD
+   larger tag length (128-bit) in EDHOC than in the Application AEAD
    algorithm (64-bit):
 
       0. ( 10, -16, 8, 4, -8, 10, -16 )
@@ -2088,7 +2088,7 @@ Table of Contents
    The hash algorithms SHA-1 and SHA-256/64 (SHA-256 truncated to
    64-bits) SHALL NOT be supported for use in EDHOC except for
    certificate identification with x5u and c5u.  Note that secp256k1 is
-   only defined for use with ECDSA and not for ECDH.  Note that many
+   only defined for use with ECDSA and not for ECDH.  Note that some
    COSE algorithms are marked as not recommended in the COSE IANA
    registry.
 
