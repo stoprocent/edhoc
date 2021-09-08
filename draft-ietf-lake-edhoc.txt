@@ -5,8 +5,8 @@
 Network Working Group                                        G. Selander
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                            F. Palombini
-Expires: 11 March 2022                                          Ericsson
-                                                        7 September 2021
+Expires: 12 March 2022                                          Ericsson
+                                                        8 September 2021
 
 
                Ephemeral Diffie-Hellman Over COSE (EDHOC)
@@ -50,7 +50,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 11 March 2022.
+   This Internet-Draft will expire on 12 March 2022.
 
 Copyright Notice
 
@@ -249,10 +249,10 @@ Table of Contents
                                          kid       x5t
                      ---------------------------------
                      message_1            37        37
-                     message_2            45       116
+                     message_2            45       115
                      message_3            19        90
                      ---------------------------------
-                     Total               101       243
+                     Total               101       242
                      =================================
 
                 Figure 1: Example of message sizes in bytes.
@@ -3466,17 +3466,17 @@ Appendix H.  Change Log
 Acknowledgments
 
    The authors want to thank Christian Amsuess, Alessandro Bruni,
-   Karthikeyan Bhargavan, Timothy Claeys, Martin Disch, Theis Groenbech
-   Petersen, Dan Harkins, Klaus Hartke, Russ Housley, Stefan Hristozov,
-   Alexandros Krontiris, Ilari Liusvaara, Karl Norrman, Salvador Perez,
-   Eric Rescorla, Michael Richardson, Thorvald Sahl Joergensen, Jim
-   Schaad, Carsten Schuermann, Ludwig Seitz, Stanislav Smyshlyaev,
-   Valery Smyslov, Peter van der Stok, Rene Struik, Vaishnavi
-   Sundararajan, Erik Thormarker, Marco Tiloca, Michel Veillette, and
-   Malisa Vucinic for reviewing and commenting on intermediate versions
-   of the draft.  We are especially indebted to Jim Schaad for his
-   continuous reviewing and implementation of different versions of the
-   draft.
+   Karthikeyan Bhargavan, Timothy Claeys, Martin Disch, Loic Ferreira,
+   Theis Groenbech Petersen, Dan Harkins, Klaus Hartke, Russ Housley,
+   Stefan Hristozov, Alexandros Krontiris, Ilari Liusvaara, Karl
+   Norrman, Salvador Perez, Eric Rescorla, Michael Richardson, Thorvald
+   Sahl Joergensen, Jim Schaad, Carsten Schuermann, Ludwig Seitz,
+   Stanislav Smyshlyaev, Valery Smyslov, Peter van der Stok, Rene
+   Struik, Vaishnavi Sundararajan, Erik Thormarker, Marco Tiloca, Michel
+   Veillette, and Malisa Vucinic for reviewing and commenting on
+   intermediate versions of the draft.  We are especially indebted to
+   Jim Schaad for his continuous reviewing and implementation of
+   different versions of the draft.
 
    Work on this document has in part been supported by the H2020 project
    SIFIS-Home (grant agreement 952652).
