@@ -392,16 +392,17 @@ Table of Contents
    The EDHOC protocol consists of three mandatory messages (message_1,
    message_2, message_3) between Initiator and Responder, an optional
    fourth message (message_4), plus an error message.  EDHOC messages
-   are CBOR Sequences [RFC8742], see Figure 3.  The protocol elements in
-   the figure are introduced in the following sections.  Message
-   formatting and processing is specified in Section 5 and Section 6.
-   An implementation may support only Initiator or only Responder.
+   are CBOR Sequences [RFC8742].  Figure 3 illustrates an EDHOC message
+   flow thee messages.  The protocol elements in the figure are
+   introduced in the following sections.  Message formatting and
+   processing is specified in Section 5 and Section 6.  An
+   implementation may support only Initiator or only Responder.
 
-   Application data is protected using the agreed application algorithms
-   (AEAD, hash) in the selected cipher suite (see Section 3.6) and the
-   application can make use of the established connection identifiers
-   C_I and C_R (see Section 3.3).  EDHOC may be used with the media type
-   application/edhoc defined in Section 8.
+   Application data may protected using the agreed application
+   algorithms (AEAD, hash) in the selected cipher suite (see
+   Section 3.6) and the application can make use of the established
+   connection identifiers C_I and C_R (see Section 3.3).  EDHOC may be
+   used with the media type application/edhoc defined in Section 8.
 
    The Initiator can derive symmetric application keys after creating
    EDHOC message_3, see Section 4.3.  Protected application data can
@@ -578,8 +579,8 @@ Table of Contents
    settings it is not necessary to transport the authentication
    credential over constrained links.  It may, for example, be pre-
    provisioned or acquired out-of-band over less constrained links.
-   ID_CRED_x coincides with the authentication credential CRED_x in case
-   it is transported, or else contains a reference to the authentication
+   ID_CRED_x contains the authentication credential CRED_x in case it is
+   transported, or else contains a reference to the authentication
    credential to facilitate its retrieval (see Section 3.5.4).
 
    The choice of authentication credential also depends on the trust
@@ -668,8 +669,8 @@ Table of Contents
    encodings as specified in Section 4.2.1 of [RFC8949].
 
    An example of CRED_x being a UCCS in bytewise lexicographic order
-   containing an X25519 static Diffie-Hellman key and where the parties
-   have agreed on an EUI-64 identity is shown below:
+   containing an X25519 static Diffie-Hellman key and an EUI-64 identity
+   is shown below:
 
    {                                              /UCCS/
      2 : "42-50-31-FF-EF-37-32-39",               /sub/
@@ -727,15 +728,15 @@ Table of Contents
       identities in the 'sub'(subject) claim of the CWT to determine if
       it is allowed to communicate with.
 
-   *  When public keys are used but not with a PKI (UCCS, self-signed
-      certificate/CWT), the trust anchor is the authentication key of
-      the other party.  In this case, the identity is typically directly
-      associated to the authentication key of the other party.  For
-      example, the name of the subject may be a canonical representation
-      of the public key.  Alternatively, if identities can be expressed
-      in the form of unique subject names assigned to public keys, then
-      a binding to identity can be achieved by including both public key
-      and associated subject name in the protocol message computation:
+   *  When PKI is not use (UCCS, self-signed certificate/CWT), the trust
+      anchor is the authentication key of the other party.  In this
+      case, the identity is typically directly associated to the
+      authentication key of the other party.  For example, the name of
+      the subject may be a canonical representation of the public key.
+      Alternatively, if identities can be expressed in the form of
+      unique subject names assigned to public keys, then a binding to
+      identity can be achieved by including both public key and
+      associated subject name in the protocol message computation:
       CRED_I or CRED_R may be a self-signed certificate/CWT or UCCS
       containing the authentication key and the subject name, see
       Section 3.5.2.  Before running EDHOC, each endpoint needs a
@@ -848,8 +849,8 @@ Table of Contents
 
    The following CCM cipher suites are for constrained IoT where message
    overhead is a very important factor.  Cipher suites 1 and 3 use a
-   larger tag length (128-bit) in the EDHOC AEAD algorithm than the
-   Application AEAD algorithm (64-bit):
+   larger tag length (128-bit) in the EDHOC than in the Application AEAD
+   algorithm (64-bit):
 
       0. ( 10, -16, 8, 4, -8, 10, -16 )
          (AES-CCM-16-64-128, SHA-256, 8, X25519, EdDSA,
@@ -935,10 +936,10 @@ Table of Contents
 
    EDHOC allows opaque external authorization data (EAD) to be sent in
    the EDHOC messages.  External authorization data sent in message_1
-   (EAD_1) or message_2 (EAD_2) must be considered unprotected by EDHOC,
-   see Section 7.4.  External authorization data sent in message_3
-   (EAD_3) or message_4 (EAD_4) is protected between Initiator and
-   Responder.
+   (EAD_1) or message_2 (EAD_2) should be considered unprotected by
+   EDHOC, see Section 7.4.  External authorization data sent in
+   message_3 (EAD_3) or message_4 (EAD_4) is protected between Initiator
+   and Responder.
 
    External authorization data is a CBOR sequence (see Appendix C.1)
    consisting of one or more (type, ext_authz_data) pairs as defined
@@ -1193,9 +1194,9 @@ Table of Contents
    *  MAC_3 is derived using the transcript hash TH_3 and the
       pseudorandom key PRK_4x3m.
 
-   KEYSTREAM_2, K_3ae, and IV_3ae do not use a context.  MAC_2 and MAC_3
-   use context as defined in Section 5.3.2 and Section 5.4.2,
-   respectively.
+   KEYSTREAM_2, K_3ae, and IV_3ae use an empty byte string h'' as
+   context.  MAC_2 and MAC_3 use context as defined in Section 5.3.2 and
+   Section 5.4.2, respectively.
 
 4.3.  EDHOC-Exporter
 
@@ -1246,7 +1247,7 @@ Table of Contents
    This section specifies formatting of the messages and processing
    steps.  Error messages are specified in Section 6.
 
-   An EDHOC message is encoded as a sequence of CBOR data (CBOR
+   An EDHOC message is encoded as a sequence of CBOR data items (CBOR
    Sequence, [RFC8742]).  Additional optimizations are made to reduce
    message overhead.
 
@@ -2046,7 +2047,7 @@ Table of Contents
    attacks.  For this reason, the ephemeral keys MUST NOT be reused, and
    both parties SHALL generate fresh random ephemeral key pairs.
 
-   As discussed, the [SIGMA], the encryption of message_2 does only need
+   As discussed in [SIGMA], the encryption of message_2 does only need
    to protect against passive attacker as active attackers can always
    get the Responders identity by sending their own message_1.  EDHOC
    uses the Expand function (typically HKDF-Expand) as a binary additive
@@ -2071,12 +2072,12 @@ Table of Contents
    than one cipher suite.  Existing devices can be expected to support
    either ECDSA or EdDSA.  To enable as much interoperability as we can
    reasonably achieve, less constrained devices SHOULD implement both
-   cipher suite 0 (AES-CCM-16-64-128, SHA-256, X25519, EdDSA, AES-CCM-
-   16-64-128, SHA-256) and cipher suite 2 (AES-CCM-16-64-128, SHA-256,
-   P-256, ES256, AES-CCM-16-64-128, SHA-256).  Constrained endpoints
-   SHOULD implement cipher suite 0 or cipher suite 2.  Implementations
-   only need to implement the algorithms needed for their supported
-   methods.
+   cipher suite 0 (AES-CCM-16-64-128, SHA-256, 8, X25519, EdDSA, AES-
+   CCM-16-64-128, SHA-256) and cipher suite 2 (AES-CCM-16-64-128, SHA-
+   256, 8, P-256, ES256, AES-CCM-16-64-128, SHA-256).  Constrained
+   endpoints SHOULD implement cipher suite 0 or cipher suite 2.
+   Implementations only need to implement the algorithms needed for
+   their supported methods.
 
    When using private cipher suite or registering new cipher suites, the
    choice of key length used in the different algorithms needs to be
@@ -2084,10 +2085,12 @@ Table of Contents
    certificates, EDHOC, and the protection of application data.  The
    Initiator and the Responder should enforce a minimum security level.
 
-   The hash algorithms SHA-1 and SHA-256/64 (256-bit Hash truncated to
+   The hash algorithms SHA-1 and SHA-256/64 (SHA-256 truncated to
    64-bits) SHALL NOT be supported for use in EDHOC except for
    certificate identification with x5u and c5u.  Note that secp256k1 is
-   only defined for use with ECDSA and not for ECDH.
+   only defined for use with ECDSA and not for ECDH.  Note that many
+   COSE algorithms are marked as not recommended in the COSE IANA
+   registry.
 
 7.4.  Unprotected Data
 
