@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-09-07T00:59:24.261453+00:00",
+  "timestamp": "2021-09-09T01:04:53.169095+00:00",
   "repo": "lake-wg/edhoc",
   "labels": [
     {
@@ -5265,10 +5265,12 @@
       "author": "chrysn",
       "authorAssociation": "NONE",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "Close?"
+      ],
       "body": "Quoting main branch:\r\n\r\n> The EAD fields [...] special considerations need to be made such that a) it does not violate security, privacy etc. requirements of the service which uses this data, and b) it does not violate the security properties of EDHOC.\r\n\r\nI see how an application developer would take a into account, but I think that for b, it'd help to give concrete pointers on what not to do. (Right now, other than \"putting anything in there that's picked out of the EDHOC engine\", I don't have any clue as to what could endanger EDHOC here).",
       "createdAt": "2021-07-29T19:31:44Z",
-      "updatedAt": "2021-08-26T16:38:11Z",
+      "updatedAt": "2021-09-07T11:57:28Z",
       "closedAt": null,
       "comments": [
         {
@@ -5726,7 +5728,7 @@
       "labels": [],
       "body": "ID_CRED_x are COSE header maps and everything with them follows from COSE. The only thing EDHOC adds is to define the format of CRED_x.\r\n\r\nThis is not clear in the current version of the draft. The term \"COSE header map\" has disappeared and it is not clear that the quite long section on ID_CRED_x are just examples of COSE and not new specification.\r\n\r\nCDDL for ID_CRED_x should be added. They are of type header_map defined in the COSE RFC.\r\n",
       "createdAt": "2021-09-04T08:24:45Z",
-      "updatedAt": "2021-09-04T08:47:12Z",
+      "updatedAt": "2021-09-08T06:30:48Z",
       "closedAt": null,
       "comments": [
         {
@@ -5735,8 +5737,47 @@
           "body": "We should probably add CDDL for CRED_R as well. CRED_R is in general any as it needs to support any future header parameters COSE defined for header_map.\r\n\r\nFor the currently defined credentials\r\n\r\n```\r\nCRED_x = bstr / map / COSE_Messages / C509Certificate\r\n```\r\n\r\n```\r\nx509      bstr\r\nuccs      map\r\ncwt        COSE_Messages\r\nc509     C509Certificate\r\n```\r\n\r\nThe draft need to say something about tags. Is both tagged and untagged allowed in CRED_X?\r\n\r\nCOSE_Messages = COSE_Untagged_Message / COSE_Tagged_Message\r\n\r\n",
           "createdAt": "2021-09-04T08:47:12Z",
           "updatedAt": "2021-09-04T08:47:12Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The mapping from a a COSE header map to a credential or set of credentials is handled by COSE. Note that a COSE header map can contain several header parameters\r\n\r\n```\r\n{ x5u, x5t }\r\n{ kid, kid_context }\r\n{ crit [ c5u ] }\r\n{ kid, c5t }\r\n```\r\n\r\nEDHOC needs to provide a mapping from the credential or set of credentials (e.g. chain, bag, etc. ) to CRED_R. The mapping needs to be equal on both sides. We would like EDHOC to as automatically as posibly support new header parameters and credential types.\r\n\r\nCurrently the COSE header parameters can identify the following credentials.\r\n\r\nBy reference\r\n\r\n```\r\nCOSE_Key\r\nCOSE_Key in an UCCS\r\nCOSE_Key in an CWT\r\nx509 single certificate\r\nx509 chain or bag\r\nc509 single certificate\r\nc509 chain or bag\r\n```\r\n\r\nBy value\r\n\r\n```\r\nUCCS\r\nCWT\r\nx509 single certificate\r\nx509 chain or bag\r\nc509 single certificate\r\nc509 chain or bag\r\n```\r\n\r\nMost of the mapping to CRED_R is currently soft or not existing. It need to be specified exactly. If the parties to different mapping EDHOC will fail.\r\n\r\n- For x509 the solution is to wrap the end-entity DER certificate in a bstr.\r\n- For c509 the solution is to take the end-entity C509Certificate structure\r\n- CWT and UCCS can be tagged and untagged. This might be fine for \"by value\" but might create problems for \"by reference\" which is the main focus of EDHOC. Should EDHOC leave this to the application? Or do we need to handle situation where one of the parties have stored a CWT with an added tag.....\r\n- \"Raw\" COSE_Keys (not inside a CWT or UCSS). Are they supported or not or is UCCS only the way to go? Most if not all COSE implementations have support for raw COSE keys.\r\n- Raw COSE_Keys and UCCS where not really designed to be MACed. Can we expect that one of the parties to add things to the CBOR map?\r\n\r\n```\r\n       {                                      /COSE_Key/\r\n         1 : 1,                                   /kty/\r\n         2 : 0,                                   /kid/\r\n        -1 : 4,                                   /crv/\r\n        -2 : h'b1a3e89460e88d3a8d54211dc95f0b90   /x/\r\n               3ff205eb71912d6db8f4af980d2db83a',\r\n        -65537 : \"Note to self: This is the key to my connected toaster\"\r\n       }\r\n\r\n```\r\n\r\n\r\n",
+          "createdAt": "2021-09-08T06:26:00Z",
+          "updatedAt": "2021-09-08T06:30:48Z"
         }
       ]
+    },
+    {
+      "number": 162,
+      "id": "MDU6SXNzdWU5OTA3NDcxNzI=",
+      "title": "COSE CWT and UCCS header parameters - tagged, untagged, or both",
+      "url": "https://github.com/lake-wg/edhoc/issues/162",
+      "state": "OPEN",
+      "author": "emanjon",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The IANA section currectly specified that CWT can be sent tagged or untagged while UCCS can only be sent untagged. That is probably not how it should be.",
+      "createdAt": "2021-09-08T06:04:04Z",
+      "updatedAt": "2021-09-08T06:04:04Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 163,
+      "id": "MDU6SXNzdWU5OTA5OTU5MTg=",
+      "title": "Align exporter labels",
+      "url": "https://github.com/lake-wg/edhoc/issues/163",
+      "state": "OPEN",
+      "author": "emanjon",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The 4 labels use different styles. Should probably align them in -11.\r\n\r\n```\r\n   Label: EDHOC_message_4_Key\r\n   Label: EDHOC_message_4_Nonce\r\n   Label: OSCORE Master Secret\r\n   Label: OSCORE Master Salt\r\n\r\n```",
+      "createdAt": "2021-09-08T10:43:56Z",
+      "updatedAt": "2021-09-08T10:43:56Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
