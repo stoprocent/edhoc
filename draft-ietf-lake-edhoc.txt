@@ -100,31 +100,32 @@ Table of Contents
      6.1.  Success
      6.2.  Unspecified
      6.3.  Wrong Selected Cipher Suite
-   7.  Security Considerations
-     7.1.  Security Properties
-     7.2.  Cryptographic Considerations
-     7.3.  Cipher Suites and Cryptographic Algorithms
-     7.4.  Unprotected Data
-     7.5.  Denial-of-Service
-     7.6.  Implementation Considerations
-   8.  IANA Considerations
-     8.1.  EDHOC Exporter Label Registry
-     8.2.  EDHOC Cipher Suites Registry
-     8.3.  EDHOC Method Type Registry
-     8.4.  EDHOC Error Codes Registry
-     8.5.  EDHOC External Authorization Data Registry
-     8.6.  COSE Header Parameters Registry
-     8.7.  COSE Header Parameters Registry
-     8.8.  COSE Key Common Parameters Registry
-     8.9.  CWT Confirmation Methods Registry
-     8.10. The Well-Known URI Registry
-     8.11. Media Types Registry
-     8.12. CoAP Content-Formats Registry
-     8.13. Resource Type (rt=) Link Target Attribute Values Registry
-     8.14. Expert Review Instructions
-   9.  References
-     9.1.  Normative References
-     9.2.  Informative References
+   7.  Mandatory-to-Implement Compliance Requirements
+   8.  Security Considerations
+     8.1.  Security Properties
+     8.2.  Cryptographic Considerations
+     8.3.  Cipher Suites and Cryptographic Algorithms
+     8.4.  Unprotected Data
+     8.5.  Denial-of-Service
+     8.6.  Implementation Considerations
+   9.  IANA Considerations
+     9.1.  EDHOC Exporter Label Registry
+     9.2.  EDHOC Cipher Suites Registry
+     9.3.  EDHOC Method Type Registry
+     9.4.  EDHOC Error Codes Registry
+     9.5.  EDHOC External Authorization Data Registry
+     9.6.  COSE Header Parameters Registry
+     9.7.  COSE Header Parameters Registry
+     9.8.  COSE Key Common Parameters Registry
+     9.9.  CWT Confirmation Methods Registry
+     9.10. The Well-Known URI Registry
+     9.11. Media Types Registry
+     9.12. CoAP Content-Formats Registry
+     9.13. Resource Type (rt=) Link Target Attribute Values Registry
+     9.14. Expert Review Instructions
+   10. References
+     10.1.  Normative References
+     10.2.  Informative References
    Appendix A.  Use with OSCORE and Transfer over CoAP
      A.1.  Selecting EDHOC Connection Identifier
      A.2.  Deriving the OSCORE Security Context
@@ -226,7 +227,7 @@ Table of Contents
    from the lightweight properties of the protocol.  EDHOC could e.g.,
    be run when a device connects for the first time, or to establish
    fresh keys which are not revealed by a later compromise of the long-
-   term keys.  Further security properties are described in Section 7.1.
+   term keys.  Further security properties are described in Section 8.1.
 
    EDHOC enables the reuse of the same lightweight primitives as OSCORE:
    CBOR for encoding, COSE for cryptography, and CoAP for transport.  By
@@ -399,14 +400,13 @@ Table of Contents
    flow with the optional fourth message as well as the content of each
    message.  The protocol elements in the figure are introduced in the
    following sections.  Message formatting and processing is specified
-   in Section 5 and Section 6.  An implementation may support only
-   Initiator or only Responder.
+   in Section 5 and Section 6.
 
    Application data may protected using the agreed application
    algorithms (AEAD, hash) in the selected cipher suite (see
    Section 3.6) and the application can make use of the established
    connection identifiers C_I and C_R (see Section 3.3).  EDHOC may be
-   used with the media type application/edhoc defined in Section 8.
+   used with the media type application/edhoc defined in Section 9.
 
    The Initiator can derive symmetric application keys after creating
    EDHOC message_3, see Section 4.3.  Protected application data can
@@ -441,9 +441,8 @@ Table of Contents
    corresponds to the case outlined in Section 2 where both Initiator
    and Responder authenticate with signature keys.)
 
-   An implementation may support only a single method.  The Initiator
-   and the Responder need to have agreed on a single method to be used
-   for EDHOC, see Section 3.9.
+   The Initiator and the Responder need to have agreed on a single
+   method to be used for EDHOC, see Section 3.9.
 
    +-------+-------------------+-------------------+-------------------+
    | Value | Initiator         | Responder         | Reference         |
@@ -797,7 +796,7 @@ Table of Contents
    [I-D.ietf-cose-cbor-encoded-cert] and [I-D.ietf-cose-x509].
 
    Credentials of type CWT and UCCS are transported with the COSE header
-   parameters registered in Section 8.6:
+   parameters registered in Section 9.6:
 
    *  ID_CRED_x = { TBD1 : CWT }, for x = I or R,
 
@@ -816,7 +815,7 @@ Table of Contents
       R.
 
    Note that 'kid' is extended to support int values to allow more one-
-   byte identifiers (see Section 8.7 and Section 8.8) which may be
+   byte identifiers (see Section 9.7 and Section 9.8) which may be
    useful in many scenarios since constrained devices only have a few
    keys.
 
@@ -851,7 +850,7 @@ Table of Contents
 
    EDHOC can be used with all algorithms and curves defined for COSE.
    Implementation can either use one of the pre-defined cipher suites
-   (Section 8.2) or use any combination of COSE algorithms and
+   (Section 9.2) or use any combination of COSE algorithms and
    parameters to define their own private cipher suite.  Private cipher
    suites can be identified with any of the four values -24, -23, -22,
    -21.
@@ -946,7 +945,7 @@ Table of Contents
    EDHOC allows opaque external authorization data (EAD) to be sent in
    the EDHOC messages.  External authorization data sent in message_1
    (EAD_1) or message_2 (EAD_2) should be considered unprotected by
-   EDHOC, see Section 7.4.  External authorization data sent in
+   EDHOC, see Section 8.4.  External authorization data sent in
    message_3 (EAD_3) or message_4 (EAD_4) is protected between Initiator
    and Responder.
 
@@ -961,7 +960,7 @@ Table of Contents
 
    where ext_authz_data is authorization related data defined in a
    separate specification and its type is an int.  There is a register
-   for different types of ext_authz_data, see Section 8.5.
+   for different types of ext_authz_data, see Section 9.5.
 
    The EAD fields of EDHOC are not intended for generic application
    data.  Since data carried in EAD_1 and EAD_2 fields may not be
@@ -1216,7 +1215,7 @@ Table of Contents
         = EDHOC-KDF(PRK_4x3m, TH_4, label, context, length)
 
    where label is a registered tstr from the EDHOC Exporter Label
-   registry (Section 8.1), context is a bstr defined by the application,
+   registry (Section 9.1), context is a bstr defined by the application,
    and length is a uint defined by the application.  The (label,
    context) pair must be unique, i.e., a (label, context) MUST NOT be
    used for two different purposes.  However an application can re-
@@ -1249,7 +1248,7 @@ Table of Contents
    are no short cycles.  The Initiator and the Responder need to agree
    on the nonce, which can e.g., be a counter or a random number.  While
    the KeyUpdate method provides forward secrecy it does not give as
-   strong security properties as re-running EDHOC, see Section 7.
+   strong security properties as re-running EDHOC, see Section 8.
 
 5.  Message Formatting and Processing
 
@@ -1288,7 +1287,7 @@ Table of Contents
        provided by the transport, see Section 3.4.  If there is no
        protocol state, in the case of message_1, a new protocol state is
        created.  The Responder endpoint needs to make use of available
-       Denial-of-Service mitigation (Section 7.5).
+       Denial-of-Service mitigation (Section 8.5).
 
    3.  If the message received is an error message, then process
        according to Section 6, else process as the expected next message
@@ -1389,7 +1388,7 @@ Table of Contents
    error message back, formatted as defined in Section 6, and the
    session MUST be discontinued.  Sending error messages is essential
    for debugging but MAY e.g., be skipped due to denial-of-service
-   reasons, see Section 7.
+   reasons, see Section 8.
 
 5.3.  EDHOC Message 2
 
@@ -1510,7 +1509,7 @@ Table of Contents
    error message back, formatted as defined in Section 6.  Sending error
    messages is essential for debugging but MAY e.g., be skipped if a
    session cannot be found or due to denial-of-service reasons, see
-   Section 7.  If an error message is sent, the session MUST be
+   Section 8.  If an error message is sent, the session MUST be
    discontinued.
 
 5.4.  EDHOC Message 3
@@ -1656,7 +1655,7 @@ Table of Contents
    error message back, formatted as defined in Section 6.  Sending error
    messages is essential for debugging but MAY e.g., be skipped if a
    session cannot be found or due to denial-of-service reasons, see
-   Section 7.  If an error message is sent, the session MUST be
+   Section 8.  If an error message is sent, the session MUST be
    discontinued.
 
    After verifying message_3, the Responder is assured that the
@@ -1746,7 +1745,7 @@ Table of Contents
    error message back, formatted as defined in Section 6.  Sending error
    messages is essential for debugging but MAY e.g., be skipped if a
    session cannot be found or due to denial-of-service reasons, see
-   Section 7.  If an error message is sent, the session MUST be
+   Section 8.  If an error message is sent, the session MUST be
    discontinued.
 
 6.  Error Handling
@@ -1921,9 +1920,32 @@ Table of Contents
    message_2 containing the transcript hash TH_2 will fail and the
    Initiator will discontinue the protocol.
 
-7.  Security Considerations
+7.  Mandatory-to-Implement Compliance Requirements
 
-7.1.  Security Properties
+   An implementation may support only Initiator or only Responder.  An
+   implementation may support only a single method.  None of the methods
+   are mandatory-to-implement.  Implementations MUST support the EDHOC-
+   Exporter.  Implementations SHOULD support EDHOC-KeyUpdate.
+   Implementaions MAY support message_4.
+
+   Editor's note: Is any COSE header parameters (kid, cwt, uccs, x5t,
+   c5c, etc. ) MTI?  Editor's note: Is any credential type (UCCS, CWT,
+   X.509, C509) MTI?  Editor's note: Is support of EAD MTI?
+
+   For many constrained IoT devices it is problematic to support more
+   than one cipher suite.  Existing devices can be expected to support
+   either ECDSA or EdDSA.  To enable as much interoperability as we can
+   reasonably achieve, less constrained devices SHOULD implement both
+   cipher suite 0 (AES-CCM-16-64-128, SHA-256, 8, X25519, EdDSA, AES-
+   CCM-16-64-128, SHA-256) and cipher suite 2 (AES-CCM-16-64-128, SHA-
+   256, 8, P-256, ES256, AES-CCM-16-64-128, SHA-256).  Constrained
+   endpoints SHOULD implement cipher suite 0 or cipher suite 2.
+   Implementations only need to implement the algorithms needed for
+   their supported methods.
+
+8.  Security Considerations
+
+8.1.  Security Properties
 
    EDHOC inherits its security properties from the theoretical SIGMA-I
    protocol [SIGMA].  Using the terminology from [SIGMA], EDHOC provides
@@ -2039,7 +2061,7 @@ Table of Contents
    [Bruni18] and the specification has been updated based on the
    analysis.
 
-7.2.  Cryptographic Considerations
+8.2.  Cryptographic Considerations
 
    The SIGMA protocol requires that the encryption of message_3 provides
    confidentiality against active attackers and EDHOC message_4 relies
@@ -2075,18 +2097,7 @@ Table of Contents
    of [SP-800-56A].  For secp256r1, secp384r1, and secp521r1, at least
    partial public-key validation MUST be done.
 
-7.3.  Cipher Suites and Cryptographic Algorithms
-
-   For many constrained IoT devices it is problematic to support more
-   than one cipher suite.  Existing devices can be expected to support
-   either ECDSA or EdDSA.  To enable as much interoperability as we can
-   reasonably achieve, less constrained devices SHOULD implement both
-   cipher suite 0 (AES-CCM-16-64-128, SHA-256, 8, X25519, EdDSA, AES-
-   CCM-16-64-128, SHA-256) and cipher suite 2 (AES-CCM-16-64-128, SHA-
-   256, 8, P-256, ES256, AES-CCM-16-64-128, SHA-256).  Constrained
-   endpoints SHOULD implement cipher suite 0 or cipher suite 2.
-   Implementations only need to implement the algorithms needed for
-   their supported methods.
+8.3.  Cipher Suites and Cryptographic Algorithms
 
    When using private cipher suite or registering new cipher suites, the
    choice of key length used in the different algorithms needs to be
@@ -2101,7 +2112,7 @@ Table of Contents
    COSE algorithms are marked as not recommended in the COSE IANA
    registry.
 
-7.4.  Unprotected Data
+8.4.  Unprotected Data
 
    The Initiator and the Responder must make sure that unprotected data
    and metadata do not reveal any sensitive information.  This also
@@ -2116,7 +2127,7 @@ Table of Contents
    unauthenticated data does not trigger any harmful actions.  In
    particular, this applies to EAD_1 and error messages.
 
-7.5.  Denial-of-Service
+8.5.  Denial-of-Service
 
    EDHOC itself does not provide countermeasures against Denial-of-
    Service attacks.  By sending a number of new or replayed message_1 an
@@ -2134,7 +2145,7 @@ Table of Contents
    attacker and ignore it without sending an error message or
    discontinuing the session.
 
-7.6.  Implementation Considerations
+8.6.  Implementation Considerations
 
    The availability of a secure random number generator is essential for
    the security of EDHOC.  If no true random number generator is
@@ -2220,9 +2231,9 @@ Table of Contents
    of code and data in the Rich Execution Environment (REE) by
    validating the REE image.
 
-8.  IANA Considerations
+9.  IANA Considerations
 
-8.1.  EDHOC Exporter Label Registry
+9.1.  EDHOC Exporter Label Registry
 
    IANA has created a new registry titled "EDHOC Exporter Label" under
    the new group name "Ephemeral Diffie-Hellman Over COSE (EDHOC)".  The
@@ -2246,7 +2257,7 @@ Table of Contents
    Description: Derived OSCORE Master Salt
    Reference: [[this document]]
 
-8.2.  EDHOC Cipher Suites Registry
+9.2.  EDHOC Cipher Suites Registry
 
    IANA has created a new registry titled "EDHOC Cipher Suites" under
    the new group name "Ephemeral Diffie-Hellman Over COSE (EDHOC)".  The
@@ -2329,7 +2340,7 @@ Table of Contents
          ChaCha20/Poly1305, SHAKE256
    Reference: [[this document]]
 
-8.3.  EDHOC Method Type Registry
+9.3.  EDHOC Method Type Registry
 
    IANA has created a new registry entitled "EDHOC Method Type" under
    the new group name "Ephemeral Diffie-Hellman Over COSE (EDHOC)".  The
@@ -2338,7 +2349,7 @@ Table of Contents
    integer and the other columns are text strings.  The initial contents
    of the registry are shown in Figure 4.
 
-8.4.  EDHOC Error Codes Registry
+9.4.  EDHOC Error Codes Registry
 
    IANA has created a new registry entitled "EDHOC Error Codes" under
    the new group name "Ephemeral Diffie-Hellman Over COSE (EDHOC)".  The
@@ -2348,7 +2359,7 @@ Table of Contents
    Description is a text string.  The initial contents of the registry
    are shown in Figure 6.
 
-8.5.  EDHOC External Authorization Data Registry
+9.5.  EDHOC External Authorization Data Registry
 
    IANA has created a new registry entitled "EDHOC External
    Authorization Data" under the new group name "Ephemeral Diffie-
@@ -2357,7 +2368,7 @@ Table of Contents
    Reference, where Value is an integer and the other columns are text
    strings.
 
-8.6.  COSE Header Parameters Registry
+9.6.  COSE Header Parameters Registry
 
    IANA has registered the following entries in the "COSE Header
    Parameters" registry under the group name "CBOR Object Signing and
@@ -2376,7 +2387,7 @@ Table of Contents
    |           |       |                | Set (UCCS)                |
    +-----------+-------+----------------+---------------------------+
 
-8.7.  COSE Header Parameters Registry
+9.7.  COSE Header Parameters Registry
 
    IANA has extended the Value Type of 'kid' in the "COSE Header
    Parameters" registry under the group name "CBOR Object Signing and
@@ -2391,7 +2402,7 @@ Table of Contents
    |      |       |            |                | [[This document]] |
    +------+-------+------------+----------------+-------------------+
 
-8.8.  COSE Key Common Parameters Registry
+9.8.  COSE Key Common Parameters Registry
 
    IANA has extended the Value Type of 'kid' in the "COSE Key Common
    Parameters" registry under the group name "CBOR Object Signing and
@@ -2408,7 +2419,7 @@ Table of Contents
    |      |       |            | in message     |                   |
    +------+-------+------------+----------------+-------------------+
 
-8.9.  CWT Confirmation Methods Registry
+9.9.  CWT Confirmation Methods Registry
 
    IANA has extended the Value Type of 'kid' in the "CWT Confirmation
    Methods" registry under the group name "CBOR Web Token (CWT) Claims"
@@ -2432,7 +2443,7 @@ Table of Contents
    *  Specification Document(s): Section 3.4 of RFC 8747 [[This
       document]]
 
-8.10.  The Well-Known URI Registry
+9.10.  The Well-Known URI Registry
 
    IANA has added the well-known URI "edhoc" to the "Well-Known URIs"
    registry under the group name "Well-Known URIs".
@@ -2445,7 +2456,7 @@ Table of Contents
 
    *  Related information: None
 
-8.11.  Media Types Registry
+9.11.  Media Types Registry
 
    IANA has added the media type "application/edhoc" to the "Media
    Types" registry.
@@ -2489,7 +2500,7 @@ Table of Contents
 
    *  Change Controller: IESG
 
-8.12.  CoAP Content-Formats Registry
+9.12.  CoAP Content-Formats Registry
 
    IANA has added the media type "application/edhoc" to the "CoAP
    Content-Formats" registry under the group name "Constrained RESTful
@@ -2503,7 +2514,7 @@ Table of Contents
 
    *  Reference: [[this document]]
 
-8.13.  Resource Type (rt=) Link Target Attribute Values Registry
+9.13.  Resource Type (rt=) Link Target Attribute Values Registry
 
    IANA has added the resource type "core.edhoc" to the "Resource Type
    (rt=) Link Target Attribute Values" registry under the group name
@@ -2519,7 +2530,7 @@ Table of Contents
    resource for EDHOC, where to send a request for executing the EDHOC
    protocol.
 
-8.14.  Expert Review Instructions
+9.14.  Expert Review Instructions
 
    The IANA Registries established in this document is defined as
    "Expert Review".  This section gives some general guidelines for what
@@ -2547,9 +2558,9 @@ Table of Contents
       provided, the description provided needs to have sufficient
       information to verify the points above.
 
-9.  References
+10.  References
 
-9.1.  Normative References
+10.1.  Normative References
 
    [I-D.ietf-core-echo-request-tag]
               Amsüss, C., Mattsson, J. P., and G. Selander, "CoAP: Echo,
@@ -2674,7 +2685,7 @@ Table of Contents
               DOI 10.17487/RFC8949, December 2020,
               <https://www.rfc-editor.org/info/rfc8949>.
 
-9.2.  Informative References
+10.2.  Informative References
 
    [Bruni18]  Bruni, A., Sahl Jørgensen, T., Grønbech Petersen, T., and
               C. Schürmann, "Formal Verification of Ephemeral Diffie-
@@ -2910,7 +2921,7 @@ A.3.  Transferring EDHOC over CoAP
 
    By default, the CoAP client is the Initiator and the CoAP server is
    the Responder, but the roles SHOULD be chosen to protect the most
-   sensitive identity, see Section 7.  According to this specification,
+   sensitive identity, see Section 8.  According to this specification,
    EDHOC is transferred in POST requests and 2.04 (Changed) responses to
    the Uri-Path: "/.well-known/edhoc".  An application may define its
    own path that can be discovered, e.g., using resource directory
