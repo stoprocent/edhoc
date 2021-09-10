@@ -954,17 +954,18 @@ Table of Contents
    and Responder.
 
    External authorization data is a CBOR sequence (see Appendix C.1)
-   consisting of one or more (type, ext_authz_data) pairs as defined
+   consisting of one or more (ead_type, ead_value) pairs as defined
    below:
 
    ead = 1* (
-     type : int,
-     ext_authz_data : any,
+     ead_type : int,
+     ead_value : any,
    )
 
-   where ext_authz_data is authorization related data defined in a
-   separate specification and its type is an int.  There is a register
-   for different types of ext_authz_data, see Section 9.5.
+   where ead_value is authorization related data defined in a separate
+   specification and its type is an int.  There is a register for
+   different types of external authorization data, see Section 9.5.  The
+   exact CBOR type of ead_value is determined by the ead_type.
 
    The EAD fields of EDHOC are not intended for generic application
    data.  Since data carried in EAD_1 and EAD_2 fields may not be
@@ -3143,8 +3144,8 @@ C.2.  CDDL Definitions
    suites = [ 2* suite ] / suite
 
    ead = 1* (
-     type : int,
-     ext_authz_data : any,
+     ead_type : int,
+     ead_value : any,
    )
 
    message_1 = (
