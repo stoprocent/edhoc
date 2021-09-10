@@ -734,10 +734,11 @@ Table of Contents
       subject of the certificate owns the public key in the certificate.
 
    *  Similarly, when a PKI is used with CWTs, each party needs to have
-      a trusted third party self-signed CWT, or just the UCCS/raw public
-      key, to verify the CWTs, and a specific identity or set of
-      identities in the 'sub'(subject) claim of the CWT to determine if
-      it is allowed to communicate with.
+      a trusted third party public key as trust anchor to verify the
+      end-entity CWTs, and a specific identity or set of identities in
+      the 'sub'(subject) claim of the CWT to determine if it is allowed
+      to communicate with.  The trusted third party public key can e.g.,
+      be stored in a self-signed CWT or in a UCCS.
 
    *  When PKI is not used (UCCS, self-signed certificate/CWT), the
       trust anchor is the authentication key of the other party.  In
