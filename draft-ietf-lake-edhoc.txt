@@ -954,18 +954,18 @@ Table of Contents
    and Responder.
 
    External authorization data is a CBOR sequence (see Appendix C.1)
-   consisting of one or more (ead_type, ead_value) pairs as defined
+   consisting of one or more (ead_label, ead_data) pairs as defined
    below:
 
    ead = 1* (
-     ead_type : int,
+     ead_label : int,
      ead_value : any,
    )
 
-   where ead_value is authorization related data defined in a separate
-   specification and its type is an int.  There is a register for
-   different types of external authorization data, see Section 9.5.  The
-   exact CBOR type of ead_value is determined by the ead_type.
+   Applications using external authorization data need to specify
+   format, processing, and security considerations and register the
+   (ead_label, ead_data) pair, see Section 9.5.  The CDDL type of
+   ead_value is determined by the int ead_label.
 
    The EAD fields of EDHOC are not intended for generic application
    data.  Since data carried in EAD_1 and EAD_2 fields may not be
@@ -2374,9 +2374,9 @@ Table of Contents
    IANA has created a new registry entitled "EDHOC External
    Authorization Data" under the new group name "Ephemeral Diffie-
    Hellman Over COSE (EDHOC)".  The registration procedure is "Expert
-   Review".  The columns of the registry are Value, Description, and
-   Reference, where Value is an integer and the other columns are text
-   strings.
+   Review".  The columns of the registry are Label, Description, Value
+   Type, and Reference, where Label is an integer and the other columns
+   are text strings.
 
 9.6.  COSE Header Parameters Registry
 
@@ -3144,7 +3144,7 @@ C.2.  CDDL Definitions
    suites = [ 2* suite ] / suite
 
    ead = 1* (
-     ead_type : int,
+     ead_label : int,
      ead_value : any,
    )
 
