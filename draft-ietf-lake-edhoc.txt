@@ -398,9 +398,9 @@ Table of Contents
    fourth message (message_4), and an error message.  All EDHOC messages
    are CBOR Sequences [RFC8742].  Figure 3 illustrates an EDHOC message
    flow with the optional fourth message as well as the content of each
-   message.  The protocol elements in the figure are introduced in the
-   following sections.  Message formatting and processing is specified
-   in Section 5 and Section 6.
+   message.  The protocol elements in the figure are introduced in
+   Section 3 and Section 5.  Message formatting and processing is
+   specified in Section 5 and Section 6.
 
    Application data may protected using the agreed application
    algorithms (AEAD, hash) in the selected cipher suite (see
