@@ -3504,15 +3504,15 @@ Acknowledgments
    The authors want to thank Christian Amsuess, Alessandro Bruni,
    Karthikeyan Bhargavan, Timothy Claeys, Martin Disch, Loic Ferreira,
    Theis Groenbech Petersen, Dan Harkins, Klaus Hartke, Russ Housley,
-   Stefan Hristozov, Alexandros Krontiris, Ilari Liusvaara, Karl
-   Norrman, Salvador Perez, Eric Rescorla, Michael Richardson, Thorvald
-   Sahl Joergensen, Jim Schaad, Carsten Schuermann, Ludwig Seitz,
-   Stanislav Smyshlyaev, Valery Smyslov, Peter van der Stok, Rene
-   Struik, Vaishnavi Sundararajan, Erik Thormarker, Marco Tiloca, Michel
-   Veillette, and Malisa Vucinic for reviewing and commenting on
-   intermediate versions of the draft.  We are especially indebted to
-   Jim Schaad for his continuous reviewing and implementation of
-   different versions of the draft.
+   Stefan Hristozov, Hugo Krawczyk, Alexandros Krontiris, Ilari
+   Liusvaara, Karl Norrman, Salvador Perez, Eric Rescorla, Michael
+   Richardson, Thorvald Sahl Joergensen, Jim Schaad, Carsten Schuermann,
+   Ludwig Seitz, Stanislav Smyshlyaev, Valery Smyslov, Peter van der
+   Stok, Rene Struik, Vaishnavi Sundararajan, Erik Thormarker, Marco
+   Tiloca, Michel Veillette, and Malisa Vucinic for reviewing and
+   commenting on intermediate versions of the draft.  We are especially
+   indebted to Jim Schaad for his continuous reviewing and
+   implementation of different versions of the draft.
 
    Work on this document has in part been supported by the H2020 project
    SIFIS-Home (grant agreement 952652).
