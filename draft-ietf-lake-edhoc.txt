@@ -350,7 +350,7 @@ Table of Contents
 
    *  Enc(), AEAD(), and MAC() denotes encryption, authenticated
       encryption with additional data, and message authentication code
-      using a keys derived from the shared secret.
+      using keys derived from the shared secret.
 
    In order to create a "full-fledged" protocol some additional protocol
    elements are needed.  EDHOC adds:
