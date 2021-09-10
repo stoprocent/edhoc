@@ -721,7 +721,7 @@ Table of Contents
 
    *  When a Public Key Infrastructure (PKI) is used with certificates,
       the trust anchor is a Certification Authority (CA) certificate,
-      and the identity is the subject whose unique name (e.g. a domain
+      and the identity is the subject whose unique name (e.g., a domain
       name, NAI, or EUI) is included in the endpoint's certificate.
       Before running EDHOC each party needs at least one CA public key
       certificate, or just the public key, and a specific identity or
@@ -1337,7 +1337,7 @@ Table of Contents
       order of preference, starting with the most preferred and ending
       with the cipher suite selected for this session.  If the most
       preferred cipher suite is selected then SUITES_I is encoded as
-      that cipher suite, i.e. as an int.  The processing steps are
+      that cipher suite, i.e., as an int.  The processing steps are
       detailed below and in Section 6.3.
 
    *  G_X - the ephemeral public key of the Initiator
@@ -1835,7 +1835,7 @@ Table of Contents
    than the selected cipher suite (independently of if the selected
    cipher suite is supported or not) then SUITES_R MUST include the
    supported cipher suite in SUITES_I which is most preferred by the
-   Initiator.  SUITES_R MAY include a single cipher suite, i.e. be
+   Initiator.  SUITES_R MAY include a single cipher suite, i.e., be
    encoded as an int.  If the Responder does not support any cipher
    suite in SUITES_I, then it SHOULD include all its supported cipher
    suites in SUITES_R in any order.
@@ -3115,7 +3115,7 @@ C.1.  CBOR and CDDL
    examples are given below.
 
    The EDHOC specification sometimes use CDDL names in CBOR dignostic
-   notation as in e.g. << ID_CRED_R >>.  This means that ID_CRED_R
+   notation as in e.g., << ID_CRED_R >>.  This means that ID_CRED_R
    should be substituted with its value before evaluation.  I.e., if
    ID_CRED_R = { 4 : h'' } then << ID_CRED_R >> = << { 4 : h'' } >>.
 
