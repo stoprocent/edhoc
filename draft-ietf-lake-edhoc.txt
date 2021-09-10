@@ -427,7 +427,7 @@ Table of Contents
    |                             message_3                             |
    |                                                                   |
    |                           AEAD( EAD_4 )                           |
-   |<------------------------------------------------------------------+
+   |<- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
    |                             message_4                             |
 
        Figure 3: EDHOC Message Flow with the Optional Fourth Message
@@ -954,7 +954,7 @@ Table of Contents
    and Responder.
 
    External authorization data is a CBOR sequence (see Appendix C.1)
-   consisting of one or more (ead_label, ead_data) pairs as defined
+   consisting of one or more (ead_label, ead_value) pairs as defined
    below:
 
    ead = 1* (
