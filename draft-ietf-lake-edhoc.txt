@@ -1788,9 +1788,8 @@ Table of Contents
       error code.
 
    The remainder of this section specifies the currently defined error
-   codes, see Figure 6.  Error codes 1 and 2 MUST be supported.
-   Additional error codes and corresponding error information may be
-   specified.
+   codes, see Figure 6.  Additional error codes and corresponding error
+   information may be specified.
 
    +----------+---------------+----------------------------------------+
    | ERR_CODE | ERR_INFO Type | Description                            |
@@ -1926,16 +1925,25 @@ Table of Contents
 
 7.  Mandatory-to-Implement Compliance Requirements
 
-   An implementation may support only Initiator or only Responder.  An
-   implementation may support only a single method.  None of the methods
-   are mandatory-to-implement.  Implementations MUST support the EDHOC-
-   Exporter.  Implementations SHOULD support EDHOC-KeyUpdate.
-   Implementaions MAY support message_4.  Implementations MUST support
-   'kid' parameters of type int.
+   An implementation may support only Initiator or only Responder.
+
+   An implementation may support only a single method.  None of the
+   methods are mandatory-to-implement.
+
+   Implementations MUST support the EDHOC-Exporter.  Implementations
+   SHOULD support EDHOC-KeyUpdate.
+
+   Implementaions MAY support message_4.  Error codes 1 and 2 MUST be
+   supported.
+
+   Implementations MUST support 'kid' parameters of type int.
 
    Editor's note: Is any COSE header parameters (kid, cwt, uccs, x5t,
-   c5c, etc. ) MTI?  Editor's note: Is any credential type (UCCS, CWT,
-   X.509, C509) MTI?  Editor's note: Is support of EAD MTI?
+   c5c, etc. ) MTI?
+
+   Editor's note: Is any credential type (UCCS, CWT, X.509, C509) MTI?
+
+   Editor's note: Is support of EAD MTI?
 
    For many constrained IoT devices it is problematic to support more
    than one cipher suite.  Existing devices can be expected to support
