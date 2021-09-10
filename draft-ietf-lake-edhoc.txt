@@ -135,11 +135,10 @@ Table of Contents
      C.1.  CBOR and CDDL
      C.2.  CDDL Definitions
      C.3.  COSE
-   Appendix D.  Test Vectors
-   Appendix E.  Applicability Template
-   Appendix F.  EDHOC Message Deduplication
-   Appendix G.  Transports Not Natively Providing Correlation
-   Appendix H.  Change Log
+   Appendix D.  Applicability Template
+   Appendix E.  EDHOC Message Deduplication
+   Appendix F.  Transports Not Natively Providing Correlation
+   Appendix G.  Change Log
    Acknowledgments
    Authors' Addresses
 
@@ -386,8 +385,8 @@ Table of Contents
    COSE, and CoAP libraries.
 
    To simplify for implementors, the use of CBOR and COSE in EDHOC is
-   summarized in Appendix C and test vectors including CBOR diagnostic
-   notation are given in Appendix D.
+   summarized in Appendix C.  Test vectors including CBOR diagnostic
+   notation are provided in [I-D.selander-lake-traces].
 
 3.  Protocol Elements
 
@@ -1022,7 +1021,7 @@ Table of Contents
    cipher suite is still performed as described in Section 5.2.1 and
    Section 6.3, but it may become simplified by this knowledge.
 
-   An example of an applicability statement is shown in Appendix E.
+   An example of an applicability statement is shown in Appendix D.
 
    For some parameters, like METHOD, ID_CRED_x, type of EAD, the
    receiver is able to verify compliance with applicability statement,
@@ -1309,7 +1308,7 @@ Table of Contents
    has moved on and now expects something else.  This assumes that
    message duplication due to re-transmissions is handled by the
    transport protocol, see Section 3.4.  The case when the transport
-   does not support message deduplication is addressed in Appendix F.
+   does not support message deduplication is addressed in Appendix E.
 
 5.2.  EDHOC Message 1
 
@@ -2779,6 +2778,12 @@ Table of Contents
               <https://www.ietf.org/archive/id/draft-selander-ace-ake-
               authz-03.txt>.
 
+   [I-D.selander-lake-traces]
+              Selander, G. and J. P. Mattsson, "Traces of EDHOC", Work
+              in Progress, Internet-Draft, draft-selander-lake-traces-
+              00, 10 September 2021, <https://www.ietf.org/archive/id/
+              draft-selander-lake-traces-00.txt>.
+
    [Norrman20]
               Norrman, K., Sundararajan, V., and A. Bruni, "Formal
               Analysis of EDHOC Key Establishment for Constrained IoT
@@ -3216,11 +3221,7 @@ C.3.  COSE
       externally supplied data (external_aad) using a private signature
       key and verified using the corresponding public signature key.
 
-Appendix D.  Test Vectors
-
-   TBD
-
-Appendix E.  Applicability Template
+Appendix D.  Applicability Template
 
    This appendix contains a rudimentary example of an applicability
    statement, see Section 3.9.
@@ -3256,7 +3257,7 @@ Appendix E.  Applicability Template
    7.  No use of message_4: the application sends protected messages
        from R to I.
 
-Appendix F.  EDHOC Message Deduplication
+Appendix E.  EDHOC Message Deduplication
 
    EDHOC by default assumes that message duplication is handled by the
    transport, in this section exemplified with CoAP.
@@ -3301,7 +3302,7 @@ Appendix F.  EDHOC Message Deduplication
    *  Different instances of the same message MUST NOT be processed in
       one session.
 
-Appendix G.  Transports Not Natively Providing Correlation
+Appendix F.  Transports Not Natively Providing Correlation
 
    Protocols that do not natively provide full correlation between a
    series of messages can send the C_I and C_R identifiers along as
@@ -3317,7 +3318,7 @@ Appendix G.  Transports Not Natively Providing Correlation
    Protocols that do not provide any correlation at all can prescribe
    prepending of the peer's chosen C_x to all messages.
 
-Appendix H.  Change Log
+Appendix G.  Change Log
 
    RFC Editor: Please remove this appendix.
 
