@@ -199,8 +199,10 @@ Table of Contents
    distribution.
 
    EDHOC makes use of known protocol constructions, such as SIGMA
-   [SIGMA] and Extract-and-Expand [RFC5869].  COSE also provides crypto
-   agility and enables the use of future algorithms targeting IoT.
+   [SIGMA] and Extract-and-Expand [RFC5869].  EDHOC uses COSE for
+   cryptography and identification of credentials (COSE_Key, UCCS, CWT,
+   X.509, C509, etc.).  COSE provides crypto agility and enables the use
+   of future algorithms and credentials targeting IoT.
 
 1.2.  Use of EDHOC
 
