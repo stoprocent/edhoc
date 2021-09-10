@@ -437,9 +437,12 @@ Table of Contents
    The data item METHOD in message_1 (see Section 5.2.1), is an integer
    specifying the authentication method.  EDHOC supports authentication
    with signature or static Diffie-Hellman keys, as defined in the four
-   authentication methods: 0, 1, 2, and 3, see Figure 4.  (Method 0
-   corresponds to the case outlined in Section 2 where both Initiator
-   and Responder authenticate with signature keys.)
+   authentication methods: 0, 1, 2, and 3, see Figure 4.  When using a
+   static Diffie-Hellman key the authentication is provided by a Message
+   Authentication Code (MAC) computed from an ephemeral-static ECDH
+   shared secret which enables significant reductions in message sizes.
+   (Method 0 corresponds to the case outlined in Section 2 where both
+   Initiator and Responder authenticate with signature keys.)
 
    The Initiator and the Responder need to have agreed on a single
    method to be used for EDHOC, see Section 3.9.
@@ -2076,8 +2079,12 @@ Table of Contents
    instead rely on the ephemeral public keys to provide randomness to
    each session.  A good amount of randomness is important for the key
    generation, to provide liveness, and to protect against interleaving
-   attacks.  For this reason, the ephemeral keys MUST NOT be reused, and
-   both parties SHALL generate fresh random ephemeral key pairs.
+   attacks.  For this reason, the ephemeral keys MUST NOT be used in
+   more than one EDHOC message, and both parties SHALL generate fresh
+   random ephemeral key pairs.  Note that an ephemeral key may be used
+   to calculate several ECDH shared secrets.  When static Diffie-Hellman
+   authentication is used the same ephemeral key is used in both
+   ephemeral-ephemeral and ephemeral-static ECDH.
 
    As discussed in [SIGMA], the encryption of message_2 does only need
    to protect against passive attacker as active attackers can always
