@@ -3131,7 +3131,8 @@ C.1.  CBOR and CDDL
    notation as in e.g., << ID_CRED_R, ? EAD_2 >>.  This means that EAD_2
    is optional and that ID_CRED_R and EAD_2 should be substituted with
    their values before evaluation.  I.e., if ID_CRED_R = { 4 : h'' } and
-   EAD_2 is omitted then << ID_CRED_R, ? EAD_2 >> = << { 4 : h'' } >>.
+   EAD_2 is omitted then << ID_CRED_R, ? EAD_2 >> = << { 4 : h'' } >>,
+   which encodes to 0x43a10440.
 
    For a complete specification and more examples, see [RFC8949] and
    [RFC8610].  We recommend implementors to get used to CBOR by using
