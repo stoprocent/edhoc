@@ -964,7 +964,7 @@ Table of Contents
    Applications using external authorization data need to specify
    format, processing, and security considerations and register the
    (ead_label, ead_data) pair, see Section 9.5.  The CDDL type of
-   ead_value is determined by the int ead_label.
+   ead_value is determined by the int ead_label and MUST be specified.
 
    The EAD fields of EDHOC are not intended for generic application
    data.  Since data carried in EAD_1 and EAD_2 fields may not be
