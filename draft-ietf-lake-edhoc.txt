@@ -2370,11 +2370,11 @@ Table of Contents
 
    IANA has created a new registry entitled "EDHOC Error Codes" under
    the new group name "Ephemeral Diffie-Hellman Over COSE (EDHOC)".  The
-   registration procedure is "Specification Required".  The columns of
-   the registry are ERR_CODE, ERR_INFO Type and Description, where
-   ERR_CODE is an integer, ERR_INFO is a CDDL defined type, and
-   Description is a text string.  The initial contents of the registry
-   are shown in Figure 6.
+   registration procedure is "Expert Review".  The columns of the
+   registry are ERR_CODE, ERR_INFO Type and Description, where ERR_CODE
+   is an integer, ERR_INFO is a CDDL defined type, and Description is a
+   text string.  The initial contents of the registry are shown in
+   Figure 6.
 
 9.5.  EDHOC External Authorization Data Registry
 
@@ -3530,7 +3530,7 @@ Appendix G.  Change Log
 
       -  Updated text on cipher suite negotiation and key confirmation
 
-      -  Test vector for static DH
+      -  Test vector for static DH o
 
    *  From -00 to -01:
 
