@@ -196,7 +196,7 @@ Table of Contents
    currently not support pre-shared key (PSK) authentication as
    authentication with static Diffie-Hellman public keys by reference
    produces equally small message sizes but with much simpler key
-   distribution.
+   distribution and identity protection.
 
    EDHOC makes use of known protocol constructions, such as SIGMA
    [SIGMA] and Extract-and-Expand [RFC5869].  EDHOC uses COSE for
