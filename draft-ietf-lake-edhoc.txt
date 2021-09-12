@@ -814,7 +814,7 @@ Table of Contents
    correct one is found.  Applications might use additional information
    such as 'kid context' or lower layers to determine which key to try
    first.  Applications should strive to make ID_CRED_x as unique as
-   possible to as the recipient may otherwise have to try several keys.
+   possible, since the recipient may otherwise have to try several keys.
    ID_CRED_I and ID_CRED_R are transported in the 'ciphertext', see
    Section 5.4.2 and Section 5.3.2.
 
