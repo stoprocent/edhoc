@@ -245,9 +245,9 @@ Table of Contents
    examples of message sizes for EDHOC with different kinds of
    authentication keys and different COSE header parameters for
    identification: static Diffie-Hellman keys or signature keys in CWT
-   or UCCS and identified by 'kid' [I-D.ietf-cose-rfc8152bis-struct] or
-   X.509 certificates identified by a hash value using 'x5t'
-   [I-D.ietf-cose-x509].
+   or UCCS identified by a key identifier using 'kid'
+   [I-D.ietf-cose-rfc8152bis-struct] or X.509 certificates identified by
+   a hash value using 'x5t' [I-D.ietf-cose-x509].
 
          ========================================================
                              Static DH Keys        Signature Keys
