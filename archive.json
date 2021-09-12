@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-09-09T01:04:53.169095+00:00",
+  "timestamp": "2021-09-12T01:04:22.445669+00:00",
   "repo": "lake-wg/edhoc",
   "labels": [
     {
@@ -436,7 +436,7 @@
       "id": "MDU6SXNzdWU2NzA2OTQ5NzQ=",
       "title": "Verification of intended peer",
       "url": "https://github.com/lake-wg/edhoc/issues/8",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gselander",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -447,8 +447,8 @@
       ],
       "body": "Extracted from https://arxiv.org/abs/2007.11427\r\nhttps://www.ietf.org/proceedings/108/slides/slides-108-lake-tamarin-study-of-edhoc-00\r\n\r\n\"Section 3.2 of the specification states that a parties are required to be configured with a policy restricting the set of peers an they are allowed to run EDHOC with.\"\r\n\r\n\"the initiator is not required to verify that the ID CRED R received in message 2 is the same as the one the application intended when initiating the EDHOC run\"\r\n\r\n\"the initiator [need] to match ID CRED R to the intended identity provided by the application\"\r\n\r\n\"the application must be able to instruct EDHOC to not accept the same identity in the next attempt\"\r\n",
       "createdAt": "2020-08-01T09:20:53Z",
-      "updatedAt": "2021-09-05T06:31:24Z",
-      "closedAt": null,
+      "updatedAt": "2021-09-10T13:48:25Z",
+      "closedAt": "2021-09-10T13:48:25Z",
       "comments": [
         {
           "author": "gselander",
@@ -470,6 +470,13 @@
           "body": "Can we close this? There has been quite a lot of work in this area, so the dicussion here seems a bit outdated. If anything remains, it might be better to open a new focused issue.",
           "createdAt": "2021-08-26T16:47:18Z",
           "updatedAt": "2021-08-26T16:47:18Z"
+        },
+        {
+          "author": "gselander",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Agree. This issue has been considered in more than one way:\r\n\r\nIn 3.5.3: \r\n\"The EDHOC implementation or the application must enforce information\r\n   about the intended endpoint, and in particular whether it is a\r\n   specific identity or a set of identities.\"\r\n\r\nIn 3.5.2:\r\n\"To prevent misbinding attacks in systems where an attacker can\r\n   register public keys without proving knowledge of the private key,\r\n   SIGMA [SIGMA] enforces a MAC to be calculated over the \"identity\".\r\n   EDHOC follows SIGMA by calculating a MAC over the whole credential,\r\n   which in case of a X.509 or C509 certificate includes the \"subject\"\r\n   and \"subjectAltName\" fields, and in the case of CWT or UCCS includes\r\n   the \"sub\" claim, see Section 3.5.3. \"\r\n\r\nIf there are other aspects where verification of intended peer is missing we can open a new issue.\r\n\r\nI close this now.\r\n",
+          "createdAt": "2021-09-10T13:48:18Z",
+          "updatedAt": "2021-09-10T13:48:18Z"
         }
       ]
     },
@@ -1791,9 +1798,9 @@
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
-      "body": "as requested from interop:\r\n\r\n- [x] obsolete PSK test vectors\r\n- [x] add TH4 output\r\n- [x] add exporter, exporter outputs, keyupdate, to all test vectors\r\n- [x] add KEYSTREAM_2\r\n- [x] print out public keys.\r\n- [x] Add error message\r\n- [x] Add message_4\r\n- [x] Add ead\r\n- [x] Update test vectors to -10\r\n- [ ] add real certificates to test vectors - 0:CBOR native and DER (and possibly later 1:ASN.1 translated)\r\n- [ ] Add ciphersuites 2 and 3 to test vectors, ECDSA keys should print out full y coordinate\r\n- [ ] Change format to JSON\r\n",
+      "body": "as requested from interop:\r\n\r\n- [x] obsolete PSK test vectors\r\n- [x] add TH4 output\r\n- [x] add exporter, exporter outputs, keyupdate, to all test vectors\r\n- [x] add KEYSTREAM_2\r\n- [x] print out public keys.\r\n- [x] Add error message\r\n- [x] Add message_4\r\n- [x] Add ead\r\n- [x] Update test vectors to -10\r\n- [x] Add JSON format\r\n- [ ] add real certificates to test vectors - 0:CBOR native and DER (and possibly later 1:ASN.1 translated)\r\n- [ ] Add ciphersuites 2 and 3 to test vectors, ECDSA keys should print out full y coordinate\r\n",
       "createdAt": "2020-12-14T12:41:48Z",
-      "updatedAt": "2021-09-05T06:29:39Z",
+      "updatedAt": "2021-09-09T15:49:50Z",
       "closedAt": null,
       "comments": [
         {
@@ -1816,6 +1823,13 @@
           "body": "I have updated the list. The new test vectors add ead, error messages, and message_4 and aligns with -10.\r\n\r\nI have not added real certificates yet. But I made them a sequence 00 01 02 03 ...  to make it easy to see they are not real. The old one were random strings and several people tried to parse them",
           "createdAt": "2021-09-05T06:29:03Z",
           "updatedAt": "2021-09-05T06:29:03Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I thinking about adding the error message to actual flows where the error message might come after any of normal  EHODC messages.\r\n\r\nafter message_1 : ERR_CODE 1 or 2\r\nafter message_2 : ERR_CODE 1\r\nafter message_3 : ERR_CODE 0 or 1\r\nafter message_3 : ERR_CODE 0 or 1\r\n",
+          "createdAt": "2021-09-09T15:49:50Z",
+          "updatedAt": "2021-09-09T15:49:50Z"
         }
       ]
     },
@@ -2916,7 +2930,7 @@
       "labels": [],
       "body": "The things that are Mandatory or optional to support or now spread out in various places.",
       "createdAt": "2021-02-21T07:07:26Z",
-      "updatedAt": "2021-08-05T11:48:46Z",
+      "updatedAt": "2021-09-10T09:44:33Z",
       "closedAt": null,
       "comments": [
         {
@@ -2925,6 +2939,13 @@
           "body": "This does not need to be a new section (like the MTI section in TLS 1.3) but it definitly needs to be clear what in the draft is mandatory to implement or not. Could be as simple as stating.\r\n\r\n- Everything is mandatory\r\n- Nothing is mandatory\r\n- Something in between\r\n\r\nCurrently is is undefined which is not good I think ",
           "createdAt": "2021-05-05T10:03:47Z",
           "updatedAt": "2021-05-05T10:03:47Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I started making an MTI section inspired by RFC 8446. I think this makes things clearer.\r\n\r\nI added some editorial notes in the section that needs to be discussed.",
+          "createdAt": "2021-09-10T09:44:33Z",
+          "updatedAt": "2021-09-10T09:44:33Z"
         }
       ]
     },
@@ -3138,10 +3159,12 @@
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "Close?"
+      ],
       "body": "We have gotten feedback that the test vectors should be in JSON intead (or in addition) of a text file. I plan to fix this. ",
       "createdAt": "2021-02-25T10:22:57Z",
-      "updatedAt": "2021-09-06T14:46:38Z",
+      "updatedAt": "2021-09-11T06:36:16Z",
       "closedAt": null,
       "comments": [
         {
@@ -3160,7 +3183,7 @@
         },
         {
           "author": "marco-tiloca-sics",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "Thanks for this, it looks good!\r\n\r\nAs a general comment, I would have to produce new output for several sub-elements and in this particular format (which is fine).\r\n\r\nMore specific comments:\r\n\r\n* To fully cover the considered configuration, 'auth_key' in the \"I\" and \"R\" objects should also include the string to use as subject name when building CRED_x.\r\n\r\n* 'secret' can be better renamed to 'g_xy'.\r\n\r\n* Why including 'p_2m' and 'p_3m' in the \"S\" object? They are always the empty byte string.\r\n\r\n* As to 'a_2m', 'a_3m' and 'a_3ae in the \"S\" object, they are available for me to print only deep in the COSE library I use, so not really in my actual implementation. That's why now I'm easily printing only the actual external data (i.e. << TH_2, CRED_R, ? AD_2 >>, << TH_3, CRED_I, ? AD_3 >> and  << TH_3, CRED_I, ? AD_3 >>). So, I would have to manually (re-)build the AAD array just for printing it, considering also the \"Encrypt0\" context string and << ID_CRED_X >>.\r\n\r\n* The \"S\" object may include the further elements related to message_4 when this is used.",
           "createdAt": "2021-04-24T10:30:07Z",
           "updatedAt": "2021-04-24T10:30:07Z"
@@ -3178,6 +3201,41 @@
           "body": "I very quickly transformed my -10 test vectors to JSON (or almost JSON as JSON forbids a trailing comma.....)\r\n\r\nhttps://github.com/lake-wg/edhoc/tree/master/test-vectors-10-json\r\n\r\nI just quickly tried to convert my test vecors to JSON. I tried to somewhat align with Timothy, but there are differences. In my test vectors, names ending with _raw and not CBOR and everything else are CBOR sequences. \r\n\r\nHappy to change my JSON test vectors to any format implementors would want.",
           "createdAt": "2021-09-06T13:41:25Z",
           "updatedAt": "2021-09-06T14:46:38Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I merged my two cpp files. JSON can now be found in\r\n\r\nhttps://github.com/lake-wg/edhoc/tree/master/test-vectors-10\r\n\r\n@TimothyClaeys and @marco-tiloca-sics if you agree on a JSON format, I'll update my output to match that. I don't have any opinions about the JSON format. Now I just made something very quick that aligned with the draft out that is used in the draft.\r\n",
+          "createdAt": "2021-09-09T12:02:59Z",
+          "updatedAt": "2021-09-09T12:02:59Z"
+        },
+        {
+          "author": "TimothyClaeys",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Hi @emanjon,\r\n\r\nI think this looks good. Maybe a small remark: for automatic parsing purposes, I might be useful to put each test case in a parent JSON structure. Something like this:\r\n\r\n`\r\n{\r\n    \"test_vector_1\": {\r\n        \"method\": 0,\r\n        \"suites_i\": \"00\",\r\n        ...\r\n     },\r\n     \"test_vector_2\": {\r\n        \"method\": 1,\r\n        \"suites_i\": \"01\",\r\n        ...\r\n      }\r\n}\r\n`",
+          "createdAt": "2021-09-09T12:34:24Z",
+          "updatedAt": "2021-09-09T12:34:24Z"
+        },
+        {
+          "author": "marco-tiloca-sics",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Looks good to me too; I agree with Timothy's point.",
+          "createdAt": "2021-09-09T15:15:59Z",
+          "updatedAt": "2021-09-09T15:15:59Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Hi, I added a parent map as suggested by Timothy. I also removed the extra commas to make the output correct JSON.",
+          "createdAt": "2021-09-09T15:44:12Z",
+          "updatedAt": "2021-09-09T15:44:12Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "If we are happy enough the current format, I plan to close this issue soon. Any future changes can be discussed in the general #47 or in new issues. ",
+          "createdAt": "2021-09-11T06:36:00Z",
+          "updatedAt": "2021-09-11T06:36:00Z"
         }
       ]
     },
@@ -3364,10 +3422,12 @@
       "author": "chrysn",
       "authorAssociation": "NONE",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "Close?"
+      ],
       "body": "Randomness can be limited in constrained devices, and that can affect EDHOC.\r\n\r\n8.2. Cryptographic Considerations does talk about the necessity of randomness, but it did not become apparent to me from reading that alone that without a new fresh key I not only lose liveness and open up to interleaving, but also run into loss of all security properties when deriving an OSCORE secret from it and neither party has any randomness to put in.\r\n\r\nIf one of the involved parties of EDHOC is just scraping together a few bits of entropy (which is as good as having none), is there a direction in which EDHOC can be used with limited loss of properties? (Gut feeling says no because an attacker can replay a previous EDHOC exchange with them).\r\n\r\nIt may be helpful to also outline how a monotonous counter (similar to that of OSCORE B.1.1) can be used together with a private secret to obtain sufficient randomness. (That may follow from RFC 8937 already, not sure).",
       "createdAt": "2021-03-03T13:14:20Z",
-      "updatedAt": "2021-07-19T06:20:17Z",
+      "updatedAt": "2021-09-10T13:10:32Z",
       "closedAt": null,
       "comments": [
         {
@@ -4368,16 +4428,24 @@
       "id": "MDU6SXNzdWU4NjI5NDQ0MDg=",
       "title": "Scope of the applicability statement.",
       "url": "https://github.com/lake-wg/edhoc/issues/100",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "My view of the applicability statement appendix was that is was a simple list of things that I and R needs to make sure that they both support because otherwise the protocol will end in error. Now the appendix has been move into the body, been made normative, and to my understanding changed scope.\r\n\r\n\"In order to ensure that EDHOC is used for the intended purpose, each message needs to be verified against an applicability statement associated to the protocol instance. If the message does not comply with the applicability statement, the protocol needs to be discontinued.\"\r\n\r\nI don't think this is a good idea. This seems to unesicarily increase complexity and make implementations bigger. Comparing with TLS this would be like stating that you need to check the every cipher suite, extension, certificate format etc has been pre-approved for use with a certain endpoint. Are any of the checks strictly needed for security reasons? Otherwise I think these kind of checks should be part of an optional policy mechanism outside of EDHOC.",
       "createdAt": "2021-04-20T15:30:44Z",
-      "updatedAt": "2021-04-20T15:30:44Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2021-09-11T20:22:55Z",
+      "closedAt": "2021-09-11T20:22:55Z",
+      "comments": [
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I am fine with the new text",
+          "createdAt": "2021-09-11T20:22:55Z",
+          "updatedAt": "2021-09-11T20:22:55Z"
+        }
+      ]
     },
     {
       "number": 101,
@@ -5154,13 +5222,25 @@
       "state": "OPEN",
       "author": "gselander",
       "authorAssociation": "COLLABORATOR",
-      "assignees": [],
-      "labels": [],
+      "assignees": [
+        "gselander"
+      ],
+      "labels": [
+        "Close?"
+      ],
       "body": "Where necessary, clarify distinction between empty byte string (0x) and CBOR empty byte string (0xf6)",
       "createdAt": "2021-07-19T06:03:52Z",
-      "updatedAt": "2021-07-19T06:03:52Z",
+      "updatedAt": "2021-09-11T10:11:39Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "If anything need to be done, lets fix it asap and close this issue. ",
+          "createdAt": "2021-09-11T10:11:27Z",
+          "updatedAt": "2021-09-11T10:11:27Z"
+        }
+      ]
     },
     {
       "number": 134,
@@ -5264,13 +5344,15 @@
       "state": "OPEN",
       "author": "chrysn",
       "authorAssociation": "NONE",
-      "assignees": [],
+      "assignees": [
+        "gselander"
+      ],
       "labels": [
         "Close?"
       ],
       "body": "Quoting main branch:\r\n\r\n> The EAD fields [...] special considerations need to be made such that a) it does not violate security, privacy etc. requirements of the service which uses this data, and b) it does not violate the security properties of EDHOC.\r\n\r\nI see how an application developer would take a into account, but I think that for b, it'd help to give concrete pointers on what not to do. (Right now, other than \"putting anything in there that's picked out of the EDHOC engine\", I don't have any clue as to what could endanger EDHOC here).",
       "createdAt": "2021-07-29T19:31:44Z",
-      "updatedAt": "2021-09-07T11:57:28Z",
+      "updatedAt": "2021-09-09T13:28:53Z",
       "closedAt": null,
       "comments": [
         {
@@ -5298,10 +5380,12 @@
       "author": "sftcd",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "Close?"
+      ],
       "body": "At some point we should think about the length of the spec.",
       "createdAt": "2021-07-29T19:57:48Z",
-      "updatedAt": "2021-08-05T07:00:39Z",
+      "updatedAt": "2021-09-11T10:10:19Z",
       "closedAt": null,
       "comments": [
         {
@@ -5338,6 +5422,27 @@
           "body": "At a later stage I think we can go through the document and try to cut out some duplicate information.",
           "createdAt": "2021-08-05T07:00:39Z",
           "updatedAt": "2021-08-05T07:00:39Z"
+        },
+        {
+          "author": "gselander",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Test vectors are now moved from Appendix D to a separate draft:\r\n\r\nhttps://datatracker.ietf.org/doc/html/draft-selander-lake-traces",
+          "createdAt": "2021-09-10T14:41:23Z",
+          "updatedAt": "2021-09-10T14:41:23Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I assume we upload draft-selander-lake-traces-00.md to GitHub next to draft-ietf-lake-edhoc.md as suggested by mcr",
+          "createdAt": "2021-09-11T10:02:19Z",
+          "updatedAt": "2021-09-11T10:02:19Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@sftcd Does this close this issue? There might be some trimming possible, but a lot of requests from people implementing have been more example and guidance related to COSE, CBOR and CDDL.\r\n\r\nWithout change log the document is 70 pages.",
+          "createdAt": "2021-09-11T10:10:05Z",
+          "updatedAt": "2021-09-11T10:10:05Z"
         }
       ]
     },
@@ -5462,7 +5567,7 @@
       "id": "MDU6SXNzdWU5ODM0NjQxMzM=",
       "title": "Simpler and shorter SUITES_I",
       "url": "https://github.com/lake-wg/edhoc/issues/151",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
@@ -5471,8 +5576,8 @@
       ],
       "body": "The current definition of SUITES_I is that the Initiator can chose any truncation of the list of supported cipher suites as long as the selected cipher suite is included. This works and allows the Initiator to give the Responder information about the full list. This is however a bit complex and has led to misunderstandings of the test vectors where several people thought the test vectors were wrong.\r\n\r\ni.e. the following are all valid\r\n\r\n```\r\nSUITES_I = [6, 5, 6]\r\nSUITES_I = [6, 5, 6, 7]\r\nSUITES_I = [6, 5, 6, 7, 8]\r\n```\r\n\r\nI think we should simplify SUITES_I by mandating that the last suite in the list is the selected. This makes SUITES_I much easier to understand and lowers message size when an array is used. Giving the Responder info is not so important.\r\n\r\n`SUITES_I = [5, 6] `\r\n\r\nCDDL\r\n\r\n`SUITES_I : [ 2* suite ] / suite`",
       "createdAt": "2021-08-31T05:39:55Z",
-      "updatedAt": "2021-09-05T06:23:35Z",
-      "closedAt": null,
+      "updatedAt": "2021-09-09T07:39:41Z",
+      "closedAt": "2021-09-09T07:39:41Z",
       "comments": [
         {
           "author": "emanjon",
@@ -5509,7 +5614,7 @@
       "id": "MDU6SXNzdWU5ODM5NjQ4NzQ=",
       "title": "There are two different mac_length ",
       "url": "https://github.com/lake-wg/edhoc/issues/153",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
@@ -5518,8 +5623,8 @@
       ],
       "body": "Current specification could give the impression that there is a single mac_length. But the mac length in message_2 and message_3 may be different.",
       "createdAt": "2021-08-31T15:00:31Z",
-      "updatedAt": "2021-09-05T06:23:35Z",
-      "closedAt": null,
+      "updatedAt": "2021-09-09T07:39:41Z",
+      "closedAt": "2021-09-09T07:39:41Z",
       "comments": [
         {
           "author": "emanjon",
@@ -5535,7 +5640,7 @@
       "id": "MDU6SXNzdWU5ODUxMDkwMTQ=",
       "title": "Definition of info in the key derivation",
       "url": "https://github.com/lake-wg/edhoc/issues/154",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
@@ -5544,8 +5649,8 @@
       ],
       "body": "The new definition of info in th ecurrent specification is.\r\n\r\n```\r\n   OKM = EDHOC-KDF( PRK, transcript_hash, label, context, length )\r\n       = Expand( PRK, info, length )\r\n\r\nwhere info is the CBOR encoding of\r\n\r\ninfo = [\r\n   edhoc_aead_id : int / tstr,\r\n   transcript_hash : bstr,\r\n   label : tstr,\r\n   * context : any,\r\n   length : uint,\r\n]\r\n```\r\n\r\nI noticed two problems with this while implementing.\r\n1. To create the array you need to parse context to see how many items it contains. \r\n2. Unless context is validated, length is not strictly defined (an attacker could create collisions)\r\n\r\nI suggest that info is changed to:\r\n\r\n```\r\ninfo = (\r\n   edhoc_aead_id : int / tstr,\r\n   transcript_hash : bstr,\r\n   label : tstr,\r\n   length : uint,\r\n   * context : any,\r\n)\r\n\r\n```\r\n\r\n",
       "createdAt": "2021-09-01T12:47:05Z",
-      "updatedAt": "2021-09-05T06:23:35Z",
-      "closedAt": null,
+      "updatedAt": "2021-09-09T07:39:41Z",
+      "closedAt": "2021-09-09T07:39:41Z",
       "comments": [
         {
           "author": "emanjon",
@@ -5568,7 +5673,7 @@
       "id": "MDU6SXNzdWU5ODUyODI2MDU=",
       "title": "ERR_TYPE for ERR_CODE = 2 is a name instead of type.",
       "url": "https://github.com/lake-wg/edhoc/issues/155",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
@@ -5577,8 +5682,8 @@
       ],
       "body": "SUITES_R is a name. The type needs to be defined and the table changed. This can be done in PR #152 \r\n\r\n`suites = [ 2* suite ] / suite,`\r\n\r\n```\r\n   +----------+---------------+----------------------------------------+\r\n   | ERR_CODE | ERR_INFO Type | Description                            |\r\n   +==========+===============+========================================+\r\n   |        0 | any           | Success                                |\r\n   +----------+---------------+----------------------------------------+\r\n   |        1 | tstr          | Unspecified                            |\r\n   +----------+---------------+----------------------------------------+\r\n   |        2 | suites        | Wrong selected cipher suite            |\r\n   +----------+---------------+----------------------------------------+\r\n```",
       "createdAt": "2021-09-01T15:17:41Z",
-      "updatedAt": "2021-09-05T06:23:36Z",
-      "closedAt": null,
+      "updatedAt": "2021-09-09T07:39:41Z",
+      "closedAt": "2021-09-09T07:39:41Z",
       "comments": []
     },
     {
@@ -5586,7 +5691,7 @@
       "id": "MDU6SXNzdWU5ODY1ODE5NTQ=",
       "title": "CRED_x for 'kid' is not specified",
       "url": "https://github.com/lake-wg/edhoc/issues/156",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
@@ -5595,8 +5700,8 @@
       ],
       "body": "-08 contained a definition of CRED_x including an example when kid is used. -09 removed that example and replaces it with a RPK by value example.\r\n\r\nNow it seems like the most important use case `ID_CRED_x = { 4 : key_id_x }` is not well specified. This is the use case that leads to message_2 being 45 bytes. ",
       "createdAt": "2021-09-02T11:28:01Z",
-      "updatedAt": "2021-09-05T06:23:36Z",
-      "closedAt": null,
+      "updatedAt": "2021-09-09T07:39:41Z",
+      "closedAt": "2021-09-09T07:39:41Z",
       "comments": [
         {
           "author": "emanjon",
@@ -5626,7 +5731,7 @@
       "id": "MDU6SXNzdWU5ODY2MTg1ODE=",
       "title": "The CWT Confirmation Method 'kid' should also be updated to bstr / int",
       "url": "https://github.com/lake-wg/edhoc/issues/157",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
@@ -5635,8 +5740,8 @@
       ],
       "body": "https://www.iana.org/assignments/cwt/cwt.xhtml",
       "createdAt": "2021-09-02T12:01:01Z",
-      "updatedAt": "2021-09-05T06:23:36Z",
-      "closedAt": null,
+      "updatedAt": "2021-09-09T07:39:42Z",
+      "closedAt": "2021-09-09T07:39:42Z",
       "comments": [
         {
           "author": "emanjon",
@@ -5666,15 +5771,15 @@
       "id": "MDU6SXNzdWU5ODY5MzU0ODQ=",
       "title": "Registration of a CoRE Resource Type",
       "url": "https://github.com/lake-wg/edhoc/issues/158",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "marco-tiloca-sics",
-      "authorAssociation": "NONE",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "A new Resource Type (rt=) Link Target attribute like \"core.edhoc\" may be registered in the \"Resource Type (rt=) Link Target Attribute Values\" subregistry under the \"Constrained RESTful Environments (CoRE) Parameters\" registry.",
       "createdAt": "2021-09-02T16:24:35Z",
-      "updatedAt": "2021-09-03T06:55:56Z",
-      "closedAt": null,
+      "updatedAt": "2021-09-09T13:26:29Z",
+      "closedAt": "2021-09-09T13:26:29Z",
       "comments": [
         {
           "author": "emanjon",
@@ -5682,6 +5787,27 @@
           "body": "That seems like a good idea.",
           "createdAt": "2021-09-03T06:55:56Z",
           "updatedAt": "2021-09-03T06:55:56Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Marco, do you want to provide a PR? Then we could merge that for -11",
+          "createdAt": "2021-09-09T07:38:34Z",
+          "updatedAt": "2021-09-09T07:38:34Z"
+        },
+        {
+          "author": "marco-tiloca-sics",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Done, see https://github.com/lake-wg/edhoc/pull/164\r\n\r\nNote that the first commit is just about removing trailing whitespace to avoid compiling errors.\r\n\r\nThe content you need is in the commit https://github.com/lake-wg/edhoc/pull/164/commits/3b0f225aa1f35182126bb96abfd2e8be8c187e9f",
+          "createdAt": "2021-09-09T10:33:43Z",
+          "updatedAt": "2021-09-09T10:33:43Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Looks good. I tried to align the whole IANA section with RFC 8126. Then I merged.",
+          "createdAt": "2021-09-09T13:26:29Z",
+          "updatedAt": "2021-09-09T13:26:29Z"
         }
       ]
     },
@@ -5728,7 +5854,7 @@
       "labels": [],
       "body": "ID_CRED_x are COSE header maps and everything with them follows from COSE. The only thing EDHOC adds is to define the format of CRED_x.\r\n\r\nThis is not clear in the current version of the draft. The term \"COSE header map\" has disappeared and it is not clear that the quite long section on ID_CRED_x are just examples of COSE and not new specification.\r\n\r\nCDDL for ID_CRED_x should be added. They are of type header_map defined in the COSE RFC.\r\n",
       "createdAt": "2021-09-04T08:24:45Z",
-      "updatedAt": "2021-09-08T06:30:48Z",
+      "updatedAt": "2021-09-10T09:23:13Z",
       "closedAt": null,
       "comments": [
         {
@@ -5744,6 +5870,41 @@
           "body": "The mapping from a a COSE header map to a credential or set of credentials is handled by COSE. Note that a COSE header map can contain several header parameters\r\n\r\n```\r\n{ x5u, x5t }\r\n{ kid, kid_context }\r\n{ crit [ c5u ] }\r\n{ kid, c5t }\r\n```\r\n\r\nEDHOC needs to provide a mapping from the credential or set of credentials (e.g. chain, bag, etc. ) to CRED_R. The mapping needs to be equal on both sides. We would like EDHOC to as automatically as posibly support new header parameters and credential types.\r\n\r\nCurrently the COSE header parameters can identify the following credentials.\r\n\r\nBy reference\r\n\r\n```\r\nCOSE_Key\r\nCOSE_Key in an UCCS\r\nCOSE_Key in an CWT\r\nx509 single certificate\r\nx509 chain or bag\r\nc509 single certificate\r\nc509 chain or bag\r\n```\r\n\r\nBy value\r\n\r\n```\r\nUCCS\r\nCWT\r\nx509 single certificate\r\nx509 chain or bag\r\nc509 single certificate\r\nc509 chain or bag\r\n```\r\n\r\nMost of the mapping to CRED_R is currently soft or not existing. It need to be specified exactly. If the parties to different mapping EDHOC will fail.\r\n\r\n- For x509 the solution is to wrap the end-entity DER certificate in a bstr.\r\n- For c509 the solution is to take the end-entity C509Certificate structure\r\n- CWT and UCCS can be tagged and untagged. This might be fine for \"by value\" but might create problems for \"by reference\" which is the main focus of EDHOC. Should EDHOC leave this to the application? Or do we need to handle situation where one of the parties have stored a CWT with an added tag.....\r\n- \"Raw\" COSE_Keys (not inside a CWT or UCSS). Are they supported or not or is UCCS only the way to go? Most if not all COSE implementations have support for raw COSE keys.\r\n- Raw COSE_Keys and UCCS where not really designed to be MACed. Can we expect that one of the parties to add things to the CBOR map?\r\n\r\n```\r\n       {                                      /COSE_Key/\r\n         1 : 1,                                   /kty/\r\n         2 : 0,                                   /kid/\r\n        -1 : 4,                                   /crv/\r\n        -2 : h'b1a3e89460e88d3a8d54211dc95f0b90   /x/\r\n               3ff205eb71912d6db8f4af980d2db83a',\r\n        -65537 : \"Note to self: This is the key to my connected toaster\"\r\n       }\r\n\r\n```\r\n\r\n\r\n",
           "createdAt": "2021-09-08T06:26:00Z",
           "updatedAt": "2021-09-08T06:30:48Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "While we have working interop for the many of the use cases. I think it is clear that ID_CRED_x and CRED_x need to be specified a bit more in detail.\r\n\r\nFor ID_CRED_x I think EDHOC should rely on COSE as much as possible. Formatting of CRED_x is outside of COSE and needs to be specified in EDHOC.\r\n\r\nMy suggestions: \r\n\r\n- I think ID_CRED_x and CRED_x should be defined with CDDL\r\n- I think EDHOC should specify that ID_CRED_x is a COSE header_map but acknoledge that some of the COSE header parameters do not make sense to use in EDHOC. This way EDHOC automatically support new COSE header parameters.\r\n- I think EDHOC should support all COSE header parameters that can be used to identity a cryptographic key.\r\n- In addition there is a need of a map between the object the key is stored in and CRED_x. I think this should maybe be done with a table. An IANA registry might not be wrong.\r\n\r\n```\r\nID_CRED_x = header_map\r\n\r\nCRED_x = any    (where any is determined by the key cryptographic key object)\r\n\r\n```\r\n```\r\n===========================================\r\nCredential type            CRED_x CDDL type\r\n-------------------------------------------\r\nCOSE_Key                   COSE_Key\r\nUCCS                       map\r\nCWT                        COSE_Untagged_Message\r\nX509                       bstr (end-entity)\r\nC509                       C509Certificate (end-entity)\r\n===========================================\r\n\r\n```\r\nThe table above use untagged CWS and UCSS. This avoids problems if of the parties tag their UCCS or CWT for storage. The three options are:\r\n\r\n1. Forcing untagged CRED_x.\r\n2. Forcing tagged CRED_x.\r\n3. Forcing I and R to agree on the format.\r\n\r\n3. does not seem optimal as the parties need to remember if the credential was tagged or untagged when they got it. The coice between 1. and 2. depends on what creates the least work for implementations.\r\n\r\nFurther discussion points are content and order, which the parties need to agree on.\r\n\r\n- EDHOC should state that the parties cannot add private headers to COSE_Key and UCCS\r\n\r\n- Regarding order, the choices are\r\n\r\n   a. force lexiographical order\r\n   b. force the parties to agree on the order.\r\n  \r\n   I don't really understand why the order is unspecified in the first place, but given that is is and that COSE assumes that entities can and will reorder it seems like forcing lexiographic order might be the best. That should probably be recommended in general.\r\n",
+          "createdAt": "2021-09-09T08:57:49Z",
+          "updatedAt": "2021-09-09T08:58:55Z"
+        },
+        {
+          "author": "marco-tiloca-sics",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Some input on some of the points above:\r\n\r\n* I think it's good to exclude \"Raw\" COSE Keys altogether, like it recently seemed to be the plan.\r\n   - As a main limitation, they don't allow to express additional metadata, including peer identity and credential expiration, that might be important to have around as part of an authenticated credential. As another limitation, they can't currently be transported by value, because there is no COSE Header Parameter for that.\r\n   - On the other hand, it's pretty cheap and easy to build a UCCS around a COSE Key. If COSE Keys are already supported in one's implementation, the additional step to take for \"dressing-up\" a \"Raw\" COSE Key as a UCCS is really small (trivial?), and might of course be limited to including only the 'cnf' claim, with no further metadata if that's appropriate/desired. Hence I think it's worthwhile and justifiable to have UCCS as a better substitute without the limitations above.\r\n\r\n* For the inner COSE Key structure, I believe forcing the lexicographical order of its elements is best and most viable.\r\n\r\n* If I understand correctly, there is no need to integrity-protect also the possible CBOR tags. Then, I'd propose to generally admit both tagged and untagged objects. However, possible CBOR tags must be stripped away when building CRED_X --- Relates to https://github.com/lake-wg/edhoc/issues/162\r\n\r\n",
+          "createdAt": "2021-09-10T07:18:14Z",
+          "updatedAt": "2021-09-10T07:18:14Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thanks Marco. My understandanding of the the current suggestion from Marco is:\r\n\r\n**COSE:** The COSE header parameters for CWT and ECCS allow bot tagged and untagged and do not enforce any specific order in the map.\r\n\r\n**EDHOC:** When CWT and UCCS is used in EDHOC, then CRED_x is the untagged CWT or UCCS sorted\r\nin lexigraphical order as defined by deterministic CBOR.\r\n\r\nThat works for me. ",
+          "createdAt": "2021-09-10T07:49:52Z",
+          "updatedAt": "2021-09-10T07:49:52Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "UCCS are great, they are clearly a more flexible format for RPKs than \"raw\" COSE_Keys. I think\r\nthe important thing is that EHDOC support UCCS as \"raw\" COSE_Keys has clear limitations. It\r\nwould be good to enourage use of UCCS, but from a design perspective it would be\r\nnice to say that EDHOC relies on COSE and support all credentials that can be identified\r\nwith COSE.\r\n\r\nIt is certainly trivial to dress up a COSE_Key as a UCCS.\r\n\r\n```\r\nNaked:     COSE_Key \r\nDressed:   { 8 : { 1 : COSE_Key } }\r\n```\r\n\r\nThis is done by prefixing the COSE_Key with 0xA108A101. I like the idea of dressing up\r\na COSE_Key as a UCCS. This needs to be specified a bit more in the document.",
+          "createdAt": "2021-09-10T09:15:25Z",
+          "updatedAt": "2021-09-10T09:15:25Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "So the current suggestion would be something like:\r\n\r\n```\r\n===========================================\r\nCredential type                       CRED_x CDDL type\r\n-------------------------------------------\r\nUCCS / COSE_Key                   map (UCCS map sorted in lexiographical order)\r\nCWT                                       COSE_Untagged_Message (Outer layer in lexiographical order)\r\nX509                                      bstr (end-entity)\r\nC509                                     C509Certificate (end-entity)\r\n===========================================\r\n```\r\n\r\nThe parties need to agree on the content in the CRED_x UCCS map.\r\n\r\nDo we need to specify lexiographical ordering for the CWT as well? If I understand correctly, some parts of the outher layer are formally unordered.\r\n\r\n",
+          "createdAt": "2021-09-10T09:22:37Z",
+          "updatedAt": "2021-09-10T09:23:13Z"
         }
       ]
     },
@@ -5759,9 +5920,52 @@
       "labels": [],
       "body": "The IANA section currectly specified that CWT can be sent tagged or untagged while UCCS can only be sent untagged. That is probably not how it should be.",
       "createdAt": "2021-09-08T06:04:04Z",
-      "updatedAt": "2021-09-08T06:04:04Z",
+      "updatedAt": "2021-09-10T07:50:36Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Only untagged:\r\n\r\n```\r\ncwt               COSE_Untagged_Message\r\nuccs             map\r\n\r\n```\r\n\r\nUntagged or tagged:\r\n\r\n```\r\ncwt               COSE_Messages\r\nuccs             #TBD601(map) / map\r\n\r\n```\r\n\r\nOnly tagged\r\n\r\n```\r\ncwt               COSE_Tagged_Message\r\nuccs             #TBD601(map)\r\n```\r\n",
+          "createdAt": "2021-09-09T07:35:18Z",
+          "updatedAt": "2021-09-09T07:35:18Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Tagged add bytes that are not required. The COSE header parameter alredady gives this information.\r\n\r\nExcept that I don't have a strong opinion between allowing both and only allowing untagged.\r\n\r\nNote that this is mostly a COSE question, rather than LAKE",
+          "createdAt": "2021-09-09T07:36:54Z",
+          "updatedAt": "2021-09-09T07:36:54Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The UCCS tag numer has not been assigned yet. \r\n\r\nhttps://datatracker.ietf.org/doc/html/draft-ietf-rats-uccs\r\n\r\n",
+          "createdAt": "2021-09-09T07:37:37Z",
+          "updatedAt": "2021-09-09T07:37:37Z"
+        },
+        {
+          "author": "marco-tiloca-sics",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "If I understand correctly, there is no need to integrity-protect also the possible CBOR tags. Then, I'd propose to generally admit both tagged and untagged objects. However, possible CBOR tags must be stripped away when building CRED_X --- Relates to https://github.com/lake-wg/edhoc/issues/161",
+          "createdAt": "2021-09-10T07:18:46Z",
+          "updatedAt": "2021-09-10T07:18:46Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": ">If I understand correctly, there is no need to integrity-protect also the possible CBOR tags.\r\n\r\nThere is no need, but if used in the protected header as in EDHOC they will be integrity protected. That however not a problem as the protected header_map is sent on the wire, so both parties will have the same formatting.",
+          "createdAt": "2021-09-10T07:43:05Z",
+          "updatedAt": "2021-09-10T07:43:05Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thanks Marco. My understandanding of the the current suggestion from Marco is:\r\n\r\n**COSE:** The COSE header parameters for CWT and ECCS allow bot tagged and untagged and do not enforce any specific order in the map.\r\n\r\n**EDHOC:** When CWT and UCCS is used in EDHOC, then CRED_x is the untagged CWT or UCCS sorted\r\nin lexigraphical order as defined by deterministic CBOR.\r\n\r\nThat works for me. ",
+          "createdAt": "2021-09-10T07:48:42Z",
+          "updatedAt": "2021-09-10T07:50:36Z"
+        }
+      ]
     },
     {
       "number": 163,
@@ -5775,9 +5979,107 @@
       "labels": [],
       "body": "The 4 labels use different styles. Should probably align them in -11.\r\n\r\n```\r\n   Label: EDHOC_message_4_Key\r\n   Label: EDHOC_message_4_Nonce\r\n   Label: OSCORE Master Secret\r\n   Label: OSCORE Master Salt\r\n\r\n```",
       "createdAt": "2021-09-08T10:43:56Z",
-      "updatedAt": "2021-09-08T10:43:56Z",
+      "updatedAt": "2021-09-09T07:30:15Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "1. Should they be aligned?\r\n\r\n2. If yes, how should they be aligned?\r\n\r\n```\r\na)\r\nEDHOC message 4 Key\r\nOSCORE Master Secret\r\n\r\nb)\r\nEDHOC_message_4_Key\r\nOSCORE_Master_Secret\r\n```",
+          "createdAt": "2021-09-09T07:29:52Z",
+          "updatedAt": "2021-09-09T07:30:15Z"
+        }
+      ]
+    },
+    {
+      "number": 165,
+      "id": "MDU6SXNzdWU5OTI5NjM2MTY=",
+      "title": "Possible collision of credential identifiers after credential transport by value",
+      "url": "https://github.com/lake-wg/edhoc/issues/165",
+      "state": "OPEN",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [
+        "Close?"
+      ],
+      "body": "Think of this scenario. An Initiator C1 offers its (self-generated) UCCS credential by value in ID_CRED_I with inner 'kid'=42, and EDHOC completes correctly by accepting the UCCS as Trust On First Use (TOFU). Later on, a different Initiator C2 also offers to the same Responder its (self-generated) UCCS credential by value in ID_CRED_I with inner 'kid'=42 again, and EDHOC completes correctly, again by accepting the UCCS as TOFU. You can think of the same scenario applied to two Responders' credential transported by value in ID_CRED_R just as well.\r\n\r\nIt's probably up to a peer's policies --- possibly reflected in the applicability statement for servers --- to determine whether it is fine or not to accept a UCCS/CWT credential that has a 'kid' equal to another credential already stored.\r\n\r\nIf the policy allows to accept multiple credentials with the same 'kid', later on in the following executions of EDHOC those will likely be referred by their 'kid' in ID_CRED_X, and something needs to be adapted in the EDHOC engine. That is, failing to verify an EDHOC message with one of those peer credential must not discontinue the protocol and send an Error Message right away. Instead, the next credential with that 'kid' should be tried. Only if the message processing fails with all of those credentials, an Error Message is sent.",
+      "createdAt": "2021-09-10T07:24:48Z",
+      "updatedAt": "2021-09-11T10:51:01Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thanks Marco,\r\n\r\nI think this is a general problem not really related to CTW or UCSS by value. It exists as long as\r\nmore that one entity determines the kid values. I also think it is not really an EDHOC problem. For\r\nidentification of cryptogrphic keys EDHOC relies purely on COSE by using COSE header maps.\r\n\r\nCOSE writes:\r\n\r\n```\r\n      Applications MUST NOT assume\r\n      that 'kid' values are unique.  There may be more than one key with\r\n      the same 'kid' value, so all of the keys associated with this\r\n      'kid' may need to be checked.\r\n```\r\n\r\nhttps://datatracker.ietf.org/doc/html/draft-ietf-cose-rfc8152bis-struct-15\r\n\r\nI don't know if there is need for more guidance from a COSE perspective.\r\n\r\n\r\nIn EDHOC the following sentence should maybe be reformulated.\r\n\r\n```\r\n   It is RECOMMENDED that ID_CRED_x uniquely identify the public\r\n   authentication key as the recipient may otherwise have to try several\r\n   keys.\r\n```\r\n\r\nMight be good to remind readers that applications MUST NOT assume that 'kid' values are unique\r\n\r\n",
+          "createdAt": "2021-09-10T08:16:37Z",
+          "updatedAt": "2021-09-10T08:16:56Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@marco-tiloca-sics I made a commit with a reference to COSE and some rephrasing. If you are happy with that we can close this. Otherwise feel free to suggest improvements.",
+          "createdAt": "2021-09-11T09:59:30Z",
+          "updatedAt": "2021-09-11T09:59:30Z"
+        },
+        {
+          "author": "marco-tiloca-sics",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Looks good to me, thanks! Just a small typo and editorial fix:\r\n\r\ns/as unique as possible to as the/as unique as possible, since the\r\n",
+          "createdAt": "2021-09-11T10:51:00Z",
+          "updatedAt": "2021-09-11T10:51:00Z"
+        }
+      ]
+    },
+    {
+      "number": 166,
+      "id": "MDU6SXNzdWU5OTMxNTY1Njg=",
+      "title": "Should EAD IANA registry contain CDDL",
+      "url": "https://github.com/lake-wg/edhoc/issues/166",
+      "state": "OPEN",
+      "author": "emanjon",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [
+        "Close?"
+      ],
+      "body": "EAD is currently an (int, any) pair where the specification registering ead is supposed to say what any is for each int. Shold this CDDL information be in the IANA table as well. That forces specification to do this and makes it easier to get an overview.\r\n\r\nI would say yes. COSE and CWT does this.",
+      "createdAt": "2021-09-10T11:44:43Z",
+      "updatedAt": "2021-09-11T06:56:27Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "After discussing with G\u00f6ran this seems like a good thing to do. To make the ead terms work with \"value type\" I renamed them to ead_label and ead_value. This aligns with some of the COSE and CWT registries.\r\n\r\nThe change is merged to master and is planned for -11. \r\n",
+          "createdAt": "2021-09-11T06:55:54Z",
+          "updatedAt": "2021-09-11T06:55:54Z"
+        }
+      ]
+    },
+    {
+      "number": 167,
+      "id": "MDU6SXNzdWU5OTMyMDkxODM=",
+      "title": "Registration procedures for the new EDHOC registries",
+      "url": "https://github.com/lake-wg/edhoc/issues/167",
+      "state": "OPEN",
+      "author": "emanjon",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Currently a mixture of:\r\nThe registration procedure is \"Expert Review\".\r\nThe registration procedure is \"Specification Required\". \r\n",
+      "createdAt": "2021-09-10T12:55:40Z",
+      "updatedAt": "2021-09-11T07:49:38Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I changed EDHOC Error Code Registry to \"Expert Review\" to align with the others. It makes no sense that the Error registry has harder requirements than the methods or cipher suite registry,\r\n\r\nWe should maybe discuss Registration procedures for the new EDHOC registries at IETF 112. Right now they are all expert review without any differentiation between small and big numbers. We should discuss what is the right approach.\r\n",
+          "createdAt": "2021-09-11T06:49:44Z",
+          "updatedAt": "2021-09-11T07:49:38Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -7450,6 +7752,60 @@
       "mergeCommit": {
         "oid": "efaa7ccba40adc3291c05faab884229ece009908"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 164,
+      "id": "MDExOlB1bGxSZXF1ZXN0NzMwNDQzOTA3",
+      "title": "Core resource type",
+      "url": "https://github.com/lake-wg/edhoc/pull/164",
+      "state": "MERGED",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-09-09T10:31:14Z",
+      "updatedAt": "2021-09-09T13:24:00Z",
+      "baseRepository": "lake-wg/edhoc",
+      "baseRefName": "master",
+      "baseRefOid": "eb3ad1450181a8938771ae6f031fc8ab86e4a48f",
+      "headRepository": "marco-tiloca-sics/edhoc",
+      "headRefName": "core-resource-type",
+      "headRefOid": "49d5d0490b99181c31b14b7a6ed0e86dd7a3220d",
+      "closedAt": "2021-09-09T13:24:00Z",
+      "mergedAt": "2021-09-09T13:24:00Z",
+      "mergedBy": "emanjon",
+      "mergeCommit": {
+        "oid": "7702ed137f46af09a0e2f08508d787ecaf70e588"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 168,
+      "id": "MDExOlB1bGxSZXF1ZXN0NzMxNzk2Njg2",
+      "title": "Small restructure of 3.3 and 3.4",
+      "url": "https://github.com/lake-wg/edhoc/pull/168",
+      "state": "OPEN",
+      "author": "emanjon",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "There was quite a lot of overlap between 3.3.2 and 3.4. Tried to integrate 3.3.2 in 3.4 to avoid that.",
+      "createdAt": "2021-09-10T22:34:10Z",
+      "updatedAt": "2021-09-10T22:34:10Z",
+      "baseRepository": "lake-wg/edhoc",
+      "baseRefName": "master",
+      "baseRefOid": "8b05f6f41a547e7dab86d30dd7a07f9a7d576cc5",
+      "headRepository": "lake-wg/edhoc",
+      "headRefName": "Small-restructure-of-3.3-and-3.4",
+      "headRefOid": "ae7fc4d2d54addb3f4956a7c2c1471c773913197",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
