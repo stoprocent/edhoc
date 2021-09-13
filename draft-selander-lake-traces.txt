@@ -63,7 +63,7 @@ Table of Contents
 
    1.  Introduction
    2.  Setup
-   3.  Authentication with static DH, RPK identified by 'kid'
+   3.  Authentication with static DH, UCCS identified by 'kid'
      3.1.  message_1
      3.2.  message_2
      3.3.  message_3
@@ -133,7 +133,7 @@ Table of Contents
    generate them can be found at: https://github.com/lake-
    wg/edhoc/tree/master/test-vectors-10.
 
-3.  Authentication with static DH, RPK identified by 'kid'
+3.  Authentication with static DH, UCCS identified by 'kid'
 
    In this example I and R are authenticated with ephemeral-static
    Diffie-Hellman (METHOD = 3).  The public keys are represented as raw
