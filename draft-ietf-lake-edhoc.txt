@@ -404,7 +404,7 @@ Table of Contents
    Section 3 and Section 5.  Message formatting and processing is
    specified in Section 5 and Section 6.
 
-   Application data may protected using the agreed application
+   Application data may be protected using the agreed application
    algorithms (AEAD, hash) in the selected cipher suite (see
    Section 3.6) and the application can make use of the established
    connection identifiers C_I and C_R (see Section 3.3).  EDHOC may be
@@ -2132,7 +2132,7 @@ Table of Contents
 
    The hash algorithms SHA-1 and SHA-256/64 (SHA-256 truncated to
    64-bits) SHALL NOT be supported for use in EDHOC except for
-   certificate identification with x5u and c5u.  Note that secp256k1 is
+   certificate identification with x5t and c5t.  Note that secp256k1 is
    only defined for use with ECDSA and not for ECDH.  Note that some
    COSE algorithms are marked as not recommended in the COSE IANA
    registry.
@@ -2238,7 +2238,7 @@ Table of Contents
    preferred cipher suites will be used by blocking the other exchange.
 
    If supported by the device, it is RECOMMENDED that at least the long-
-   term private keys is stored in a Trusted Execution Environment (TEE)
+   term private keys are stored in a Trusted Execution Environment (TEE)
    and that sensitive operations using these keys are performed inside
    the TEE.  To achieve even higher security it is RECOMMENDED that
    additional operations such as ephemeral key generation, all
