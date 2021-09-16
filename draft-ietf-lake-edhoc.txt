@@ -5,8 +5,8 @@
 Network Working Group                                        G. Selander
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                            F. Palombini
-Expires: 19 March 2022                                          Ericsson
-                                                       15 September 2021
+Expires: 20 March 2022                                          Ericsson
+                                                       16 September 2021
 
 
                Ephemeral Diffie-Hellman Over COSE (EDHOC)
@@ -50,7 +50,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 March 2022.
+   This Internet-Draft will expire on 20 March 2022.
 
 Copyright Notice
 
@@ -1248,6 +1248,11 @@ Table of Contents
    Examples of use of the EDHOC-Exporter are given in Section 5.5.2 and
    Appendix A.
 
+   *  K_4 and IV_4 are derived with the EDHOC-Exporter using the empty
+      byte string h'' as context, and labels "EDHOC_message_4_Key" and
+      "EDHOC_message_4_Nonce", respectively.  IVs are only used if the
+      EDHOC AEAD algorithm uses IVs.
+
 4.4.  EDHOC-KeyUpdate
 
    To provide forward secrecy in an even more efficient way than re-
@@ -1719,16 +1724,19 @@ Table of Contents
 
       -  external_aad = TH_4
 
-      -  plaintext = ( ? EAD_4 )
+      -  plaintext = ( ? EAD_4 ), where EAD_4 is protected external
+         authorization data, see Section 3.8
 
-      where EAD_4 is protected external authorization data, see
-      Section 3.8.  COSE constructs the input to the AEAD [RFC5116] as
-      follows:
+      -  Key K_4 = EDHOC-Exporter( "EDHOC_message_4_Key", h'', length )
 
-      -  Key K = EDHOC-Exporter( "EDHOC_message_4_Key", h'', length )
-
-      -  Nonce N = EDHOC-Exporter( "EDHOC_message_4_Nonce", h'', length
+      -  IV IV_4 = EDHOC-Exporter( "EDHOC_message_4_Nonce", h'', length
          )
+
+      COSE constructs the input to the AEAD [RFC5116] as follows:
+
+      -  Key K = K_4
+
+      -  Nonce N = IV_4
 
       -  Plaintext P = ( ? EAD_4 )
 
