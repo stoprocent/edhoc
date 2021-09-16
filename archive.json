@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-09-14T01:05:31.202163+00:00",
+  "timestamp": "2021-09-16T01:06:07.746495+00:00",
   "repo": "lake-wg/edhoc",
   "labels": [
     {
@@ -6040,7 +6040,7 @@
       ],
       "body": "The 4 labels use different styles. Should probably align them in -11.\r\n\r\n```\r\n   Label: EDHOC_message_4_Key\r\n   Label: EDHOC_message_4_Nonce\r\n   Label: OSCORE Master Secret\r\n   Label: OSCORE Master Salt\r\n\r\n```",
       "createdAt": "2021-09-08T10:43:56Z",
-      "updatedAt": "2021-09-13T07:54:53Z",
+      "updatedAt": "2021-09-14T07:38:32Z",
       "closedAt": null,
       "comments": [
         {
@@ -6049,6 +6049,13 @@
           "body": "1. Should they be aligned?\r\n\r\n2. If yes, how should they be aligned?\r\n\r\n```\r\na)\r\nEDHOC message 4 Key\r\nOSCORE Master Secret\r\n\r\nb)\r\nEDHOC_message_4_Key\r\nOSCORE_Master_Secret\r\n```",
           "createdAt": "2021-09-09T07:29:52Z",
           "updatedAt": "2021-09-09T07:30:15Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "For information, the labels used directly with the internal EDHOC-KDF (together with TH_2 and TH_3) are\r\n\r\nKEYSTREAM_2\r\nMAC_2\r\nK_3ae\r\nIV_3ae\r\nMAC_3\r\n\r\n",
+          "createdAt": "2021-09-14T07:38:32Z",
+          "updatedAt": "2021-09-14T07:38:32Z"
         }
       ]
     },
@@ -7877,24 +7884,26 @@
       "id": "MDExOlB1bGxSZXF1ZXN0NzMxNzk2Njg2",
       "title": "Small restructure of 3.3 and 3.4",
       "url": "https://github.com/lake-wg/edhoc/pull/168",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "There was quite a lot of overlap between 3.3.2 and 3.4. Tried to integrate 3.3.2 in 3.4 to avoid that.",
       "createdAt": "2021-09-10T22:34:10Z",
-      "updatedAt": "2021-09-13T14:14:47Z",
+      "updatedAt": "2021-09-14T08:32:39Z",
       "baseRepository": "lake-wg/edhoc",
       "baseRefName": "master",
       "baseRefOid": "8b05f6f41a547e7dab86d30dd7a07f9a7d576cc5",
       "headRepository": "lake-wg/edhoc",
       "headRefName": "Small-restructure-of-3.3-and-3.4",
       "headRefOid": "ae7fc4d2d54addb3f4956a7c2c1471c773913197",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2021-09-14T07:29:27Z",
+      "mergedAt": "2021-09-14T07:29:27Z",
+      "mergedBy": "emanjon",
+      "mergeCommit": {
+        "oid": "ed3bd711ffbb64c98f80b1912e0e80562be73cee"
+      },
       "comments": [],
       "reviews": [
         {
