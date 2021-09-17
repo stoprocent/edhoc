@@ -2260,7 +2260,10 @@ Table of Contents
    the new group name "Ephemeral Diffie-Hellman Over COSE (EDHOC)".  The
    registration procedure is "Expert Review".  The columns of the
    registry are Label, Description, and Reference.  All columns are text
-   strings.  The initial contents of the registry are:
+   strings where Label consists only of the printable ASCII characters
+   0x21 - 0x7e.  Labels beginning with "PRIVATE" MAY be used for private
+   use without registration.  All other label values MUST be registered.
+   The initial contents of the registry are:
 
    Label: EDHOC_K_4
    Description: Key used to protect EDHOC message_4
