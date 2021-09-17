@@ -5,8 +5,8 @@
 Network Working Group                                        G. Selander
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                            F. Palombini
-Expires: 20 March 2022                                          Ericsson
-                                                       16 September 2021
+Expires: 21 March 2022                                          Ericsson
+                                                       17 September 2021
 
 
                Ephemeral Diffie-Hellman Over COSE (EDHOC)
@@ -50,7 +50,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 March 2022.
+   This Internet-Draft will expire on 21 March 2022.
 
 Copyright Notice
 
@@ -1182,7 +1182,7 @@ Table of Contents
       TH_2, TH_3, or TH_4 as defined in Sections 5.3.1, 5.4.1, and 4.3.
 
    *  label is a tstr set to the name of the derived key, IV or MAC;
-      i.e., "KEYSTREAM_2", "MAC_2", "K_3ae", "IV_3ae", or "MAC_3".
+      i.e., "KEYSTREAM_2", "MAC_2", "K_3", "IV_3", or "MAC_3".
 
    *  context is a bstr
 
@@ -1210,15 +1210,15 @@ Table of Contents
    *  MAC_2 is derived using the transcript hash TH_2 and the
       pseudorandom key PRK_3e2m.
 
-   *  K_3ae and IV_3ae are derived using the transcript hash TH_3 and
-      the pseudorandom key PRK_3e2m.  IVs are only used if the EDHOC
-      AEAD algorithm uses IVs.
+   *  K_3 and IV_3 are derived using the transcript hash TH_3 and the
+      pseudorandom key PRK_3e2m.  IVs are only used if the EDHOC AEAD
+      algorithm uses IVs.
 
    *  MAC_3 is derived using the transcript hash TH_3 and the
       pseudorandom key PRK_4x3m.
 
-   KEYSTREAM_2, K_3ae, and IV_3ae use an empty byte string h'' as
-   context.  MAC_2 and MAC_3 use context as defined in Section 5.3.2 and
+   KEYSTREAM_2, K_3, and IV_3 use an empty byte string h'' as context.
+   MAC_2 and MAC_3 use context as defined in Section 5.3.2 and
    Section 5.4.2, respectively.
 
 4.3.  EDHOC-Exporter
@@ -1596,7 +1596,7 @@ Table of Contents
 
    *  Compute an outer COSE_Encrypt0 as defined in Section 5.3 of
       [I-D.ietf-cose-rfc8152bis-struct], with the EDHOC AEAD algorithm
-      in the selected cipher suite, K_3ae, IV_3ae, and the following
+      in the selected cipher suite, K_3, IV_3, and the following
       parameters.  The protected header SHALL be empty.
 
       -  external_aad = TH_3
@@ -1611,9 +1611,9 @@ Table of Contents
 
       COSE constructs the input to the AEAD [RFC5116] as follows:
 
-      -  Key K = EDHOC-KDF( PRK_3e2m, TH_3, "K_3ae", h'', length )
+      -  Key K = EDHOC-KDF( PRK_3e2m, TH_3, "K_3", h'', length )
 
-      -  Nonce N = EDHOC-KDF( PRK_3e2m, TH_3, "IV_3ae", h'', length )
+      -  Nonce N = EDHOC-KDF( PRK_3e2m, TH_3, "IV_3", h'', length )
 
       -  Plaintext P = ( ID_CRED_I / bstr / int, Signature_or_MAC_3, ?
          EAD_3 )
@@ -1655,7 +1655,7 @@ Table of Contents
 
    *  Decrypt and verify the outer COSE_Encrypt0 as defined in
       Section 5.3 of [I-D.ietf-cose-rfc8152bis-struct], with the EDHOC
-      AEAD algorithm in the selected cipher suite, K_3ae, and IV_3ae.
+      AEAD algorithm in the selected cipher suite, K_3, and IV_3.
 
    *  Pass EAD_3 to the security application.
 
