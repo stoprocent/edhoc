@@ -1249,9 +1249,9 @@ Table of Contents
    Appendix A.
 
    *  K_4 and IV_4 are derived with the EDHOC-Exporter using the empty
-      byte string h'' as context, and labels "EDHOC_message_4_Key" and
-      "EDHOC_message_4_IV", respectively.  IVs are only used if the
-      EDHOC AEAD algorithm uses IVs.
+      byte string h'' as context, and labels "EDHOC_K_4" and
+      "EDHOC_IV_4", respectively.  IVs are only used if the EDHOC AEAD
+      algorithm uses IVs.
 
 4.4.  EDHOC-KeyUpdate
 
@@ -1727,9 +1727,9 @@ Table of Contents
       -  plaintext = ( ? EAD_4 ), where EAD_4 is protected external
          authorization data, see Section 3.8
 
-      -  Key K_4 = EDHOC-Exporter( "EDHOC_message_4_Key", h'', length )
+      -  Key K_4 = EDHOC-Exporter( "EDHOC_K_4", h'', length )
 
-      -  IV IV_4 = EDHOC-Exporter( "EDHOC_message_4_IV", h'', length )
+      -  IV IV_4 = EDHOC-Exporter( "EDHOC_IV_4", h'', length )
 
       COSE constructs the input to the AEAD [RFC5116] as follows:
 
@@ -2268,11 +2268,11 @@ Table of Contents
    registry are Label, Description, and Reference.  All columns are text
    strings.  The initial contents of the registry are:
 
-   Label: EDHOC_message_4_Key
+   Label: EDHOC_K_4
    Description: Key used to protect EDHOC message_4
    Reference: [[this document]]
 
-   Label: EDHOC_message_4_IV
+   Label: EDHOC_IV_4
    Description: IV used to protect EDHOC message_4
    Reference: [[this document]]
 
