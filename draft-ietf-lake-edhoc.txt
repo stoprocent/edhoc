@@ -5,8 +5,8 @@
 Network Working Group                                        G. Selander
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                            F. Palombini
-Expires: 21 March 2022                                          Ericsson
-                                                       17 September 2021
+Expires: 22 March 2022                                          Ericsson
+                                                       18 September 2021
 
 
                Ephemeral Diffie-Hellman Over COSE (EDHOC)
@@ -50,7 +50,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 March 2022.
+   This Internet-Draft will expire on 22 March 2022.
 
 Copyright Notice
 
@@ -1230,8 +1230,8 @@ Table of Contents
    context) pair must be unique, i.e., a (label, context) MUST NOT be
    used for two different purposes.  However an application can re-
    derive the same key several times as long as it is done in a secure
-   way.  For example, in most encryption algorithms the same (key,
-   nonce) pair must not be reused.  The context can for example be the
+   way.  For example, in most encryption algorithms the same key kan be
+   reused with different nonces.  The context can for example be the
    empty (zero-length) sequence or a single CBOR byte string.
 
    The transcript hash TH_4 is a CBOR encoded bstr and the input to the
