@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-09-16T01:06:07.746495+00:00",
+  "timestamp": "2021-09-19T01:03:36.507061+00:00",
   "repo": "lake-wg/edhoc",
   "labels": [
     {
@@ -1810,7 +1810,7 @@
       "labels": [],
       "body": "as requested from interop:\r\n\r\n- [x] obsolete PSK test vectors\r\n- [x] add TH4 output\r\n- [x] add exporter, exporter outputs, keyupdate, to all test vectors\r\n- [x] add KEYSTREAM_2\r\n- [x] print out public keys.\r\n- [x] Add error message\r\n- [x] Add message_4\r\n- [x] Add ead\r\n- [x] Update test vectors to -10\r\n- [x] Add JSON format\r\n- [ ] add real certificates to test vectors - 0:CBOR native and DER (and possibly later 1:ASN.1 translated)\r\n- [ ] Add ciphersuites 2 and 3 to test vectors, ECDSA keys should print out full y coordinate\r\n",
       "createdAt": "2020-12-14T12:41:48Z",
-      "updatedAt": "2021-09-12T12:42:23Z",
+      "updatedAt": "2021-09-17T14:27:43Z",
       "closedAt": null,
       "comments": [
         {
@@ -1847,6 +1847,13 @@
           "body": "I added the two additional test vectors with a SDH key in a x509 and a signature key in a UCCS.",
           "createdAt": "2021-09-12T12:42:22Z",
           "updatedAt": "2021-09-12T12:42:22Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I uploaded preliminary -11 test vectors base on the current master. The two changes that affect test vectors are\r\n-  Changed several of the KDF and Exporter labels \u00a0\r\n-  Replaced edhoc_aead_id with selected_suite",
+          "createdAt": "2021-09-17T14:27:42Z",
+          "updatedAt": "2021-09-17T14:27:42Z"
         }
       ]
     },
@@ -6036,11 +6043,11 @@
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [
-        "work in progress -11"
+        "Close?"
       ],
       "body": "The 4 labels use different styles. Should probably align them in -11.\r\n\r\n```\r\n   Label: EDHOC_message_4_Key\r\n   Label: EDHOC_message_4_Nonce\r\n   Label: OSCORE Master Secret\r\n   Label: OSCORE Master Salt\r\n\r\n```",
       "createdAt": "2021-09-08T10:43:56Z",
-      "updatedAt": "2021-09-14T07:38:32Z",
+      "updatedAt": "2021-09-17T14:51:50Z",
       "closedAt": null,
       "comments": [
         {
@@ -6056,6 +6063,41 @@
           "body": "For information, the labels used directly with the internal EDHOC-KDF (together with TH_2 and TH_3) are\r\n\r\nKEYSTREAM_2\r\nMAC_2\r\nK_3ae\r\nIV_3ae\r\nMAC_3\r\n\r\n",
           "createdAt": "2021-09-14T07:38:32Z",
           "updatedAt": "2021-09-14T07:38:32Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The newly registered TLS exporter labels seem to avoid blank space and most labels use '-' or '_' instead. That might point to b) being a good approach if we want to do alignment.",
+          "createdAt": "2021-09-16T14:50:18Z",
+          "updatedAt": "2021-09-16T14:56:07Z"
+        },
+        {
+          "author": "gselander",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Fixed in dad40e5",
+          "createdAt": "2021-09-16T17:58:31Z",
+          "updatedAt": "2021-09-16T17:58:31Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Good that you fixed the structure in message_4 so the key is defined for COSE_Encrypt and not only for the underlying AEAD. Good with a name change to IV which is what COSE calls the input.\r\n\r\nBased on the new names K_4 and IV_4 we should maybe rename to K_3 and IV_3 as well.\r\n\r\n\r\nGS: fixed in 1798445",
+          "createdAt": "2021-09-16T18:56:07Z",
+          "updatedAt": "2021-09-17T05:28:16Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Maybe just\r\n \r\n   * Key K_4 = EDHOC-Exporter( \"EDHOC_K_4\", h'', length )\r\n   * IV IV_4 = EDHOC-Exporter( \"EDHOC_IV_4\", h'', length )\r\n\r\n\r\n\r\nGS: fixed in 33f0fbf",
+          "createdAt": "2021-09-16T18:59:10Z",
+          "updatedAt": "2021-09-17T05:27:42Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Some ideas from the TLS exporter that could be used.\r\n\r\n```\r\nThe label is a string consisting of the printable ASCII characters \r\n\r\nLabel values beginning with \"EXPERIMENTAL\" MAY be used for private use without registration. All other label values MUST be registered.\r\n\r\n```\r\n\r\nEDHOC could specify exactly what a label consists of:\r\n\r\n`The label is a string consisting of the printable ASCII characters 0x21 - 0x7e\r\n`",
+          "createdAt": "2021-09-16T19:16:46Z",
+          "updatedAt": "2021-09-17T08:16:40Z"
         }
       ]
     },
@@ -6176,6 +6218,95 @@
           "updatedAt": "2021-09-13T11:53:57Z"
         }
       ]
+    },
+    {
+      "number": 170,
+      "id": "I_kwDOEItXAM47gJg5",
+      "title": "Traces document - New note on connection identifiers",
+      "url": "https://github.com/lake-wg/edhoc/issues/170",
+      "state": "OPEN",
+      "author": "marco-tiloca-sics",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "In Section 2 of the EDHOC traces document [1], I suggest to add the note below (or something similar):\r\n\r\nNOTE 3.  Remember that an EDHOC message never starts with a connection identifier or with an analogous sentinel value like the CBOR simple value \"true\" (0xf5). These are possibly prepended to an EDHOC message as the transport protocol needs, but are not part of the EDHOC message.\r\n\r\n[1] https://datatracker.ietf.org/doc/html/draft-selander-lake-traces-00#section-2",
+      "createdAt": "2021-09-16T14:29:39Z",
+      "updatedAt": "2021-09-17T06:23:38Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "gselander",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I agree it is good to point out in this draft that a real world EDHOC trace would typically contain connection identifiers. Perhaps we can formulate it as follows:\r\n\r\nNOTE 3. When the protocol transporting EDHOC messages does not inherently provide correlation across all messages, like CoAP (see 3.4.1 and A.3 of {{EDHOC}}), then some messages typically are prepended with connection identifiers and  message_1 indicator. Those bytes are omitted from the traces in this draft.\r\n",
+          "createdAt": "2021-09-17T05:57:55Z",
+          "updatedAt": "2021-09-17T05:57:55Z"
+        },
+        {
+          "author": "marco-tiloca-sics",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "It looks good.",
+          "createdAt": "2021-09-17T06:23:38Z",
+          "updatedAt": "2021-09-17T06:23:38Z"
+        }
+      ]
+    },
+    {
+      "number": 171,
+      "id": "I_kwDOEItXAM47jFj1",
+      "title": "Make it clearer what is explanations of COSE.",
+      "url": "https://github.com/lake-wg/edhoc/issues/171",
+      "state": "OPEN",
+      "author": "emanjon",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Several things in the document is not specification but rather clarification of how COSE works. The additon of this and the integration in the main body was requested by several implementors. It should be more clearly marked that these parts just explain COSE and does not define anything. If soemthing would be wrong. The COSE specification apply.\r\n\r\nE.g.\r\n\r\n```\r\n\r\n\r\n   COSE constructs the input to the Signature Algorithm as:\r\n\r\n      -  The key is the private authentication key of the Responder.\r\n\r\n      -  The message M to be signed =\r\n\r\n         [ \"Signature1\", << ID_CRED_R >>, << TH_2, CRED_R, ? EAD_2 >>,\r\n         MAC_2 ]\r\n\r\n\r\n\r\n\r\n\r\n  COSE constructs the input to the AEAD [RFC5116] as follows:\r\n\r\n      -  Key K = EDHOC-KDF( PRK_3e2m, TH_3, \"K_3ae\", h'', length )\r\n\r\n      -  Nonce N = EDHOC-KDF( PRK_3e2m, TH_3, \"IV_3ae\", h'', length )\r\n\r\n      -  Plaintext P = ( ID_CRED_I / bstr / int, Signature_or_MAC_3, ?\r\n         EAD_3 )\r\n\r\n      -  Associated data A = [ \"Encrypt0\", h'', TH_3 ]\r\n\r\n\r\n\r\n *  by a hash value with the 'x5t' or 'c5t' parameters, respectively:\r\n\r\n      -  ID_CRED_x = { 34 : COSE_CertHash }, for x = I or R,\r\n\r\n      -  ID_CRED_x = { TBD3 : COSE_CertHash }, for x = I or R;\r\n\r\n   *  or by a URI with the 'x5u' or 'c5u' parameters, respectively:\r\n\r\n      -  ID_CRED_x = { 35 : uri }, for x = I or R,\r\n\r\n      -  ID_CRED_x = { TBD4 : uri }, for x = I or R.\r\n\r\n\r\n\r\n\r\n```\r\n\r\n",
+      "createdAt": "2021-09-17T07:47:57Z",
+      "updatedAt": "2021-09-17T08:14:52Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 172,
+      "id": "I_kwDOEItXAM47jdIC",
+      "title": "  Change edhoc_aead_id to selected cipher suite in info structure",
+      "url": "https://github.com/lake-wg/edhoc/issues/172",
+      "state": "OPEN",
+      "author": "emanjon",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [
+        "Close?"
+      ],
+      "body": "The selected cipher suite covers the aead and more.",
+      "createdAt": "2021-09-17T09:33:56Z",
+      "updatedAt": "2021-09-17T21:22:00Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "selected_suite is always included in transcript_hash and could be removed. I.e. an equally secure info would be\r\n\r\ninfo = (\r\n  transcript_hash : bstr,\r\n  label : tstr,\r\n  context : bstr,\r\n  length : uint,\r\n)",
+          "createdAt": "2021-09-17T21:22:00Z",
+          "updatedAt": "2021-09-17T21:22:00Z"
+        }
+      ]
+    },
+    {
+      "number": 174,
+      "id": "I_kwDOEItXAM47lH8i",
+      "title": "Use of confirmable messages in CoAP",
+      "url": "https://github.com/lake-wg/edhoc/issues/174",
+      "state": "OPEN",
+      "author": "chrysn",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Following a discussion recently had with Carsten and the CoAP-EAP authors, I stumbled upon this sentence:\r\n\r\n> According to this specification, EDHOC messages are carried in Confirmable messages, which is beneficial especially if fragmentation is used.\r\n\r\nNo other part of the spec mentions CONs (apart from the deduplication part where it does fit well), so maybe this is not intended anyway. At most, it could say:\r\n\r\n> To avoid that the EDHOC exchange gets stuck (especially when fragmentation is used), the underlying CoAP transport should be used in reliable mode.",
+      "createdAt": "2021-09-17T17:46:55Z",
+      "updatedAt": "2021-09-17T17:46:55Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -7920,6 +8051,34 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 173,
+      "id": "PR_kwDOEItXAM4r4lCq",
+      "title": "selected_suite in info #172",
+      "url": "https://github.com/lake-wg/edhoc/pull/173",
+      "state": "MERGED",
+      "author": "emanjon",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This simplify things. The selected cipher suite also covers more than just the aead algorithm.\r\n\r\nI think the \"suite = int\" definition can be removed. It does not add much in the current version. In older versions suite was a more advances construction.",
+      "createdAt": "2021-09-17T10:17:31Z",
+      "updatedAt": "2021-09-17T11:05:53Z",
+      "baseRepository": "lake-wg/edhoc",
+      "baseRefName": "master",
+      "baseRefOid": "33f0fbfdad94ab31be21795f7d410ace6ff36e7c",
+      "headRepository": "lake-wg/edhoc",
+      "headRefName": "selected_suite-in-info-#172",
+      "headRefOid": "356e1d5f71c23ff94a9c7fcdc78ed2a60ef229c0",
+      "closedAt": "2021-09-17T11:05:53Z",
+      "mergedAt": "2021-09-17T11:05:52Z",
+      "mergedBy": "emanjon",
+      "mergeCommit": {
+        "oid": "1b096dd6d9dd0097d9fe2d607a268b0c2d01cc3e"
+      },
+      "comments": [],
+      "reviews": []
     }
   ]
 }
