@@ -5,8 +5,8 @@
 Network Working Group                                        G. Selander
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                            F. Palombini
-Expires: 24 March 2022                                          Ericsson
-                                                       20 September 2021
+Expires: 25 March 2022                                          Ericsson
+                                                       21 September 2021
 
 
                Ephemeral Diffie-Hellman Over COSE (EDHOC)
@@ -50,7 +50,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 March 2022.
+   This Internet-Draft will expire on 25 March 2022.
 
 Copyright Notice
 
@@ -200,9 +200,10 @@ Table of Contents
 
    EDHOC makes use of known protocol constructions, such as SIGMA
    [SIGMA] and Extract-and-Expand [RFC5869].  EDHOC uses COSE for
-   cryptography and identification of credentials (COSE_Key, CWT, CCS,
-   X.509, C509, etc.).  COSE provides crypto agility and enables the use
-   of future algorithms and credentials targeting IoT.
+   cryptography and identification of credentials (including COSE_Key,
+   CWT, CCS, X.509, C509, see Section 3.5).  COSE provides crypto
+   agility and enables the use of future algorithms and credentials
+   targeting IoT.
 
 1.2.  Use of EDHOC
 
@@ -244,10 +245,11 @@ Table of Contents
    [I-D.ietf-lwig-security-protocol-comparison].  Figure 1 shows
    examples of message sizes for EDHOC with different kinds of
    authentication keys and different COSE header parameters for
-   identification: static Diffie-Hellman keys or signature keys in CWT
-   or CCS identified by a key identifier using 'kid'
-   [I-D.ietf-cose-rfc8152bis-struct] or X.509 certificates identified by
-   a hash value using 'x5t' [I-D.ietf-cose-x509].
+   identification: static Diffie-Hellman keys or signature keys, either
+   in CBOR Web Token (CWT) / CWT Claims Set (CCS) [RFC8392] identified
+   by a key identifier using 'kid' [I-D.ietf-cose-rfc8152bis-struct], or
+   in X.509 certificates identified by a hash value using 'x5t'
+   [I-D.ietf-cose-x509].
 
          ========================================================
                              Static DH Keys        Signature Keys
