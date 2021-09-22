@@ -5,8 +5,8 @@
 Network Working Group                                        G. Selander
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                            F. Palombini
-Expires: 25 March 2022                                          Ericsson
-                                                       21 September 2021
+Expires: 26 March 2022                                          Ericsson
+                                                       22 September 2021
 
 
                Ephemeral Diffie-Hellman Over COSE (EDHOC)
@@ -50,7 +50,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 March 2022.
+   This Internet-Draft will expire on 26 March 2022.
 
 Copyright Notice
 
@@ -2899,7 +2899,7 @@ A.2.  Deriving the OSCORE Security Context
    the OSCORE Master Salt, are "OSCORE_Master_Secret" and
    "OSCORE_Master_Salt", respectively.
 
-   The context parameter is h'' (0x40), the empty CBOR byte string.
+   The context parameter is h'', the empty CBOR byte string.
 
    By default, key_length is the key length (in bytes) of the
    application AEAD Algorithm of the selected cipher suite for the EDHOC
@@ -3128,16 +3128,12 @@ C.1.  CBOR and CDDL
    of pairs of data items, and sequences [RFC8742] of data items.  Some
    examples are given below.
 
-   The EDHOC specification sometimes use CDDL names in CBOR dignostic
+   The EDHOC specification sometimes use CDDL names in CBOR diagnostic
    notation as in e.g., << ID_CRED_R, ? EAD_2 >>.  This means that EAD_2
-   is optional and that ID_CRED_R and EAD_2 should be substituted with
+   is optional and that ID_CRED_R, and EAD_2 should be substituted with
    their values before evaluation.  I.e., if ID_CRED_R = { 4 : h'' } and
    EAD_2 is omitted then << ID_CRED_R, ? EAD_2 >> = << { 4 : h'' } >>,
    which encodes to 0x43a10440.
-
-   For a complete specification and more examples, see [RFC8949] and
-   [RFC8610].  We recommend implementors to get used to CBOR by using
-   the CBOR playground [CborMe].
 
     Diagnostic          Encoded              Type
     ------------------------------------------------------------------
@@ -3156,6 +3152,10 @@ C.1.  CBOR and CDDL
     ( 1, 2, true )      0x0102f5             sequence
     1, 2, true          0x0102f5             sequence
     ------------------------------------------------------------------
+
+   For a complete specification and more examples, see [RFC8949] and
+   [RFC8610].  We recommend implementors to get used to CBOR by using
+   the CBOR playground [CborMe].
 
 C.2.  CDDL Definitions
 
