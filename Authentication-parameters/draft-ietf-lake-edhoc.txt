@@ -5,8 +5,8 @@
 Network Working Group                                        G. Selander
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                            F. Palombini
-Expires: 26 March 2022                                          Ericsson
-                                                       22 September 2021
+Expires: 27 March 2022                                          Ericsson
+                                                       23 September 2021
 
 
                Ephemeral Diffie-Hellman Over COSE (EDHOC)
@@ -50,7 +50,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 26 March 2022.
+   This Internet-Draft will expire on 27 March 2022.
 
 Copyright Notice
 
@@ -545,10 +545,10 @@ Table of Contents
    (i.e., the public key) is stored in an authentication credential that
    also contains the authentication key algorithm and optionally other
    parameters such as identity, key usage, expiry, issuer, etc.  EDHOC
-   relies on COSE for identification of authentication credentials and
-   supports all credential types for which COSE header parameters are
-   defined, see Section 3.5.3.  The authentication key and credential is
-   used in several parts of EDHOC:
+   relies on COSE for identification of authentication credentials (see
+   Section 3.5.4) and supports all credential types for which COSE
+   header parameters are defined (see Section 3.5.3).  The
+   authentication key and credential is used in several parts of EDHOC:
 
    1.  the authentication credential CRED_x is included in the integrity
        calculation
@@ -685,9 +685,18 @@ Table of Contents
 
    CRED_x needs to be defined such that it is identical when used by
    Initiator or Responder.  The Initiator and Responder are expected to
-   agree on a specific encoding of the credential, see Section 3.9.  The
-   common encoding is needed in particular when the credential is not
-   transported, e.g., when using the COSE 'kid' parameter for
+   agree on a specific encoding of the credential, see Section 3.9.  It
+   is RECOMMENDED that the COSE 'kid' parameter, when used, refers to a
+   specific encoding.  The Initiator and Responder SHOULD use an
+   available authentication credential without re-encoding.
+
+   If for some reason re-encoding of the authentication credntial may
+   occur, then a potential common encoding for CBOR based credentials is
+   bytewise lexicographic order of their deterministic encodings as
+   specified in Section 4.2.1 of [RFC8949].
+
+   The common encoding is needed in particular when the credential is
+   not transported, e.g., when using the COSE 'kid' parameter for
    identification.  A preferred common encoding for a CBOR based
    credential is bytewise lexicographic order of their deterministic
    encodings as specified in Section 4.2.1 of [RFC8949], but for
@@ -3182,10 +3191,6 @@ C.3.  COSE
       externally supplied data (external_aad) using a private signature
       key and verified using the corresponding public signature key.
 
-   EDHOC relies on COSE for identification of authentication credentials
-   and supports all COSE header parameters used to identify
-   authentication credentials such X.509, C509, CWT and CCS.
-
    Different header parameters to identify X.509 or C509 certificates by
    reference are defined in [I-D.ietf-cose-x509] and
    [I-D.ietf-cose-cbor-encoded-cert]:
@@ -3209,12 +3214,15 @@ C.3.  COSE
    *  ID_CRED_x = { 4 : key_id_x }, where key_id_x : kid, for x = I or
       R.
 
-   ID_CRED_x MAY also identify the the authentication credential by
-   value.  For example, a certificate chain can be transported in
-   ID_CRED_x with COSE header parameter c5c or x5chain, defined in
+   Note that a COSE header map can contain several header parameters,
+   for example { x5u, x5t } or { kid, kid_context }.
+
+   ID_CRED_x MAY also identify the authentication credential by value.
+   For example, a certificate chain can be transported in ID_CRED_x with
+   COSE header parameter c5c or x5chain, defined in
    [I-D.ietf-cose-cbor-encoded-cert] and [I-D.ietf-cose-x509] and
    credentials of type CWT and CCS can be transported with the COSE
-   header parameters registered in Section 9.6:
+   header parameters registered in Section 9.6.
 
 Appendix D.  Applicability Template
 
