@@ -541,17 +541,14 @@ Table of Contents
 3.5.  Authentication Parameters
 
    EDHOC supports various settings for how the other endpoint's public
-   key is transported, identified, and trusted.  The authentication key
-   (i.e., the public key) is stored in an authentication credential that
-   also contains the authentication key algorithm and optionally other
-   parameters such as identity, key usage, expiry, issuer, etc.  EDHOC
-   relies on COSE for identification of authentication credentials (see
-   Section 3.5.4) and supports all credential types for which COSE
-   header parameters are defined (see Section 3.5.3).  The
-   authentication key and credential is used in several parts of EDHOC:
+   key is transported, identified, and trusted as described in this
+   section.
 
-   1.  the authentication credential CRED_x is included in the integrity
-       calculation
+   The authentication key (i.e., the public key, see Section 3.5.2) is
+   used in several parts of EDHOC:
+
+   1.  as part of the authentication credential CRED_x included in the
+       integrity calculation
 
    2.  for verification of the Signature_or_MAC field in message_2 and
        message_3 (see Section 5.3.2 and Section 5.4.2)
@@ -559,20 +556,31 @@ Table of Contents
    3.  in the key derivation (in case of a static Diffie-Hellman key,
        see Section 4).
 
-   Identical authentication credentials need to be established in both
-   endpoints to accomplish item 1 above (see Section 3.5.3) but for many
+   The authentication credential, in addition to the authentication key,
+   also contains the authentication key algorithm and optionally other
+   parameters such as identity, key usage, expiry, issuer, etc., see
+   Section 3.5.3.  Identical authentication credentials need to be
+   established in both endpoints to accomplish item 1 above but for many
    settings it is not necessary to transport the authentication
-   credential over constrained links.  It may, for example, be pre-
-   provisioned or acquired out-of-band over less constrained links.
+   credential within EDHOC over constrained links.  It may, for example,
+   be pre-provisioned or acquired out-of-band over less constrained
+   links.
+
+   EDHOC relies on COSE for identification of authentication credentials
+   (see Section 3.5.4) and supports all credential types for which COSE
+   header parameters are defined (see Section 3.5.3).  The choice of
+   authentication credential depends on the trust model, see
+   Section 3.5.1.  For example, a certificate or CWT may rely on a
+   trusted third party, whereas a CCS or a self-signed certificate or
+   CWT may be used when trust in the public key can be achieved by other
+   means, or in the case of trust-on-first-use.
 
    The type of authentication key, authentication credential, and the
    way to identify the credential have a large impact on the message
-   size.  The choice of authentication credential also depends on the
-   trust model.  For example, a certificate or CWT may rely on a trusted
-   third party, whereas a CCS or a self-signed certificate or CWT may be
-   used when trust in the public key can be achieved by other means, or
-   in the case of trust-on-first-use.  The size of a CCS is much smaller
-   than a self-signed certificate or CWT.
+   size.  For example, a CCS is much smaller than a self-signed
+   certificate or CWT, but if it is possible to reference the credential
+   with a COSE header like 'kid' then that is typically much smaller
+   than a CCS.
 
 3.5.1.  Identities and trust achors
 
@@ -673,15 +681,16 @@ Table of Contents
 3.5.3.  Authentication Credentials
 
    The authentication credentials, CRED_I and CRED_R, contain the public
-   authentication key of the Initiator and the Responder.  CRED_x is an
-   end-entity X.509 or C509 certificate / CWT (i.e., not a chain or
-   bag).  In X.509 and C509 certificates, signature keys typically have
-   key usage "digitalSignature" and Diffie-Hellman public keys typically
-   have key usage "keyAgreement".
+   authentication key of the Initiator and the Responder, respectively.
 
    EDHOC relies on COSE for identification of authentication credentials
    (see Section 3.5.4) and supports all credential types for which COSE
    header parameters are defined including X.509, C509, CWT and CCS.
+   When the identified credential is a chain or bag, CRED_x is just the
+   end-entity X.509 or C509 certificate / CWT.  In X.509 and C509
+   certificates, signature keys typically have key usage
+   "digitalSignature" and Diffie-Hellman public keys typically have key
+   usage "keyAgreement".
 
    CRED_x needs to be defined such that it is identical when used by
    Initiator or Responder.  The Initiator and Responder are expected to
@@ -690,18 +699,10 @@ Table of Contents
    specific encoding.  The Initiator and Responder SHOULD use an
    available authentication credential without re-encoding.
 
-   If for some reason re-encoding of the authentication credntial may
+   If for some reason re-encoding of the authentication credential may
    occur, then a potential common encoding for CBOR based credentials is
    bytewise lexicographic order of their deterministic encodings as
    specified in Section 4.2.1 of [RFC8949].
-
-   The common encoding is needed in particular when the credential is
-   not transported, e.g., when using the COSE 'kid' parameter for
-   identification.  A preferred common encoding for a CBOR based
-   credential is bytewise lexicographic order of their deterministic
-   encodings as specified in Section 4.2.1 of [RFC8949], but for
-   performance reasons it is not recommended to always re-encode the
-   credentials before use.
 
    *  When the authentication credential is a X.509 certificate, CRED_x
       SHALL be the end-entity DER encoded certificate wrapped in a bstr
