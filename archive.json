@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-09-21T01:03:42.213861+00:00",
+  "timestamp": "2021-09-23T01:06:53.176746+00:00",
   "repo": "lake-wg/edhoc",
   "labels": [
     {
@@ -6322,10 +6322,12 @@
       "author": "chrysn",
       "authorAssociation": "NONE",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "LAKE interim Oct 21"
+      ],
       "body": "Following a discussion recently had with Carsten and the CoAP-EAP authors, I stumbled upon this sentence:\r\n\r\n> According to this specification, EDHOC messages are carried in Confirmable messages, which is beneficial especially if fragmentation is used.\r\n\r\nNo other part of the spec mentions CONs (apart from the deduplication part where it does fit well), so maybe this is not intended anyway. At most, it could say:\r\n\r\n> To avoid that the EDHOC exchange gets stuck (especially when fragmentation is used), the underlying CoAP transport should be used in reliable mode.",
       "createdAt": "2021-09-17T17:46:55Z",
-      "updatedAt": "2021-09-17T17:46:55Z",
+      "updatedAt": "2021-09-21T08:43:47Z",
       "closedAt": null,
       "comments": []
     },
@@ -8145,6 +8147,46 @@
       },
       "comments": [],
       "reviews": []
+    },
+    {
+      "number": 176,
+      "id": "PR_kwDOEItXAM4sITKO",
+      "title": "Authentication parameters",
+      "url": "https://github.com/lake-wg/edhoc/pull/176",
+      "state": "OPEN",
+      "author": "emanjon",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Here is a rough first suggestion for changes.",
+      "createdAt": "2021-09-22T11:28:22Z",
+      "updatedAt": "2021-09-22T16:06:39Z",
+      "baseRepository": "lake-wg/edhoc",
+      "baseRefName": "master",
+      "baseRefOid": "e504e20621097eded0fdf4cdbdc8d7a4d693d499",
+      "headRepository": "lake-wg/edhoc",
+      "headRefName": "Authentication-parameters",
+      "headRefOid": "f6504f42300c4ebbebbc522c4d4c02a130a0f543",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEItXAM4tXdmp",
+          "commit": {
+            "abbreviatedOid": "f6504f4"
+          },
+          "author": "gselander",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Looks good. Two other things we discussed: 1. using credential \"as received\" instead of canonicalization. 2. Examples of multiple CBOR header maps.",
+          "createdAt": "2021-09-22T16:06:39Z",
+          "updatedAt": "2021-09-22T16:06:39Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
