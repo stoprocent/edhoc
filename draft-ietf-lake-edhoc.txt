@@ -585,7 +585,7 @@ Table of Contents
    credential with a COSE header like 'kid', then that is typically much
    smaller than to transport a CCS.
 
-3.5.1.  Identities and trust achors
+3.5.1.  Identities and trust anchors
 
    Policies for what connections to allow are typically set based on the
    identity of the other party, and parties typically only allow
@@ -3333,6 +3333,8 @@ Appendix G.  Change Log
    RFC Editor: Please remove this appendix.
 
    *  From -10 to -11:
+
+      -  Restructured section on authentication parameters
 
       -  Changed UCCS to CCS
 
