@@ -91,6 +91,11 @@ Table of Contents
    input, output and intermediate processing results to simplify testing
    of implementations.
 
+   The traces in this draft are based on draft-ietf-lake-edhoc-11.  A
+   more extensive test vector suite and related code that was used to
+   generate them can be found at: https://github.com/lake-
+   wg/edhoc/tree/master/test-vectors-11.
+
 2.  Setup
 
    EDHOC is run between an Initiator (I) and a Responder (R).  The
@@ -135,11 +140,6 @@ Table of Contents
    potentially a message_1 indicator (see Section 3.4.1 and Appendix A.3
    of [I-D.ietf-lake-edhoc]).  Those bytes are not included in the
    traces in this document.
-
-   The traces in this draft are based on draft-ietf-lake-edhoc-11.  A
-   more extensive test vector suite and related code that was used to
-   generate them can be found at: https://github.com/lake-
-   wg/edhoc/tree/master/test-vectors-11.
 
 3.  Authentication with static DH, CCS identified by 'kid'
 
