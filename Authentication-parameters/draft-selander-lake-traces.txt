@@ -5,7 +5,7 @@
 Network Working Group                                        G. Selander
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                                Ericsson
-Expires: 27 March 2022                                 23 September 2021
+Expires: 28 March 2022                                 24 September 2021
 
 
                             Traces of EDHOC
@@ -43,7 +43,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 March 2022.
+   This Internet-Draft will expire on 28 March 2022.
 
 Copyright Notice
 
