@@ -239,8 +239,10 @@ Table of Contents
    d1 d0 11 a5 9a 6d 10 57 5e b2 20 c7 65 2e 6f 98 c4 17 a5 65 e4 e4 5c
    f5 b5 01 06 95 04 3b 0e b7
 
-   Since METHOD = 3, R authenticates using static DH.  R's static key
-   pair for use with the EDHOC key exchange algorithm is:
+   Since METHOD = 3, R authenticates using static DH.
+
+   R's static key pair for use with the EDHOC key exchange algorithm is
+   based on the same curve as for the ephemeral keys, X25519:
 
    R (Raw Value) (Responder's private authentication key) (32 bytes)
    52 8b 49 c6 70 f8 fc 16 a2 ad 95 c1 88 5b 2e 24 fb 15 76 22 72 79 2a
@@ -451,7 +453,8 @@ Table of Contents
 
    Since METHOD = 3, I authenticates using static DH.
 
-   I's static key pair for use with the EDHOC key exchange algorithm is:
+   I's static key pair for use with the EDHOC key exchange algorithm is
+   based on the same curve as for the ephemeral keys, X25519:
 
    I (Raw Value) (Initiator's private authentication key) (32 bytes)
    cf c4 b6 ed 22 e7 00 a3 0d 5c 5b cd 61 f1 f0 20 49 de 23 54 62 33 48
@@ -1005,8 +1008,9 @@ Table of Contents
    4e 57 dc e2 58 75 77 c4 34 69 7c 03 93 5c c6 a2 82 16 5a 88 76 05 11
    fc 70 a8 c0 02 20 a5 ba 1a
 
-   Since METHOD = 0, R authenticates using signatures.  R's signature
-   key pair for use with the EDHOC signature algorithm is:
+   Since METHOD = 0, R authenticates using signatures with the EDHOC
+   signature algorithm.  R's signature key pair using Ed25519 is (note
+   that Ed448 would also be compatible with EdDSA):
 
    SK_R (Raw Value) (Responders's private authentication key) (32 bytes)
    bc 4d 4f 98 82 61 22 33 b4 02 db 75 e6 c4 cf 30 32 a7 0a 0d 2e 3e e6
@@ -1248,8 +1252,9 @@ Table of Contents
 
 4.3.  message_3
 
-   Since METHOD = 0, I authenticates using signatures.  I's signature
-   key pair for use with the EDHOC signature algorithm is:
+   Since METHOD = 0, I authenticates using signatures with the EDHOC
+   signature algorithm.  I's signature key pair using Ed25519 is (note
+   that Ed448 would also be compatible with EdDSA):
 
    SK_I (Raw Value) (Initiator's private authentication key) (32 bytes)
    36 6a 58 59 a4 cd 65 cf ae af 05 66 c9 fc 7e 1a 93 30 6f de c1 77 63
