@@ -612,7 +612,7 @@ Table of Contents
       the trust anchor is a Certification Authority (CA) certificate,
       and the identity is the subject whose unique name (e.g., a domain
       name, NAI, or EUI) is included in the endpoint's certificate.  In
-      order to EDHOC each party needs at least one CA public key
+      order to run EDHOC each party needs at least one CA public key
       certificate, or just the public key, and a specific identity or
       set of identities it is allowed to communicate with.  Only
       validated public-key certificates with an allowed subject name, as
@@ -1430,8 +1430,7 @@ Table of Contents
 
       -  payload = MAC_2
 
-      Explanation: COSE constructs the input to the Signature Algorithm
-      as:
+      COSE constructs the input to the Signature Algorithm as:
 
       -  The key is the private authentication key of the Responder.
 
@@ -1537,8 +1536,7 @@ Table of Contents
 
       -  payload = MAC_3
 
-      Explanation: COSE constructs the input to the Signature Algorithm
-      as:
+      COSE constructs the input to the Signature Algorithm as:
 
       -  The key is the private authentication key of the Initiator.
 
@@ -1565,8 +1563,7 @@ Table of Contents
             integer kid_I is conveyed in the plaintext encoded as a bstr
             or int.
 
-      Explanation: COSE constructs the input to the AEAD [RFC5116] as
-      follows:
+      COSE constructs the input to the AEAD [RFC5116] as follows:
 
       -  Key K = EDHOC-KDF( PRK_3e2m, TH_3, "K_3", h'', length )
 
@@ -1688,8 +1685,7 @@ Table of Contents
 
       -  IV IV_4 = EDHOC-Exporter( "EDHOC_IV_4", h'', length )
 
-      Explanation: COSE constructs the input to the AEAD [RFC5116] as
-      follows:
+      COSE constructs the input to the AEAD [RFC5116] as follows:
 
       -  Key K = K_4
 
