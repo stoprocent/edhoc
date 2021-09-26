@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-09-23T01:06:53.176746+00:00",
+  "timestamp": "2021-09-26T01:04:46.875156+00:00",
   "repo": "lake-wg/edhoc",
   "labels": [
     {
@@ -4395,7 +4395,7 @@
       "id": "MDU6SXNzdWU4NjI3MzUxMDg=",
       "title": "TEE security consideration",
       "url": "https://github.com/lake-wg/edhoc/issues/99",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gselander",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
@@ -4404,8 +4404,8 @@
       ],
       "body": "Section 8.6 in -05 states:\r\n\r\n  \"Typically an \r\n    adversary with physical access to a device can be assumed to gain \r\n    access to all information outside of the TEE, but none of the \r\n    information inside the TEE.\"\r\n\r\nStefan Hristozov commented:\r\n\r\n    \"A TEE does not provide protection against physical adversary, since the same CPU with the same physical memory executes both the operations in the TEE and in the non-TEE domains. It provides protection only against remote adversary exploiting, e.g., a buffer overflow for conducting code injection or return oriented attacks.\"\r\n\r\nFollowing the description in [1] I replaced the text with:\r\n\r\n\"The use of a TEE enforces that code within that environment cannot be tampered with, and that any data used by such code cannot be read or tampered with by code outside that environment.\"\r\n\r\nhttps://github.com/lake-wg/edhoc/commit/665d60c\r\n\r\nAny objections to this?\r\n\r\n\r\n[1] https://tools.ietf.org/html/draft-ietf-teep-architecture-14\r\n",
       "createdAt": "2021-04-20T11:51:03Z",
-      "updatedAt": "2021-09-12T21:06:33Z",
-      "closedAt": null,
+      "updatedAt": "2021-09-24T15:15:52Z",
+      "closedAt": "2021-09-24T15:15:52Z",
       "comments": [
         {
           "author": "emanjon",
@@ -5254,7 +5254,7 @@
       "id": "MDU6SXNzdWU5NDcyOTY3OTc=",
       "title": "\"Empty byte string\"",
       "url": "https://github.com/lake-wg/edhoc/issues/133",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gselander",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -5266,8 +5266,8 @@
       ],
       "body": "Where necessary, clarify distinction between empty byte string (0x) and CBOR empty byte string (0xf6)",
       "createdAt": "2021-07-19T06:03:52Z",
-      "updatedAt": "2021-09-13T08:30:06Z",
-      "closedAt": null,
+      "updatedAt": "2021-09-24T15:15:37Z",
+      "closedAt": "2021-09-24T15:15:37Z",
       "comments": [
         {
           "author": "emanjon",
@@ -5907,11 +5907,12 @@
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [
+        "Close?",
         "work in progress -11"
       ],
       "body": "ID_CRED_x are COSE header maps and everything with them follows from COSE. The only thing EDHOC adds is to define the format of CRED_x.\r\n\r\nThis is not clear in the current version of the draft. The term \"COSE header map\" has disappeared and it is not clear that the quite long section on ID_CRED_x are just examples of COSE and not new specification.\r\n\r\nCDDL for ID_CRED_x should be added. They are of type header_map defined in the COSE RFC.\r\n",
       "createdAt": "2021-09-04T08:24:45Z",
-      "updatedAt": "2021-09-13T07:55:01Z",
+      "updatedAt": "2021-09-24T11:27:41Z",
       "closedAt": null,
       "comments": [
         {
@@ -5975,11 +5976,12 @@
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [
+        "Close?",
         "work in progress -11"
       ],
       "body": "The IANA section currectly specified that CWT can be sent tagged or untagged while UCCS can only be sent untagged. That is probably not how it should be.",
       "createdAt": "2021-09-08T06:04:04Z",
-      "updatedAt": "2021-09-20T07:36:53Z",
+      "updatedAt": "2021-09-24T11:26:09Z",
       "closedAt": null,
       "comments": [
         {
@@ -6045,7 +6047,7 @@
       "id": "MDU6SXNzdWU5OTA5OTU5MTg=",
       "title": "Align exporter labels",
       "url": "https://github.com/lake-wg/edhoc/issues/163",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
@@ -6054,8 +6056,8 @@
       ],
       "body": "The 4 labels use different styles. Should probably align them in -11.\r\n\r\n```\r\n   Label: EDHOC_message_4_Key\r\n   Label: EDHOC_message_4_Nonce\r\n   Label: OSCORE Master Secret\r\n   Label: OSCORE Master Salt\r\n\r\n```",
       "createdAt": "2021-09-08T10:43:56Z",
-      "updatedAt": "2021-09-17T14:51:50Z",
-      "closedAt": null,
+      "updatedAt": "2021-09-24T11:39:56Z",
+      "closedAt": "2021-09-24T11:39:56Z",
       "comments": [
         {
           "author": "emanjon",
@@ -6105,6 +6107,13 @@
           "body": "Some ideas from the TLS exporter that could be used.\r\n\r\n```\r\nThe label is a string consisting of the printable ASCII characters \r\n\r\nLabel values beginning with \"EXPERIMENTAL\" MAY be used for private use without registration. All other label values MUST be registered.\r\n\r\n```\r\n\r\nEDHOC could specify exactly what a label consists of:\r\n\r\n`The label is a string consisting of the printable ASCII characters 0x21 - 0x7e\r\n`",
           "createdAt": "2021-09-16T19:16:46Z",
           "updatedAt": "2021-09-17T08:16:40Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "This has been merged to master. ",
+          "createdAt": "2021-09-24T11:39:56Z",
+          "updatedAt": "2021-09-24T11:39:56Z"
         }
       ]
     },
@@ -6238,15 +6247,17 @@
       "id": "I_kwDOEItXAM47gJg5",
       "title": "Traces document - New note on connection identifiers",
       "url": "https://github.com/lake-wg/edhoc/issues/170",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "marco-tiloca-sics",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "Close?"
+      ],
       "body": "In Section 2 of the EDHOC traces document [1], I suggest to add the note below (or something similar):\r\n\r\nNOTE 3.  Remember that an EDHOC message never starts with a connection identifier or with an analogous sentinel value like the CBOR simple value \"true\" (0xf5). These are possibly prepended to an EDHOC message as the transport protocol needs, but are not part of the EDHOC message.\r\n\r\n[1] https://datatracker.ietf.org/doc/html/draft-selander-lake-traces-00#section-2",
       "createdAt": "2021-09-16T14:29:39Z",
-      "updatedAt": "2021-09-17T06:23:38Z",
-      "closedAt": null,
+      "updatedAt": "2021-09-24T11:39:41Z",
+      "closedAt": "2021-09-24T11:39:41Z",
       "comments": [
         {
           "author": "gselander",
@@ -6261,6 +6272,13 @@
           "body": "It looks good.",
           "createdAt": "2021-09-17T06:23:38Z",
           "updatedAt": "2021-09-17T06:23:38Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "This has been merged to master. Let's close",
+          "createdAt": "2021-09-24T11:39:41Z",
+          "updatedAt": "2021-09-24T11:39:41Z"
         }
       ]
     },
@@ -6285,7 +6303,7 @@
       "id": "I_kwDOEItXAM47jdIC",
       "title": "  Change edhoc_aead_id to selected cipher suite in info structure",
       "url": "https://github.com/lake-wg/edhoc/issues/172",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
@@ -6294,8 +6312,8 @@
       ],
       "body": "The selected cipher suite covers the aead and more.",
       "createdAt": "2021-09-17T09:33:56Z",
-      "updatedAt": "2021-09-20T06:40:30Z",
-      "closedAt": null,
+      "updatedAt": "2021-09-24T11:39:13Z",
+      "closedAt": "2021-09-24T11:39:13Z",
       "comments": [
         {
           "author": "emanjon",
@@ -6310,6 +6328,13 @@
           "body": "Agree, we can close this.",
           "createdAt": "2021-09-20T06:40:30Z",
           "updatedAt": "2021-09-20T06:40:30Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "This has been merged to master.",
+          "createdAt": "2021-09-24T11:39:13Z",
+          "updatedAt": "2021-09-24T11:39:13Z"
         }
       ]
     },
@@ -6323,13 +6348,29 @@
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [
+        "Close?",
         "LAKE interim Oct 21"
       ],
       "body": "Following a discussion recently had with Carsten and the CoAP-EAP authors, I stumbled upon this sentence:\r\n\r\n> According to this specification, EDHOC messages are carried in Confirmable messages, which is beneficial especially if fragmentation is used.\r\n\r\nNo other part of the spec mentions CONs (apart from the deduplication part where it does fit well), so maybe this is not intended anyway. At most, it could say:\r\n\r\n> To avoid that the EDHOC exchange gets stuck (especially when fragmentation is used), the underlying CoAP transport should be used in reliable mode.",
       "createdAt": "2021-09-17T17:46:55Z",
-      "updatedAt": "2021-09-21T08:43:47Z",
+      "updatedAt": "2021-09-24T11:25:11Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "gselander",
+          "authorAssociation": "COLLABORATOR",
+          "body": "How about this:\r\n\r\n\"The underlying CoAP transport should be used in reliable mode, in particular when fragmentation is used, to avoid, e.g.,  situations with hanging endpoints waiting for each other.\"",
+          "createdAt": "2021-09-24T07:20:05Z",
+          "updatedAt": "2021-09-24T07:20:05Z"
+        },
+        {
+          "author": "chrysn",
+          "authorAssociation": "NONE",
+          "body": "I like it, that'd work fine.\n",
+          "createdAt": "2021-09-24T07:43:11Z",
+          "updatedAt": "2021-09-24T07:43:11Z"
+        }
+      ]
     },
     {
       "number": 175,
@@ -6373,6 +6414,65 @@
           "body": "It is actually no problem if draft-ietf-rats-uccs has a different abbreviation since we both refer to RFC 8392, so the term is well defined. Closing. ",
           "createdAt": "2021-09-20T15:54:10Z",
           "updatedAt": "2021-09-20T15:54:10Z"
+        }
+      ]
+    },
+    {
+      "number": 177,
+      "id": "I_kwDOEItXAM47-PcX",
+      "title": "Explanation of COSE processing",
+      "url": "https://github.com/lake-wg/edhoc/issues/177",
+      "state": "OPEN",
+      "author": "gselander",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "@emanjon In #176 you added \"Explanation:\" to COSE processing description of Section 5. I removed that as out context for that PR and instead opened this issue as placeholder.",
+      "createdAt": "2021-09-24T07:34:03Z",
+      "updatedAt": "2021-09-25T13:49:23Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Essential that something like that need to be added to -11. It is very important to point out that this is not specification at all. The COSE RFC specifies these things. If the EDHOC spec makes anything incorrect or COSE makes updates in the future, that apply and NOT the EHDOC spec. ",
+          "createdAt": "2021-09-24T11:23:43Z",
+          "updatedAt": "2021-09-24T11:23:43Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@gselander Unless you have a better suggestion than \"Explanation:\" I think \"Explanation:\" should stay, but I can live with basically any formulation here. Whether it is out of the context of the PR is not very important. The important thing is that it is merged to master. The important thing is to make it very clear that these parts is not normative specification.",
+          "createdAt": "2021-09-24T11:32:24Z",
+          "updatedAt": "2021-09-24T11:32:24Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "There was already an issue regarding this #171",
+          "createdAt": "2021-09-24T11:38:31Z",
+          "updatedAt": "2021-09-24T11:38:31Z"
+        },
+        {
+          "author": "gselander",
+          "authorAssociation": "COLLABORATOR",
+          "body": "OK. Just adding \"Explanation:\" was not sufficient explanation, at least not for me. So now we have two issues and surely won't forget adding it to the master. ",
+          "createdAt": "2021-09-24T12:30:07Z",
+          "updatedAt": "2021-09-24T13:08:25Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I see now that you already submitted -11. \"Essential\"  was maybe a bit strong, but I it would have been good to clearly distinguish between COSE and EDHOC before more formal verfication. Let's try to do that for -12.\r\n\r\n- Might be good to add that the separaration between signature algorithm and key authentication algorithm (where the key authentication algorithm might not be a COSE algorithm) comes from COSE. TLS chose a different approach than COSE where the curve (but not RSA key lenght) is integrated into the \"signature algorithm\". So also in TLS the security level and exact parameters are determined by the signature algorithm and the key algorithm together. COSE is flexible and allows ECDSA with Brainpool as long as Brainpool is stored in a X509 even if Brainpool is not registered in the COSE IANA registry.\r\n\r\n- The security consideration section in EDHOC should maybe consider refering to the section in COSE section discussion external_aad.",
+          "createdAt": "2021-09-24T15:14:25Z",
+          "updatedAt": "2021-09-24T15:14:25Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Maybe something like\r\n\r\n- COSE recap:\r\n- COSE summary:\r\n- COSE explanation:\r\n- Informal COSE recap:\r\n- Informal COSE summary:\r\n- Informal COSE explanation:\r\n",
+          "createdAt": "2021-09-25T13:49:23Z",
+          "updatedAt": "2021-09-25T13:49:23Z"
         }
       ]
     }
@@ -8132,7 +8232,7 @@
       "labels": [],
       "body": "This simplify things. The selected cipher suite also covers more than just the aead algorithm.\r\n\r\nI think the \"suite = int\" definition can be removed. It does not add much in the current version. In older versions suite was a more advances construction.",
       "createdAt": "2021-09-17T10:17:31Z",
-      "updatedAt": "2021-09-17T11:05:53Z",
+      "updatedAt": "2021-09-24T11:42:23Z",
       "baseRepository": "lake-wg/edhoc",
       "baseRefName": "master",
       "baseRefOid": "33f0fbfdad94ab31be21795f7d410ace6ff36e7c",
@@ -8153,24 +8253,26 @@
       "id": "PR_kwDOEItXAM4sITKO",
       "title": "Authentication parameters",
       "url": "https://github.com/lake-wg/edhoc/pull/176",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Here is a rough first suggestion for changes.",
       "createdAt": "2021-09-22T11:28:22Z",
-      "updatedAt": "2021-09-22T16:06:39Z",
+      "updatedAt": "2021-09-24T11:42:21Z",
       "baseRepository": "lake-wg/edhoc",
       "baseRefName": "master",
       "baseRefOid": "e504e20621097eded0fdf4cdbdc8d7a4d693d499",
       "headRepository": "lake-wg/edhoc",
       "headRefName": "Authentication-parameters",
-      "headRefOid": "f6504f42300c4ebbebbc522c4d4c02a130a0f543",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "0114f7aefe971fd87ba641fc4becfd86330bc4e8",
+      "closedAt": "2021-09-24T07:40:14Z",
+      "mergedAt": "2021-09-24T07:40:14Z",
+      "mergedBy": "gselander",
+      "mergeCommit": {
+        "oid": "43cc862c7cf3b12dc66687f4c440d902b4a2adfa"
+      },
       "comments": [],
       "reviews": [
         {
