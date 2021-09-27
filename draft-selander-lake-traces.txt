@@ -5,7 +5,7 @@
 Network Working Group                                        G. Selander
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                                Ericsson
-Expires: 28 March 2022                                 24 September 2021
+Expires: 31 March 2022                                 27 September 2021
 
 
                             Traces of EDHOC
@@ -43,7 +43,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 March 2022.
+   This Internet-Draft will expire on 31 March 2022.
 
 Copyright Notice
 
@@ -1769,9 +1769,9 @@ Table of Contents
    [I-D.ietf-lake-edhoc]
               Selander, G., Mattsson, J. P., and F. Palombini,
               "Ephemeral Diffie-Hellman Over COSE (EDHOC)", Work in
-              Progress, Internet-Draft, draft-ietf-lake-edhoc-10, 4
+              Progress, Internet-Draft, draft-ietf-lake-edhoc-11, 24
               September 2021, <https://www.ietf.org/archive/id/draft-
-              ietf-lake-edhoc-10.txt>.
+              ietf-lake-edhoc-11.txt>.
 
    [RFC8949]  Bormann, C. and P. Hoffman, "Concise Binary Object
               Representation (CBOR)", STD 94, RFC 8949,
