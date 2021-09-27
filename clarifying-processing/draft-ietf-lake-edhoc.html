@@ -2261,11 +2261,13 @@ message_2 = (
 </li>
                   </ul>
 </li>
-                <li class="normal" id="section-5.3.2-2.6.2.2">CIPHERTEXT_2 = plaintext XOR KEYSTREAM_2<a href="#section-5.3.2-2.6.2.2" class="pilcrow">¶</a>
+                <li class="normal" id="section-5.3.2-2.6.2.2">Compute KEYSTREAM_2 = EDHOC-KDF( PRK_2e, TH_2, "KEYSTREAM_2", h'', plaintext_length ), where plaintext_length is the length of the plaintext.<a href="#section-5.3.2-2.6.2.2" class="pilcrow">¶</a>
+</li>
+                <li class="normal" id="section-5.3.2-2.6.2.3">CIPHERTEXT_2 = plaintext XOR KEYSTREAM_2<a href="#section-5.3.2-2.6.2.3" class="pilcrow">¶</a>
 </li>
               </ul>
 </li>
-            <li class="normal" id="section-5.3.2-2.7">Encode message_2 as a sequence of CBOR encoded data items as specified above.<a href="#section-5.3.2-2.7" class="pilcrow">¶</a>
+            <li class="normal" id="section-5.3.2-2.7">Encode message_2 as a sequence of CBOR encoded data items as specified in <a href="#asym-msg2-form" class="xref">Section 5.3.1</a>.<a href="#section-5.3.2-2.7" class="pilcrow">¶</a>
 </li>
           </ul>
 </section>
@@ -2380,7 +2382,7 @@ COSE constructs the input to the AEAD <span>[<a href="#RFC5116" class="xref">RFC
 <p id="section-5.4.2-2.4.5">
 CIPHERTEXT_3 is the 'ciphertext' of COSE_Encrypt0.<a href="#section-5.4.2-2.4.5" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-5.4.2-2.5">Encode message_3 as a sequence of CBOR encoded data items as specified above.<a href="#section-5.4.2-2.5" class="pilcrow">¶</a>
+            <li class="normal" id="section-5.4.2-2.5">Encode message_3 as a sequence of CBOR encoded data items as specified in <a href="#asym-msg3-form" class="xref">Section 5.4.1</a>.<a href="#section-5.4.2-2.5" class="pilcrow">¶</a>
 </li>
           </ul>
 <p id="section-5.4.2-3">Pass the connection identifiers (C_I, C_R) and the application algorithms in the selected cipher suite to the application. The application can now derive application keys using the EDHOC-Exporter interface, see <a href="#exporter" class="xref">Section 4.3</a>.<a href="#section-5.4.2-3" class="pilcrow">¶</a></p>

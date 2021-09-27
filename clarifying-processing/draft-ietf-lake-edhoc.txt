@@ -1446,10 +1446,14 @@ Table of Contents
             integer kid_R is conveyed in the plaintext encoded as a bstr
             or int.
 
+      -  Compute KEYSTREAM_2 = EDHOC-KDF( PRK_2e, TH_2, "KEYSTREAM_2",
+         h'', plaintext_length ), where plaintext_length is the length
+         of the plaintext.
+
       -  CIPHERTEXT_2 = plaintext XOR KEYSTREAM_2
 
    *  Encode message_2 as a sequence of CBOR encoded data items as
-      specified above.
+      specified in Section 5.3.1.
 
 5.3.3.  Initiator Processing of Message 2
 
@@ -1567,7 +1571,7 @@ Table of Contents
       CIPHERTEXT_3 is the 'ciphertext' of COSE_Encrypt0.
 
    *  Encode message_3 as a sequence of CBOR encoded data items as
-      specified above.
+      specified in Section 5.4.1.
 
    Pass the connection identifiers (C_I, C_R) and the application
    algorithms in the selected cipher suite to the application.  The
