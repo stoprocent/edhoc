@@ -1413,7 +1413,7 @@ Table of Contents
       -  CRED_R - CBOR item containing the credential of the Responder,
          see Section 3.5.4
 
-      -  EAD_2 = unprotected external authorization data, see
+      -  EAD_2 - unprotected external authorization data, see
          Section 3.8
 
    *  If the Responder authenticates with a static Diffie-Hellman key
@@ -1520,7 +1520,7 @@ Table of Contents
       -  CRED_I - CBOR item containing the credential of the Initiator,
          see Section 3.5.4
 
-      -  EAD_3 = protected external authorization data, see Section 3.8
+      -  EAD_3 - protected external authorization data, see Section 3.8
 
    *  If the Initiator authenticates with a static Diffie-Hellman key
       (method equals 2 or 3), then Signature_or_MAC_3 is MAC_3.  If the
@@ -1565,9 +1565,6 @@ Table of Contents
          o  If ID_CRED_I contains a single 'kid' parameter, i.e.,
             ID_CRED_I = { 4 : kid_I }, only the byte string or integer
             kid_I is conveyed in the plaintext encoded as a bstr or int.
-
-         o  EAD_3 is protected external authorization data, see
-            Section 3.8.
 
       CIPHERTEXT_3 is the 'ciphertext' of COSE_Encrypt0.
 
@@ -1682,8 +1679,10 @@ Table of Contents
 
       -  IV_4 = EDHOC-Exporter( "EDHOC_IV_4", h'', length )
 
-      -  P = ( ? EAD_4 ), where EAD_4 is protected external
-         authorization data, see Section 3.8.
+      -  P = ( ? EAD_4 )
+
+         o  EAD_4 - protected external authorization data, see
+            Section 3.8.
 
       CIPHERTEXT_4 is the 'ciphertext' of COSE_Encrypt0.
 
