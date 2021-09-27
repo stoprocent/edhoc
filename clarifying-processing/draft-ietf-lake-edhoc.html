@@ -2237,7 +2237,7 @@ message_2 = (
               </ul>
 </li>
             <li class="normal" id="section-5.3.2-2.5">
-              <p id="section-5.3.2-2.5.1">If the Responder authenticates with a static Diffie-Hellman key (method equals 1 or 3), then Signature_or_MAC_2 is MAC_2. If the Responder authenticates with a signature key (method equals 0 or 2), then Signature_or_MAC_2 is the 'signature' field of a COSE_Sign1 object as defined in Section 4.4 of <span>[<a href="#I-D.ietf-cose-rfc8152bis-struct" class="xref">I-D.ietf-cose-rfc8152bis-struct</a>]</span> using the signature algorithm in the selected cipher suite, the private authentication key of the Responder, and the following parameters as input:<a href="#section-5.3.2-2.5.1" class="pilcrow">¶</a></p>
+              <p id="section-5.3.2-2.5.1">If the Responder authenticates with a static Diffie-Hellman key (method equals 1 or 3), then Signature_or_MAC_2 is MAC_2. If the Responder authenticates with a signature key (method equals 0 or 2), then Signature_or_MAC_2 is the 'signature' field of a COSE_Sign1 object as defined in Section 4.4 of <span>[<a href="#I-D.ietf-cose-rfc8152bis-struct" class="xref">I-D.ietf-cose-rfc8152bis-struct</a>]</span> using the signature algorithm of the selected cipher suite, the private authentication key of the Responder, and the following parameters as input to the Sig_structure:<a href="#section-5.3.2-2.5.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.3.2-2.5.2.1">context = "Signature1"<a href="#section-5.3.2-2.5.2.1" class="pilcrow">¶</a>
 </li>
@@ -2338,7 +2338,7 @@ message_3 = (
               </ul>
 </li>
             <li class="normal" id="section-5.4.2-2.3">
-              <p id="section-5.4.2-2.3.1">If the Initiator authenticates with a static Diffie-Hellman key (method equals 2 or 3), then Signature_or_MAC_3 is MAC_3. If the Initiator authenticates with a signature key (method equals 0 or 1), then Signature_or_MAC_3 is the 'signature' field of a COSE_Sign1 object as defined in Section 4.4 of <span>[<a href="#I-D.ietf-cose-rfc8152bis-struct" class="xref">I-D.ietf-cose-rfc8152bis-struct</a>]</span> using the signature algorithm in the selected cipher suite, the private authentication key of the Initiator, and the following parameters as input:<a href="#section-5.4.2-2.3.1" class="pilcrow">¶</a></p>
+              <p id="section-5.4.2-2.3.1">If the Initiator authenticates with a static Diffie-Hellman key (method equals 2 or 3), then Signature_or_MAC_3 is MAC_3. If the Initiator authenticates with a signature key (method equals 0 or 1), then Signature_or_MAC_3 is the 'signature' field of a COSE_Sign1 object as defined in Section 4.4 of <span>[<a href="#I-D.ietf-cose-rfc8152bis-struct" class="xref">I-D.ietf-cose-rfc8152bis-struct</a>]</span> using the signature algorithm of the selected cipher suite, the private authentication key of the Initiator, and the following parameters as input to the Sig_structure:<a href="#section-5.4.2-2.3.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.4.2-2.3.2.1">context = "Signature1"<a href="#section-5.4.2-2.3.2.1" class="pilcrow">¶</a>
 </li>
@@ -2353,30 +2353,30 @@ message_3 = (
               </ul>
 </li>
             <li class="normal" id="section-5.4.2-2.4">
-              <p id="section-5.4.2-2.4.1">Compute a COSE_Encrypt0 object as defined in Section 5.3 of <span>[<a href="#I-D.ietf-cose-rfc8152bis-struct" class="xref">I-D.ietf-cose-rfc8152bis-struct</a>]</span>, with the EDHOC AEAD algorithm in the selected cipher suite, K_3, IV_3, and the following parameters. The protected header SHALL be the empty CBOR byte string.<a href="#section-5.4.2-2.4.1" class="pilcrow">¶</a></p>
+              <p id="section-5.4.2-2.4.1">Compute a COSE_Encrypt0 object as defined in Section 5.3 of <span>[<a href="#I-D.ietf-cose-rfc8152bis-struct" class="xref">I-D.ietf-cose-rfc8152bis-struct</a>]</span>, with the EDHOC AEAD algorithm of the selected cipher suite, using the key K = K_3, nonce N = IV_3, plaintext P, and the following parameters as input to the Enc_structure generating the associated data:<a href="#section-5.4.2-2.4.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.4.2-2.4.2.1">protected = h''<a href="#section-5.4.2-2.4.2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-5.4.2-2.4.2.1">context = "Encrypt0"<a href="#section-5.4.2-2.4.2.1" class="pilcrow">¶</a>
 </li>
-                <li class="normal" id="section-5.4.2-2.4.2.2">external_aad = TH_3<a href="#section-5.4.2-2.4.2.2" class="pilcrow">¶</a>
+                <li class="normal" id="section-5.4.2-2.4.2.2">protected = h''<a href="#section-5.4.2-2.4.2.2" class="pilcrow">¶</a>
 </li>
-                <li class="normal" id="section-5.4.2-2.4.2.3">
-                  <p id="section-5.4.2-2.4.2.3.1">plaintext = ( ID_CRED_I / bstr / int, Signature_or_MAC_3, ? EAD_3 )<a href="#section-5.4.2-2.4.2.3.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-5.4.2-2.4.2.3.2.1">If ID_CRED_I contains a single 'kid' parameter, i.e., ID_CRED_I = { 4 : kid_I }, only the byte string or integer kid_I is conveyed in the plaintext encoded as a bstr or int.<a href="#section-5.4.2-2.4.2.3.2.1" class="pilcrow">¶</a>
-</li>
-                  </ul>
+                <li class="normal" id="section-5.4.2-2.4.2.3">external_aad = TH_3<a href="#section-5.4.2-2.4.2.3" class="pilcrow">¶</a>
 </li>
               </ul>
 <p id="section-5.4.2-2.4.3">
-COSE constructs the input to the AEAD <span>[<a href="#RFC5116" class="xref">RFC5116</a>]</span> as follows:<a href="#section-5.4.2-2.4.3" class="pilcrow">¶</a></p>
+where<a href="#section-5.4.2-2.4.3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.4.2-2.4.4.1">Key K = EDHOC-KDF( PRK_3e2m, TH_3, "K_3", h'', length )<a href="#section-5.4.2-2.4.4.1" class="pilcrow">¶</a>
+<li class="normal" id="section-5.4.2-2.4.4.1">K_3 = EDHOC-KDF( PRK_3e2m, TH_3, "K_3", h'', length )<a href="#section-5.4.2-2.4.4.1" class="pilcrow">¶</a>
 </li>
-                <li class="normal" id="section-5.4.2-2.4.4.2">Nonce N = EDHOC-KDF( PRK_3e2m, TH_3, "IV_3", h'', length )<a href="#section-5.4.2-2.4.4.2" class="pilcrow">¶</a>
+                <li class="normal" id="section-5.4.2-2.4.4.2">IV_3 = EDHOC-KDF( PRK_3e2m, TH_3, "IV_3", h'', length )<a href="#section-5.4.2-2.4.4.2" class="pilcrow">¶</a>
 </li>
-                <li class="normal" id="section-5.4.2-2.4.4.3">Plaintext P = ( ID_CRED_I / bstr / int, Signature_or_MAC_3, ? EAD_3 )<a href="#section-5.4.2-2.4.4.3" class="pilcrow">¶</a>
+                <li class="normal" id="section-5.4.2-2.4.4.3">
+                  <p id="section-5.4.2-2.4.4.3.1">plaintext = ( ID_CRED_I / bstr / int, Signature_or_MAC_3, ? EAD_3 )<a href="#section-5.4.2-2.4.4.3.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.4.2-2.4.4.3.2.1">If ID_CRED_I contains a single 'kid' parameter, i.e., ID_CRED_I = { 4 : kid_I }, only the byte string or integer kid_I is conveyed in the plaintext encoded as a bstr or int.<a href="#section-5.4.2-2.4.4.3.2.1" class="pilcrow">¶</a>
 </li>
-                <li class="normal" id="section-5.4.2-2.4.4.4">Associated data A = [ "Encrypt0", h'', TH_3 ]<a href="#section-5.4.2-2.4.4.4" class="pilcrow">¶</a>
+                    <li class="normal" id="section-5.4.2-2.4.4.3.2.2">EAD_3 is protected external authorization data, see <a href="#AD" class="xref">Section 3.8</a><a href="#section-5.4.2-2.4.4.3.2.2" class="pilcrow">¶</a>
+</li>
+                  </ul>
 </li>
               </ul>
 <p id="section-5.4.2-2.4.5">
@@ -2453,33 +2453,27 @@ message_4 = (
 <p id="section-5.5.2-1">The Responder SHALL compose message_4 as follows:<a href="#section-5.5.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.5.2-2.1">
-              <p id="section-5.5.2-2.1.1">Compute a COSE_Encrypt0 as defined in Section 5.3 of <span>[<a href="#I-D.ietf-cose-rfc8152bis-struct" class="xref">I-D.ietf-cose-rfc8152bis-struct</a>]</span>, with the EDHOC AEAD algorithm in the selected cipher suite, and the following parameters. The protected header SHALL be the empty CBOR byte string.<a href="#section-5.5.2-2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-5.5.2-2.1.1">Compute a COSE_Encrypt0 as defined in Section 5.3 of <span>[<a href="#I-D.ietf-cose-rfc8152bis-struct" class="xref">I-D.ietf-cose-rfc8152bis-struct</a>]</span>, with the EDHOC AEAD algorithm of the selected cipher suite, using the key K = K_4, nonce N = IV_4, plaintext P, and the following parameters as input to the Enc_structure generating the associated data:<a href="#section-5.5.2-2.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.5.2-2.1.2.1">protected = h''<a href="#section-5.5.2-2.1.2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-5.5.2-2.1.2.1">context = "Encrypt0"<a href="#section-5.5.2-2.1.2.1" class="pilcrow">¶</a>
 </li>
-                <li class="normal" id="section-5.5.2-2.1.2.2">external_aad = TH_4<a href="#section-5.5.2-2.1.2.2" class="pilcrow">¶</a>
+                <li class="normal" id="section-5.5.2-2.1.2.2">protected = h''<a href="#section-5.5.2-2.1.2.2" class="pilcrow">¶</a>
 </li>
-                <li class="normal" id="section-5.5.2-2.1.2.3">plaintext = ( ? EAD_4 ), where EAD_4 is protected external authorization data, see <a href="#AD" class="xref">Section 3.8</a><a href="#section-5.5.2-2.1.2.3" class="pilcrow">¶</a>
-</li>
-                <li class="normal" id="section-5.5.2-2.1.2.4">Key K_4 = EDHOC-Exporter( "EDHOC_K_4", h'', length )<a href="#section-5.5.2-2.1.2.4" class="pilcrow">¶</a>
-</li>
-                <li class="normal" id="section-5.5.2-2.1.2.5">IV IV_4 = EDHOC-Exporter( "EDHOC_IV_4", h'', length )<a href="#section-5.5.2-2.1.2.5" class="pilcrow">¶</a>
+                <li class="normal" id="section-5.5.2-2.1.2.3">external_aad = TH_4<a href="#section-5.5.2-2.1.2.3" class="pilcrow">¶</a>
 </li>
               </ul>
 <p id="section-5.5.2-2.1.3">
-COSE constructs the input to the AEAD <span>[<a href="#RFC5116" class="xref">RFC5116</a>]</span> as follows:<a href="#section-5.5.2-2.1.3" class="pilcrow">¶</a></p>
+where<a href="#section-5.5.2-2.1.3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5.5.2-2.1.4.1">Key K = K_4<a href="#section-5.5.2-2.1.4.1" class="pilcrow">¶</a>
+<li class="normal" id="section-5.5.2-2.1.4.1">K_4 = EDHOC-Exporter( "EDHOC_K_4", h'', length )<a href="#section-5.5.2-2.1.4.1" class="pilcrow">¶</a>
 </li>
-                <li class="normal" id="section-5.5.2-2.1.4.2">Nonce N = IV_4<a href="#section-5.5.2-2.1.4.2" class="pilcrow">¶</a>
+                <li class="normal" id="section-5.5.2-2.1.4.2">IV_4 = EDHOC-Exporter( "EDHOC_IV_4", h'', length )<a href="#section-5.5.2-2.1.4.2" class="pilcrow">¶</a>
 </li>
-                <li class="normal" id="section-5.5.2-2.1.4.3">Plaintext P = ( ? EAD_4 )<a href="#section-5.5.2-2.1.4.3" class="pilcrow">¶</a>
-</li>
-                <li class="normal" id="section-5.5.2-2.1.4.4">Associated data A = [ "Encrypt0", h'', TH_4 ]<a href="#section-5.5.2-2.1.4.4" class="pilcrow">¶</a>
+                <li class="normal" id="section-5.5.2-2.1.4.3">plaintext = ( ? EAD_4 ), where EAD_4 is protected external authorization data, see <a href="#AD" class="xref">Section 3.8</a><a href="#section-5.5.2-2.1.4.3" class="pilcrow">¶</a>
 </li>
               </ul>
 <p id="section-5.5.2-2.1.5">
-CIPHERTEXT_4 is the ciphertext of the COSE_Encrypt0.<a href="#section-5.5.2-2.1.5" class="pilcrow">¶</a></p>
+CIPHERTEXT_4 is the 'ciphertext' of COSE_Encrypt0.<a href="#section-5.5.2-2.1.5" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-5.5.2-2.2">Encode message_4 as a sequence of CBOR encoded data items as specified in <a href="#asym-msg4-form" class="xref">Section 5.5.1</a>.<a href="#section-5.5.2-2.2" class="pilcrow">¶</a>
 </li>
