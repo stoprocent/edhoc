@@ -1449,7 +1449,7 @@ Table of Contents
       -  CIPHERTEXT_2 = plaintext XOR KEYSTREAM_2
 
    *  Encode message_2 as a sequence of CBOR encoded data items as
-      specified in Section 5.3.1.
+      specified above.
 
 5.3.3.  Initiator Processing of Message 2
 
@@ -1567,7 +1567,7 @@ Table of Contents
       CIPHERTEXT_3 is the 'ciphertext' of COSE_Encrypt0.
 
    *  Encode message_3 as a sequence of CBOR encoded data items as
-      specified in Section 5.4.1.
+      specified above.
 
    Pass the connection identifiers (C_I, C_R) and the application
    algorithms in the selected cipher suite to the application.  The
