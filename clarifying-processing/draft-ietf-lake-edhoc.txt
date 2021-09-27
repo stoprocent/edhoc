@@ -1423,7 +1423,7 @@ Table of Contents
       COSE_Sign1 object as defined in Section 4.4 of
       [I-D.ietf-cose-rfc8152bis-struct] using the signature algorithm in
       the selected cipher suite, the private authentication key of the
-      Responder, and the following parameters:
+      Responder, and the following parameters as input:
 
       -  context = "Signature1"
 
@@ -1435,14 +1435,14 @@ Table of Contents
 
       -  payload = MAC_2
 
-   *  CIPHERTEXT_2 is encrypted by using the Expand function as a binary
-      additive stream cipher.
+   *  CIPHERTEXT_2 is calculated by using the Expand function as a
+      binary additive stream cipher.
 
       -  plaintext = ( ID_CRED_R / bstr / int, Signature_or_MAC_2, ?
          EAD_2 )
 
-         o  Note that if ID_CRED_R contains a single 'kid' parameter,
-            i.e., ID_CRED_R = { 4 : kid_R }, only the byte string or
+         o  If ID_CRED_R contains a single 'kid' parameter, i.e.,
+            ID_CRED_R = { 4 : kid_R }, then only the byte string or
             integer kid_R is conveyed in the plaintext encoded as a bstr
             or int.
 
@@ -1524,7 +1524,7 @@ Table of Contents
       COSE_Sign1 object as defined in Section 4.4 of
       [I-D.ietf-cose-rfc8152bis-struct] using the signature algorithm in
       the selected cipher suite, the private authentication key of the
-      Initiator, and the following parameters:
+      Initiator, and the following parameters as input:
 
       -  context = "Signature1"
 
@@ -1549,10 +1549,9 @@ Table of Contents
       -  plaintext = ( ID_CRED_I / bstr / int, Signature_or_MAC_3, ?
          EAD_3 )
 
-         o  Note that if ID_CRED_I contains a single 'kid' parameter,
-            i.e., ID_CRED_I = { 4 : kid_I }, only the byte string or
-            integer kid_I is conveyed in the plaintext encoded as a bstr
-            or int.
+         o  If ID_CRED_I contains a single 'kid' parameter, i.e.,
+            ID_CRED_I = { 4 : kid_I }, only the byte string or integer
+            kid_I is conveyed in the plaintext encoded as a bstr or int.
 
       COSE constructs the input to the AEAD [RFC5116] as follows:
 
