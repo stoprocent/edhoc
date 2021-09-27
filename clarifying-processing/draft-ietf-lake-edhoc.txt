@@ -1544,9 +1544,9 @@ Table of Contents
 
    *  Compute a COSE_Encrypt0 object as defined in Section 5.3 of
       [I-D.ietf-cose-rfc8152bis-struct], with the EDHOC AEAD algorithm
-      of the selected cipher suite, using the key K = K_3, nonce N =
-      IV_3, plaintext P, and the following parameters as input to the
-      Enc_structure generating the associated data:
+      of the selected cipher suite, using the key K = K_3, the nonce N =
+      IV_3, the plaintext P, and the following parameters as input to
+      the Enc_structure generating the associated data:
 
       -  context = "Encrypt0"
 
@@ -1560,15 +1560,14 @@ Table of Contents
 
       -  IV_3 = EDHOC-KDF( PRK_3e2m, TH_3, "IV_3", h'', length )
 
-      -  plaintext = ( ID_CRED_I / bstr / int, Signature_or_MAC_3, ?
-         EAD_3 )
+      -  P = ( ID_CRED_I / bstr / int, Signature_or_MAC_3, ? EAD_3 )
 
          o  If ID_CRED_I contains a single 'kid' parameter, i.e.,
             ID_CRED_I = { 4 : kid_I }, only the byte string or integer
             kid_I is conveyed in the plaintext encoded as a bstr or int.
 
          o  EAD_3 is protected external authorization data, see
-            Section 3.8
+            Section 3.8.
 
       CIPHERTEXT_3 is the 'ciphertext' of COSE_Encrypt0.
 
@@ -1667,9 +1666,9 @@ Table of Contents
 
    *  Compute a COSE_Encrypt0 as defined in Section 5.3 of
       [I-D.ietf-cose-rfc8152bis-struct], with the EDHOC AEAD algorithm
-      of the selected cipher suite, using the key K = K_4, nonce N =
-      IV_4, plaintext P, and the following parameters as input to the
-      Enc_structure generating the associated data:
+      of the selected cipher suite, using the key K = K_4, the nonce N =
+      IV_4, the plaintext P, and the following parameters as input to
+      the Enc_structure generating the associated data:
 
       -  context = "Encrypt0"
 
@@ -1683,8 +1682,8 @@ Table of Contents
 
       -  IV_4 = EDHOC-Exporter( "EDHOC_IV_4", h'', length )
 
-      -  plaintext = ( ? EAD_4 ), where EAD_4 is protected external
-         authorization data, see Section 3.8
+      -  P = ( ? EAD_4 ), where EAD_4 is protected external
+         authorization data, see Section 3.8.
 
       CIPHERTEXT_4 is the 'ciphertext' of COSE_Encrypt0.
 
