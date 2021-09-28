@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-09-26T01:04:46.875156+00:00",
+  "timestamp": "2021-09-28T01:03:49.048222+00:00",
   "repo": "lake-wg/edhoc",
   "labels": [
     {
@@ -1807,10 +1807,12 @@
       "author": "fpalombini",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "LAKE interim Oct 21"
+      ],
       "body": "as requested from interop:\r\n\r\n- [x] obsolete PSK test vectors\r\n- [x] add TH4 output\r\n- [x] add exporter, exporter outputs, keyupdate, to all test vectors\r\n- [x] add KEYSTREAM_2\r\n- [x] print out public keys.\r\n- [x] Add error message\r\n- [x] Add message_4\r\n- [x] Add ead\r\n- [x] Update test vectors to -10\r\n- [x] Add JSON format\r\n- [ ] add real certificates to test vectors - 0:CBOR native and DER (and possibly later 1:ASN.1 translated)\r\n- [ ] Add ciphersuites 2 and 3 to test vectors, ECDSA keys should print out full y coordinate\r\n",
       "createdAt": "2020-12-14T12:41:48Z",
-      "updatedAt": "2021-09-17T14:27:43Z",
+      "updatedAt": "2021-09-27T09:33:30Z",
       "closedAt": null,
       "comments": [
         {
@@ -3558,11 +3560,12 @@
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [
-        "Close?"
+        "Close?",
+        "LAKE interim Oct 21"
       ],
       "body": "Given we're now moving towards that EDHOC needs to know the application (with its applicability statement), it would make sense to move the definition of the .well-known/edhoc resource over to @fpalombini's draft on EDHOC/OSCORE.\r\n\r\nThe general mechanisms of EDHOC-over-CoAP could stay here (which eg. say which corr to use, and which content format), but using it for OSCORE key extraction could be the exclusive user of .well-known/edhoc (which may get a different name in the course of this). Other applications would then be indicated with different paths.",
       "createdAt": "2021-03-04T16:23:53Z",
-      "updatedAt": "2021-09-05T06:31:25Z",
+      "updatedAt": "2021-09-27T17:55:21Z",
       "closedAt": null,
       "comments": [
         {
@@ -3588,7 +3591,7 @@
         },
         {
           "author": "marco-tiloca-sics",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "Yes, it makes sense, let's take is as a first step and see where it leads to.\r\n\r\nThe text in Appendix A.3 of draft-ietf-lake-edhoc-08 says:\r\n\r\n> According to this specification, EDHOC is transferred in POST requests ... to the Uri-Path: \"/.well-known/edhoc\". An application may define its own path ...\r\n\r\nThen maybe this can be further generalized to mention \"/.well-known/edhoc\" as nothing more than an example used in the following figures.",
           "createdAt": "2021-07-16T14:31:07Z",
           "updatedAt": "2021-07-16T14:31:07Z"
@@ -3602,7 +3605,7 @@
         },
         {
           "author": "marco-tiloca-sics",
-          "authorAssociation": "NONE",
+          "authorAssociation": "CONTRIBUTOR",
           "body": "Yes, that's the current distribution and I see your points. Ok to keep it here then",
           "createdAt": "2021-07-16T14:52:34Z",
           "updatedAt": "2021-07-16T14:52:34Z"
@@ -5377,7 +5380,7 @@
       "id": "MDU6SXNzdWU5NTYxNDUxMTI=",
       "title": "How can EAD violate security properties?",
       "url": "https://github.com/lake-wg/edhoc/issues/141",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "chrysn",
       "authorAssociation": "NONE",
       "assignees": [
@@ -5388,8 +5391,8 @@
       ],
       "body": "Quoting main branch:\r\n\r\n> The EAD fields [...] special considerations need to be made such that a) it does not violate security, privacy etc. requirements of the service which uses this data, and b) it does not violate the security properties of EDHOC.\r\n\r\nI see how an application developer would take a into account, but I think that for b, it'd help to give concrete pointers on what not to do. (Right now, other than \"putting anything in there that's picked out of the EDHOC engine\", I don't have any clue as to what could endanger EDHOC here).",
       "createdAt": "2021-07-29T19:31:44Z",
-      "updatedAt": "2021-09-09T13:28:53Z",
-      "closedAt": null,
+      "updatedAt": "2021-09-27T09:39:47Z",
+      "closedAt": "2021-09-27T09:39:47Z",
       "comments": [
         {
           "author": "gselander",
@@ -5908,11 +5911,11 @@
       "assignees": [],
       "labels": [
         "Close?",
-        "work in progress -11"
+        "LAKE interim Oct 21"
       ],
       "body": "ID_CRED_x are COSE header maps and everything with them follows from COSE. The only thing EDHOC adds is to define the format of CRED_x.\r\n\r\nThis is not clear in the current version of the draft. The term \"COSE header map\" has disappeared and it is not clear that the quite long section on ID_CRED_x are just examples of COSE and not new specification.\r\n\r\nCDDL for ID_CRED_x should be added. They are of type header_map defined in the COSE RFC.\r\n",
       "createdAt": "2021-09-04T08:24:45Z",
-      "updatedAt": "2021-09-24T11:27:41Z",
+      "updatedAt": "2021-09-27T09:42:18Z",
       "closedAt": null,
       "comments": [
         {
@@ -5977,11 +5980,11 @@
       "assignees": [],
       "labels": [
         "Close?",
-        "work in progress -11"
+        "LAKE interim Oct 21"
       ],
       "body": "The IANA section currectly specified that CWT can be sent tagged or untagged while UCCS can only be sent untagged. That is probably not how it should be.",
       "createdAt": "2021-09-08T06:04:04Z",
-      "updatedAt": "2021-09-24T11:26:09Z",
+      "updatedAt": "2021-09-27T09:42:18Z",
       "closedAt": null,
       "comments": [
         {
@@ -6429,7 +6432,7 @@
       "labels": [],
       "body": "@emanjon In #176 you added \"Explanation:\" to COSE processing description of Section 5. I removed that as out context for that PR and instead opened this issue as placeholder.",
       "createdAt": "2021-09-24T07:34:03Z",
-      "updatedAt": "2021-09-25T13:49:23Z",
+      "updatedAt": "2021-09-27T09:49:47Z",
       "closedAt": null,
       "comments": [
         {
@@ -6473,8 +6476,38 @@
           "body": "Maybe something like\r\n\r\n- COSE recap:\r\n- COSE summary:\r\n- COSE explanation:\r\n- Informal COSE recap:\r\n- Informal COSE summary:\r\n- Informal COSE explanation:\r\n",
           "createdAt": "2021-09-25T13:49:23Z",
           "updatedAt": "2021-09-25T13:49:23Z"
+        },
+        {
+          "author": "gselander",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Current text says:\r\n\r\n\"\r\nCOSE constructs the input to the Signature Algorithm as:\r\n* The key is the private authentication key of the Responder.\r\n* The message M to be signed =\r\n[ \"Signature1\", << ID_CRED_R >>, << TH_2, CRED_R, ? EAD_2 >>, MAC_2 ]\r\n\"\r\n\r\nIf this is not clear, then I think a prefix is not enough. A potential confusion is  where the COSE processing stops and EDHOC processing restarts. More clear is to separate the explanation from the processing and put this text in some other section. The purpose of appendix C.3 is to explain COSE, so that section could be used. At least a reference to the explanation should be put in that section.",
+          "createdAt": "2021-09-27T09:14:46Z",
+          "updatedAt": "2021-09-27T09:14:46Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Let's make subsections for the \"COSE constructs\".\r\n\r\nLets discuss how COSE works with signature algorithms and public keys.",
+          "createdAt": "2021-09-27T09:49:47Z",
+          "updatedAt": "2021-09-27T09:49:47Z"
         }
       ]
+    },
+    {
+      "number": 178,
+      "id": "I_kwDOEItXAM48E9fi",
+      "title": "Security considerations of TOFU",
+      "url": "https://github.com/lake-wg/edhoc/issues/178",
+      "state": "OPEN",
+      "author": "emanjon",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The current text is not really explaining how TOFU works and the security considerations. Would be good with some more text. TOFU might also go agains requirements in other parts of the document that says that \"EDHOC is mutually authenticated.",
+      "createdAt": "2021-09-27T09:47:52Z",
+      "updatedAt": "2021-09-27T09:47:52Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -8289,6 +8322,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 179,
+      "id": "PR_kwDOEItXAM4sUrN3",
+      "title": "Clarifying processing",
+      "url": "https://github.com/lake-wg/edhoc/pull/179",
+      "state": "OPEN",
+      "author": "gselander",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-09-27T16:11:24Z",
+      "updatedAt": "2021-09-27T17:47:02Z",
+      "baseRepository": "lake-wg/edhoc",
+      "baseRefName": "master",
+      "baseRefOid": "5dd0a227778a776b0dff9d16bb5d7d406c8b774c",
+      "headRepository": "lake-wg/edhoc",
+      "headRefName": "clarifying-processing",
+      "headRefOid": "bfa57919bc6e0af56526829fface3aa2440da569",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
