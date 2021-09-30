@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-09-28T01:03:49.048222+00:00",
+  "timestamp": "2021-09-30T01:09:07.647753+00:00",
   "repo": "lake-wg/edhoc",
   "labels": [
     {
@@ -3451,11 +3451,12 @@
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [
-        "Close?"
+        "Close?",
+        "LAKE interim Oct 21"
       ],
       "body": "Randomness can be limited in constrained devices, and that can affect EDHOC.\r\n\r\n8.2. Cryptographic Considerations does talk about the necessity of randomness, but it did not become apparent to me from reading that alone that without a new fresh key I not only lose liveness and open up to interleaving, but also run into loss of all security properties when deriving an OSCORE secret from it and neither party has any randomness to put in.\r\n\r\nIf one of the involved parties of EDHOC is just scraping together a few bits of entropy (which is as good as having none), is there a direction in which EDHOC can be used with limited loss of properties? (Gut feeling says no because an attacker can replay a previous EDHOC exchange with them).\r\n\r\nIt may be helpful to also outline how a monotonous counter (similar to that of OSCORE B.1.1) can be used together with a private secret to obtain sufficient randomness. (That may follow from RFC 8937 already, not sure).",
       "createdAt": "2021-03-03T13:14:20Z",
-      "updatedAt": "2021-09-10T13:10:32Z",
+      "updatedAt": "2021-09-29T15:35:31Z",
       "closedAt": null,
       "comments": [
         {
@@ -3471,6 +3472,13 @@
           "body": "@chrysn  What remains of this issue? Is there anything you want to add to the text?",
           "createdAt": "2021-07-19T06:20:17Z",
           "updatedAt": "2021-07-19T06:20:17Z"
+        },
+        {
+          "author": "gselander",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> outline how a monotonous counter (similar to that of OSCORE B.1.1) can be used together with a private secret to obtain sufficient randomness.\r\n\r\nThis part is not explicitly covered and may be worth mentioning or referencing other source.\r\n\r\n> the initiator only saves-to-disk its counter between receiving M2 and before sending M3.\r\n\r\n> The reason this would be useful is that it'd defer the point where the B.1.1 process performs a kind-of-destructive operation (writing to flash that has a finite number of duty cycles) to a point in time when it has good reason to believe that there is actually a peer that makes it worth it. \r\n\r\nIn B.1.1. write to flash is done every k, or when cache is lost. Why write a counter to flash happen every time EDHOC is run?",
+          "createdAt": "2021-09-29T15:35:31Z",
+          "updatedAt": "2021-09-29T15:35:31Z"
         }
       ]
     },
@@ -6432,7 +6440,7 @@
       "labels": [],
       "body": "@emanjon In #176 you added \"Explanation:\" to COSE processing description of Section 5. I removed that as out context for that PR and instead opened this issue as placeholder.",
       "createdAt": "2021-09-24T07:34:03Z",
-      "updatedAt": "2021-09-27T09:49:47Z",
+      "updatedAt": "2021-09-28T08:55:24Z",
       "closedAt": null,
       "comments": [
         {
@@ -6490,6 +6498,20 @@
           "body": "Let's make subsections for the \"COSE constructs\".\r\n\r\nLets discuss how COSE works with signature algorithms and public keys.",
           "createdAt": "2021-09-27T09:49:47Z",
           "updatedAt": "2021-09-27T09:49:47Z"
+        },
+        {
+          "author": "gselander",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I went through the processing steps and removed the COSE constructs part, see #179. We may want to add to C.3 if something was lost in the process.",
+          "createdAt": "2021-09-28T08:04:09Z",
+          "updatedAt": "2021-09-28T08:04:09Z"
+        },
+        {
+          "author": "gselander",
+          "authorAssociation": "COLLABORATOR",
+          "body": "In C.3. we may e.g. describe how Sig_structure and Enc_structure are used ",
+          "createdAt": "2021-09-28T08:55:24Z",
+          "updatedAt": "2021-09-28T08:55:24Z"
         }
       ]
     },
@@ -8335,13 +8357,13 @@
       "labels": [],
       "body": "",
       "createdAt": "2021-09-27T16:11:24Z",
-      "updatedAt": "2021-09-27T17:47:02Z",
+      "updatedAt": "2021-09-28T07:43:39Z",
       "baseRepository": "lake-wg/edhoc",
       "baseRefName": "master",
       "baseRefOid": "5dd0a227778a776b0dff9d16bb5d7d406c8b774c",
       "headRepository": "lake-wg/edhoc",
       "headRefName": "clarifying-processing",
-      "headRefOid": "bfa57919bc6e0af56526829fface3aa2440da569",
+      "headRefOid": "5e5f887f1dd192ca7a95f459e6a18698e46c1acd",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
