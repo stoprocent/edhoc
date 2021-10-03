@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-09-30T01:09:07.647753+00:00",
+  "timestamp": "2021-10-03T01:09:34.711983+00:00",
   "repo": "lake-wg/edhoc",
   "labels": [
     {
@@ -6530,6 +6530,30 @@
       "updatedAt": "2021-09-27T09:47:52Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 180,
+      "id": "I_kwDOEItXAM48UN8u",
+      "title": "EDHOC with Post-Quantum Cryptography ",
+      "url": "https://github.com/lake-wg/edhoc/issues/180",
+      "state": "OPEN",
+      "author": "StefanHri",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Is it relevant to have post-quantum cipher suites see https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions",
+      "createdAt": "2021-09-30T09:19:12Z",
+      "updatedAt": "2021-10-02T20:50:33Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "EDHOC already supports PQC signatures in the form of LMS. Any PQC signatures added to COSE will also be supported by EDHOC. For Key Exchange it is a bit more complex. Supporting KEMs will likely require some changes.\r\n\r\nThe conslusion in the requirement document was that:\r\n\r\n\"PAKE, post-quantum and \"hybrid\" (simultaneously more than one) key exchange is out of scope, but may be supported in a later version.\"\r\n",
+          "createdAt": "2021-10-02T20:50:33Z",
+          "updatedAt": "2021-10-02T20:50:33Z"
+        }
+      ]
     }
   ],
   "pulls": [
