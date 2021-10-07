@@ -1532,7 +1532,8 @@ Table of Contents
       COSE_Sign1 object as defined in Section 4.4 of
       [I-D.ietf-cose-rfc8152bis-struct] using the signature algorithm of
       the selected cipher suite, the private authentication key of the
-      Initiator, and the following parameters as input:
+      Initiator, and the following parameters as input (see
+      Appendix C.3):
 
       -  protected = << ID_CRED_I >>
 
