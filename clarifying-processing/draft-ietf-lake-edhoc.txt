@@ -5,8 +5,8 @@
 Network Working Group                                        G. Selander
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                            F. Palombini
-Expires: 1 April 2022                                           Ericsson
-                                                       28 September 2021
+Expires: 10 April 2022                                          Ericsson
+                                                          7 October 2021
 
 
                Ephemeral Diffie-Hellman Over COSE (EDHOC)
@@ -50,7 +50,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 April 2022.
+   This Internet-Draft will expire on 10 April 2022.
 
 Copyright Notice
 
@@ -1470,8 +1470,8 @@ Table of Contents
    *  Decode message_2 (see Appendix C.1).
 
    *  Retrieve the protocol state using the message correlation provided
-      by the transport (e.g., the CoAP Token and the 5-tuple as a CoAP
-      client, or the prepended C_I as a CoAP server, see Section 3.3.2).
+      by the transport (e.g., the CoAP Token, the 5-tuple, or the
+      prepended C_I, see Section 3.3.2).
 
    *  Decrypt CIPHERTEXT_2, see Section 5.3.2.
 
@@ -1603,8 +1603,8 @@ Table of Contents
    *  Decode message_3 (see Appendix C.1).
 
    *  Retrieve the protocol state using the message correlation provided
-      by the transport (e.g., the CoAP Token and the 5-tuple as a CoAP
-      client, or the prepended C_R as a CoAP server, see Section 3.3.2).
+      by the transport (e.g., the CoAP Token, the 5-tuple, or the
+      prepended C_I, see Section 3.3.2).
 
    *  Decrypt and verify the COSE_Encrypt0 as defined in Section 5.3 of
       [I-D.ietf-cose-rfc8152bis-struct], with the EDHOC AEAD algorithm
@@ -1705,8 +1705,8 @@ Table of Contents
    *  Decode message_4 (see Appendix C.1).
 
    *  Retrieve the protocol state using the message correlation provided
-      by the transport (e.g., the CoAP Token and the 5-tuple as a CoAP
-      client, or the prepended C_I as a CoAP server, see Section 3.3.2).
+      by the transport (e.g., the CoAP Token, the 5-tuple, or the
+      prepended C_I, see Section 3.3.2).
 
    *  Decrypt and verify the COSE_Encrypt0 as defined in Section 5.3 of
       [I-D.ietf-cose-rfc8152bis-struct], with the EDHOC AEAD algorithm
@@ -2553,9 +2553,9 @@ Table of Contents
    [I-D.ietf-core-echo-request-tag]
               Amsüss, C., Mattsson, J. P., and G. Selander, "CoAP: Echo,
               Request-Tag, and Token Processing", Work in Progress,
-              Internet-Draft, draft-ietf-core-echo-request-tag-13, 12
-              July 2021, <https://www.ietf.org/archive/id/draft-ietf-
-              core-echo-request-tag-13.txt>.
+              Internet-Draft, draft-ietf-core-echo-request-tag-14, 4
+              October 2021, <https://www.ietf.org/archive/id/draft-ietf-
+              core-echo-request-tag-14.txt>.
 
    [I-D.ietf-cose-rfc8152bis-algs]
               Schaad, J., "CBOR Object Signing and Encryption (COSE):
