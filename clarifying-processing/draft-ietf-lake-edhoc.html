@@ -3610,13 +3610,13 @@ info = (
 <li class="normal" id="appendix-C.3-2.1">ECDH ephemeral public keys of type EC2 or OKP in message_1 and message_2 consist of the COSE_Key parameter named 'x', see Section 7.1 and 7.2 of <span>[<a href="#I-D.ietf-cose-rfc8152bis-algs" class="xref">I-D.ietf-cose-rfc8152bis-algs</a>]</span><a href="#appendix-C.3-2.1" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="appendix-C.3-2.2">
-            <p id="appendix-C.3-2.2.1">The ciphertexts in message_3 and message_4 consist of a subset of the single recipient encrypted data object COSE_Encrypt0, which is described in Sections 5.2-5.3 of <span>[<a href="#I-D.ietf-cose-rfc8152bis-struct" class="xref">I-D.ietf-cose-rfc8152bis-struct</a>]</span>. The ciphertext is computed over the plaintext and associated data, using an encryption key and an initialization vector. The associated data is an Enc_structure consisting of protected headers and externally supplied data (external_aad). COSE constructs the input to the AEAD <span>[<a href="#RFC5116" class="xref">RFC5116</a>]</span> for message_i (i = 3 or 4) as follows:<a href="#appendix-C.3-2.2.1" class="pilcrow">¶</a></p>
+            <p id="appendix-C.3-2.2.1">The ciphertexts in message_3 and message_4 consist of a subset of the single recipient encrypted data object COSE_Encrypt0, which is described in Sections 5.2-5.3 of <span>[<a href="#I-D.ietf-cose-rfc8152bis-struct" class="xref">I-D.ietf-cose-rfc8152bis-struct</a>]</span>. The ciphertext is computed over the plaintext and associated data, using an encryption key and an initialization vector. The associated data is an Enc_structure consisting of protected headers and externally supplied data (external_aad). COSE constructs the input to the AEAD <span>[<a href="#RFC5116" class="xref">RFC5116</a>]</span> for message_i (i = 3 or 4, see <a href="#m3" class="xref">Section 5.4</a> and <a href="#m4" class="xref">Section 5.5</a>, respectively) as follows:<a href="#appendix-C.3-2.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="appendix-C.3-2.2.2.1">Secret key K = K_i<a href="#appendix-C.3-2.2.2.1" class="pilcrow">¶</a>
 </li>
               <li class="normal" id="appendix-C.3-2.2.2.2">Nonce N = IV_i<a href="#appendix-C.3-2.2.2.2" class="pilcrow">¶</a>
 </li>
-              <li class="normal" id="appendix-C.3-2.2.2.3">Plaintext P for message_i (see <a href="#m3" class="xref">Section 5.4</a> and <a href="#m4" class="xref">Section 5.5</a>).<a href="#appendix-C.3-2.2.2.3" class="pilcrow">¶</a>
+              <li class="normal" id="appendix-C.3-2.2.2.3">Plaintext P for message_i<a href="#appendix-C.3-2.2.2.3" class="pilcrow">¶</a>
 </li>
               <li class="normal" id="appendix-C.3-2.2.2.4">Associated Data A = [ "Encrypt0", h'', TH_i ]<a href="#appendix-C.3-2.2.2.4" class="pilcrow">¶</a>
 </li>

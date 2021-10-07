@@ -3187,13 +3187,14 @@ C.3.  COSE
       and an initialization vector.  The associated data is an
       Enc_structure consisting of protected headers and externally
       supplied data (external_aad).  COSE constructs the input to the
-      AEAD [RFC5116] for message_i (i = 3 or 4) as follows:
+      AEAD [RFC5116] for message_i (i = 3 or 4, see Section 5.4 and
+      Section 5.5, respectively) as follows:
 
       -  Secret key K = K_i
 
       -  Nonce N = IV_i
 
-      -  Plaintext P for message_i (see Section 5.4 and Section 5.5).
+      -  Plaintext P for message_i
 
       -  Associated Data A = [ "Encrypt0", h'', TH_i ]
 
