@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-10-03T01:09:34.711983+00:00",
+  "timestamp": "2021-10-07T01:06:27.811563+00:00",
   "repo": "lake-wg/edhoc",
   "labels": [
     {
@@ -3456,7 +3456,7 @@
       ],
       "body": "Randomness can be limited in constrained devices, and that can affect EDHOC.\r\n\r\n8.2. Cryptographic Considerations does talk about the necessity of randomness, but it did not become apparent to me from reading that alone that without a new fresh key I not only lose liveness and open up to interleaving, but also run into loss of all security properties when deriving an OSCORE secret from it and neither party has any randomness to put in.\r\n\r\nIf one of the involved parties of EDHOC is just scraping together a few bits of entropy (which is as good as having none), is there a direction in which EDHOC can be used with limited loss of properties? (Gut feeling says no because an attacker can replay a previous EDHOC exchange with them).\r\n\r\nIt may be helpful to also outline how a monotonous counter (similar to that of OSCORE B.1.1) can be used together with a private secret to obtain sufficient randomness. (That may follow from RFC 8937 already, not sure).",
       "createdAt": "2021-03-03T13:14:20Z",
-      "updatedAt": "2021-09-29T15:35:31Z",
+      "updatedAt": "2021-10-05T15:52:29Z",
       "closedAt": null,
       "comments": [
         {
@@ -3479,6 +3479,13 @@
           "body": "> outline how a monotonous counter (similar to that of OSCORE B.1.1) can be used together with a private secret to obtain sufficient randomness.\r\n\r\nThis part is not explicitly covered and may be worth mentioning or referencing other source.\r\n\r\n> the initiator only saves-to-disk its counter between receiving M2 and before sending M3.\r\n\r\n> The reason this would be useful is that it'd defer the point where the B.1.1 process performs a kind-of-destructive operation (writing to flash that has a finite number of duty cycles) to a point in time when it has good reason to believe that there is actually a peer that makes it worth it. \r\n\r\nIn B.1.1. write to flash is done every k, or when cache is lost. Why write a counter to flash happen every time EDHOC is run?",
           "createdAt": "2021-09-29T15:35:31Z",
           "updatedAt": "2021-09-29T15:35:31Z"
+        },
+        {
+          "author": "seanturner",
+          "authorAssociation": "NONE",
+          "body": "@gselander @emanjon Check out [RFC 4086](https://datatracker.ietf.org/doc/rfc4086/). There is a section on mixing.",
+          "createdAt": "2021-10-05T15:52:29Z",
+          "updatedAt": "2021-10-05T15:52:29Z"
         }
       ]
     },
@@ -6543,7 +6550,7 @@
       "labels": [],
       "body": "Is it relevant to have post-quantum cipher suites see https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions",
       "createdAt": "2021-09-30T09:19:12Z",
-      "updatedAt": "2021-10-02T20:50:33Z",
+      "updatedAt": "2021-10-06T13:42:28Z",
       "closedAt": null,
       "comments": [
         {
@@ -6552,6 +6559,13 @@
           "body": "EDHOC already supports PQC signatures in the form of LMS. Any PQC signatures added to COSE will also be supported by EDHOC. For Key Exchange it is a bit more complex. Supporting KEMs will likely require some changes.\r\n\r\nThe conslusion in the requirement document was that:\r\n\r\n\"PAKE, post-quantum and \"hybrid\" (simultaneously more than one) key exchange is out of scope, but may be supported in a later version.\"\r\n",
           "createdAt": "2021-10-02T20:50:33Z",
           "updatedAt": "2021-10-02T20:50:33Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "We also looked into if EDHOC with ECC should be moved to KEMs to be able to (more or less) automatically support PQC Kems, but the resulting protocol would have been more heavy as some properties of ECC could not be used in a strict KEM design.\r\n\r\nI think both PAKEs and KEMs would require new methods. Each PAKE might require its own method while all KEMs could likely be supported together. Unclear if 3x PQX KEM is better than 1 PQC KEM and 2 PQC Signatures, that requires some analysis.",
+          "createdAt": "2021-10-06T13:42:28Z",
+          "updatedAt": "2021-10-06T13:42:28Z"
         }
       ]
     }
@@ -8388,6 +8402,32 @@
       "headRepository": "lake-wg/edhoc",
       "headRefName": "clarifying-processing",
       "headRefOid": "5e5f887f1dd192ca7a95f459e6a18698e46c1acd",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 181,
+      "id": "PR_kwDOEItXAM4syVb3",
+      "title": "MTI section #73",
+      "url": "https://github.com/lake-wg/edhoc/pull/181",
+      "state": "OPEN",
+      "author": "emanjon",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Suggestion base the discussion during the October interim. There was no strong opinions. This PR updates the MTI for header parameters and credential types to align with the choices made for method (none is MTI).\r\n\r\nEAD is explicitly optional to support. It is used in specific cases and requires additional mechanics for each use case.\r\n\r\n#73",
+      "createdAt": "2021-10-06T10:46:30Z",
+      "updatedAt": "2021-10-06T10:46:30Z",
+      "baseRepository": "lake-wg/edhoc",
+      "baseRefName": "master",
+      "baseRefOid": "5dd0a227778a776b0dff9d16bb5d7d406c8b774c",
+      "headRepository": "lake-wg/edhoc",
+      "headRefName": "MTI-section-#73",
+      "headRefOid": "a7e8cc9331376a68c44c22c7a26d268087c855ab",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
