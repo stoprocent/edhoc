@@ -5,8 +5,8 @@
 Network Working Group                                        G. Selander
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                            F. Palombini
-Expires: 9 April 2022                                           Ericsson
-                                                          6 October 2021
+Expires: 10 April 2022                                          Ericsson
+                                                          7 October 2021
 
 
                Ephemeral Diffie-Hellman Over COSE (EDHOC)
@@ -50,7 +50,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 9 April 2022.
+   This Internet-Draft will expire on 10 April 2022.
 
 Copyright Notice
 
@@ -1903,20 +1903,20 @@ Table of Contents
    An implementation may support only a single method.  None of the
    methods are mandatory-to-implement.
 
+   Implementations MUST support 'kid' parameters of type int.  None of
+   the other COSE header parameters are mandatory-to-implement.
+
+   An implementation may support only a single credential type (CCS,
+   CWT, X.509, C509).  None of the credential types are mandatory-to-
+   implement.
+
    Implementations MUST support the EDHOC-Exporter.  Implementations
    SHOULD support EDHOC-KeyUpdate.
 
-   Implementaions MAY support message_4.  Error codes 1 and 2 MUST be
+   Implementations MAY support message_4.  Error codes 1 and 2 MUST be
    supported.
 
-   Implementations MUST support 'kid' parameters of type int.
-
-   Editor's note: Is any COSE header parameters (kid, kcwt, kccs, x5t,
-   c5c, etc. ) MTI?
-
-   Editor's note: Is any credential type (CCS, CWT, X.509, C509) MTI?
-
-   Editor's note: Is support of EAD MTI?
+   Implementations MAY support EAD.
 
    For many constrained IoT devices it is problematic to support more
    than one cipher suite.  Existing devices can be expected to support
