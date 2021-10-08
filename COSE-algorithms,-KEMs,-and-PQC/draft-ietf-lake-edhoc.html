@@ -1022,7 +1022,7 @@ address div.right {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Selander, et al.</td>
-<td class="center">Expires 10 April 2022</td>
+<td class="center">Expires 11 April 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1035,12 +1035,12 @@ address div.right {
 <dd class="internet-draft">draft-ietf-lake-edhoc</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-10-07" class="published">7 October 2021</time>
+<time datetime="2021-10-08" class="published">8 October 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-04-10">10 April 2022</time></dd>
+<dd class="expires"><time datetime="2022-04-11">11 April 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1093,7 +1093,7 @@ address div.right {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 10 April 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 11 April 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1669,7 +1669,7 @@ Initiator                                                   Responder
             <li class="normal" id="section-3.5.1-3.3">When PKI is not used (CCS, self-signed certificate/CWT), the trust anchor is the authentication key of the other party. In this case, the identity is typically directly associated to the authentication key of the other party. For example, the name of the subject may be a canonical representation of the public key. Alternatively, if identities can be expressed in the form of unique subject names assigned to public keys, then a binding to identity can be achieved by including both public key and associated subject name in the protocol message computation: CRED_I or CRED_R may be a self-signed certificate/CWT or CCS containing the authentication key and the subject name, see <a href="#auth-cred" class="xref">Section 3.5.3</a>. In order to run EDHOC, each endpoint needs a specific authentication key/unique associated subject name, or a set of public authentication keys/unique associated subject names, which it is allowed to communicate with. EDHOC provides the proof that the other party possesses the private authentication key corresponding to the public authentication key.<a href="#section-3.5.1-3.3" class="pilcrow">¶</a>
 </li>
           </ul>
-<p id="section-3.5.1-4">To prevent misbinding attacks in systems where an attacker can register public keys without proving knowledge of the private key, SIGMA <span>[<a href="#SIGMA" class="xref">SIGMA</a>]</span> enforces a MAC to be calculated over the "identity". EDHOC follows SIGMA by calculating a MAC over the whole credential, which in case of a X.509 or C509 certificate includes the "subject" and "subjectAltName" fields, and in the case of CWT or CCS includes the "sub" claim. While the SIGMA paper only focuses on the identity, the same principle is true for other information such as policies associated to the public key.<a href="#section-3.5.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.5.1-4">To prevent misbinding attacks in systems where an attacker can register public keys without proving knowledge of the private key, SIGMA <span>[<a href="#SIGMA" class="xref">SIGMA</a>]</span> enforces a MAC to be calculated over the "identity". EDHOC follows SIGMA by calculating a MAC over the whole credential, which in case of an X.509 or C509 certificate includes the "subject" and "subjectAltName" fields, and in the case of CWT or CCS includes the "sub" claim. While the SIGMA paper only focuses on the identity, the same principle is true for other information such as policies associated to the public key.<a href="#section-3.5.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="auth-keys">
@@ -1691,7 +1691,7 @@ Initiator                                                   Responder
 <p id="section-3.5.3-2">EDHOC relies on COSE for identification of authentication credentials (see <a href="#id_cred" class="xref">Section 3.5.4</a>) and supports all credential types for which COSE header parameters are defined including X.509 <span>[<a href="#RFC5280" class="xref">RFC5280</a>]</span>, C509 <span>[<a href="#I-D.ietf-cose-cbor-encoded-cert" class="xref">I-D.ietf-cose-cbor-encoded-cert</a>]</span>, CWT <span>[<a href="#RFC8392" class="xref">RFC8392</a>]</span> and CWT Claims Set (CCS) <span>[<a href="#RFC8392" class="xref">RFC8392</a>]</span>. When the identified credential is a chain or bag, CRED_x is just the end-entity X.509 or C509 certificate / CWT. In X.509 and C509 certificates, signature keys typically have key usage "digitalSignature" and Diffie-Hellman public keys typically have key usage "keyAgreement".<a href="#section-3.5.3-2" class="pilcrow">¶</a></p>
 <p id="section-3.5.3-3">CRED_x needs to be defined such that it is identical when used by Initiator or Responder. The Initiator and Responder are expected to agree on a specific encoding of the credential, see <a href="#applicability" class="xref">Section 3.9</a>. It is RECOMMENDED that the COSE 'kid' parameter, when used, refers to a specific encoding. The Initiator and Responder SHOULD use an available authentication credential (transported in EDHOC or otherwise provisioned) without re-encoding. If for some reason re-encoding of the authentication credential may occur, then a potential common encoding for CBOR based credentials is bytewise lexicographic order of their deterministic encodings as specified in Section 4.2.1 of <span>[<a href="#RFC8949" class="xref">RFC8949</a>]</span>.<a href="#section-3.5.3-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.5.3-4.1">When the authentication credential is a X.509 certificate, CRED_x SHALL be the end-entity DER encoded certificate encoded as a bstr <span>[<a href="#I-D.ietf-cose-x509" class="xref">I-D.ietf-cose-x509</a>]</span>.<a href="#section-3.5.3-4.1" class="pilcrow">¶</a>
+<li class="normal" id="section-3.5.3-4.1">When the authentication credential is an X.509 certificate, CRED_x SHALL be the end-entity DER encoded certificate, encoded as a bstr <span>[<a href="#I-D.ietf-cose-x509" class="xref">I-D.ietf-cose-x509</a>]</span>.<a href="#section-3.5.3-4.1" class="pilcrow">¶</a>
 </li>
             <li class="normal" id="section-3.5.3-4.2">When the authentication credential is a C509 certificate, CRED_x SHALL be the end-entity C509Certificate <span>[<a href="#I-D.ietf-cose-cbor-encoded-cert" class="xref">I-D.ietf-cose-cbor-encoded-cert</a>]</span><a href="#section-3.5.3-4.2" class="pilcrow">¶</a>
 </li>
@@ -1762,8 +1762,8 @@ Initiator                                                   Responder
         <h3 id="name-cipher-suites">
 <a href="#section-3.6" class="section-number selfRef">3.6. </a><a href="#name-cipher-suites" class="section-name selfRef">Cipher Suites</a>
         </h3>
-<p id="section-3.6-1">An EDHOC cipher suite consists of an ordered set of algorithms from the "COSE Algorithms" and "COSE Elliptic Curves" registries as well as the EDHOC MAC length. Algorithms need to be specified with enough parameters to make them completely determined. EDHOC is currently only specified for use with key exchange algorithms of type ECDH curves, but any Key Encapsulation Method (KEM), including Post-Quantum Cryptography (PQC) KEMs, can be used in method 0, see <a href="#pqc" class="xref">Section 8.4</a>. Use of other types of key exchange algorithms to replace Static DH authentication (method 1,2,3) would likely require a specification updating EDHOC with new methods.<a href="#section-3.6-1" class="pilcrow">¶</a></p>
-<p id="section-3.6-2">EDHOC supports all signature algorithms defined by COSE, including PQC signature algorithms such as HSS-LMS. Just like in TLS and IKEv2, a signature in COSE is determined by the signature algorithm and the authentication key algorithm together, see <a href="#auth-keys" class="xref">Section 3.5.2</a>. The exact details of the authentication key algorithm depend on the type of authentication credential. COSE supports different formats for storing the public authentication keys including COSE_Key and X.509, which have different names and ways to represent the authentication key and the authentication key algorithm. The authentication key algorithm needs to be compatible with the EDHOC key exchange algorithm when static Diffie-Hellman authentication is used and compatible with the EDHOC signature algorithm when signature authentication is used.<a href="#section-3.6-2" class="pilcrow">¶</a></p>
+<p id="section-3.6-1">An EDHOC cipher suite consists of an ordered set of algorithms from the "COSE Algorithms" and "COSE Elliptic Curves" registries as well as the EDHOC MAC length. Algorithms need to be specified with enough parameters to make them completely determined. EDHOC is currently only specified for use with key exchange algorithms of type ECDH curves, but any Key Encapsulation Method (KEM), including Post-Quantum Cryptography (PQC) KEMs, can be used in method 0, see <a href="#pqc" class="xref">Section 8.4</a>. Use of other types of key exchange algorithms to replace static DH authentication (method 1,2,3) would likely require a specification updating EDHOC with new methods.<a href="#section-3.6-1" class="pilcrow">¶</a></p>
+<p id="section-3.6-2">EDHOC supports all signature algorithms defined by COSE, including PQC signature algorithms such as HSS-LMS. Just like in TLS and IKEv2, a signature in COSE is determined by the signature algorithm and the authentication key algorithm together, see <a href="#auth-keys" class="xref">Section 3.5.2</a>. The exact details of the authentication key algorithm depend on the type of authentication credential. COSE supports different formats for storing the public authentication keys including COSE_Key and X.509, which have different names and ways to represent the authentication key and the authentication key algorithm. The authentication key algorithm needs to be compatible with the EDHOC key exchange algorithm when static Diffie-Hellman authentication is used, and compatible with the EDHOC signature algorithm when signature authentication is used.<a href="#section-3.6-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.6-3.1">EDHOC AEAD algorithm<a href="#section-3.6-3.1" class="pilcrow">¶</a>
 </li>
@@ -1782,7 +1782,7 @@ Initiator                                                   Responder
         </ul>
 <p id="section-3.6-4">Each cipher suite is identified with a pre-defined int label.<a href="#section-3.6-4" class="pilcrow">¶</a></p>
 <p id="section-3.6-5">EDHOC can be used with all algorithms and curves defined for COSE. Implementation can either use one of the pre-defined cipher suites (<a href="#suites-registry" class="xref">Section 9.2</a>) or use any combination of COSE algorithms and parameters to define their own private cipher suite. Private cipher suites can be identified with any of the four values -24, -23, -22, -21.<a href="#section-3.6-5" class="pilcrow">¶</a></p>
-<p id="section-3.6-6">The following CCM cipher suites are for constrained IoT where message overhead is a very important factor. AES-CCM-16-64-128 and AES-CCM-16-64-128 are compatible with the IEEE CCM* mode. Cipher suites 1 and 3 use a larger tag length (128-bit) in EDHOC than in the Application AEAD algorithm (64-bit):<a href="#section-3.6-6" class="pilcrow">¶</a></p>
+<p id="section-3.6-6">The following CCM cipher suites are for constrained IoT where message overhead is a very important factor. Note that AES-CCM-16-64-128 and AES-CCM-16-64-128 are compatible with the IEEE CCM* mode. Cipher suites 1 and 3 use a larger tag length (128-bit) in EDHOC than in the Application AEAD algorithm (64-bit):<a href="#section-3.6-6" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.6-7">
 <pre>
    0. ( 10, -16, 8, 4, -8, 10, -16 )
@@ -2732,8 +2732,8 @@ authenticated encryption. Hence the message authenticating functionality of the 
         <h3 id="name-post-quantum-considerations">
 <a href="#section-8.4" class="section-number selfRef">8.4. </a><a href="#name-post-quantum-considerations" class="section-name selfRef">Post-Quantum Considerations</a>
         </h3>
-<p id="section-8.4-1">As of the publication of the specification, it is unclear when of even if a quantum computer of sufficient size and power to exploit public key cryptography will exist. Deployments that need to consider risks decades into the future should transition to Post-Quantum Cryptography (PQC) in the not-too-distant future. Many other systems should take a slower wait-and-see approach where PQC is phased in when the quantum threat is more eminent. Current PQC algorithms have limitations compared to Elliptic Curve Cryptography (ECC) and the sizes would be problematic in many constrained IoT systems.<a href="#section-8.4-1" class="pilcrow">¶</a></p>
-<p id="section-8.4-2">All symmetric algorithms used in EDHOC such as SHA-256 and AES-CCM-16-64-128 are practically secure against even large quantum computers. EDHOC supports all signature algorithms defined by COSE, including PQC signature algorithms such as HSS-LMS. EDHOC is currently only specified for use with key exchange algorithms of type ECDH curves, but any Key Encapsulation Method (KEM), including PQC KEMs, can be used in method 0. While the key exchange in method 0 is specified with terms from the Diffie-Hellman protocol, the key exchange adheres to a KEM interface. G_X is then the public key of the Initiator, G_Y is the encapsulation, and G_XY is the shared secret. Use of PQC KEMs to replace Static DH authentication would likely require a specification updating EDHOC with new methods.<a href="#section-8.4-2" class="pilcrow">¶</a></p>
+<p id="section-8.4-1">As of the publication of this specification, it is unclear when or even if a quantum computer of sufficient size and power to exploit public key cryptography will exist. Deployments that need to consider risks decades into the future should transition to Post-Quantum Cryptography (PQC) in the not-too-distant future. Many other systems should take a slower wait-and-see approach where PQC is phased in when the quantum threat is more imminent. Current PQC algorithms have limitations compared to Elliptic Curve Cryptography (ECC) and the data sizes would be problematic in many constrained IoT systems.<a href="#section-8.4-1" class="pilcrow">¶</a></p>
+<p id="section-8.4-2">All symmetric algorithms used in EDHOC such as SHA-256 and AES-CCM-16-64-128 are practically secure against even large quantum computers. EDHOC supports all signature algorithms defined by COSE, including PQC signature algorithms such as HSS-LMS. EDHOC is currently only specified for use with key exchange algorithms of type ECDH curves, but any Key Encapsulation Method (KEM), including PQC KEMs, can be used in method 0. While the key exchange in method 0 is specified with terms of the Diffie-Hellman protocol, the key exchange adheres to a KEM interface: G_X is then the public key of the Initiator, G_Y is the encapsulation, and G_XY is the shared secret. Use of PQC KEMs to replace static DH authentication would likely require a specification updating EDHOC with new methods.<a href="#section-8.4-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="unprot-data">

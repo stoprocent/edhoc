@@ -5,8 +5,8 @@
 Network Working Group                                        G. Selander
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                            F. Palombini
-Expires: 10 April 2022                                          Ericsson
-                                                          7 October 2021
+Expires: 11 April 2022                                          Ericsson
+                                                          8 October 2021
 
 
                Ephemeral Diffie-Hellman Over COSE (EDHOC)
@@ -50,7 +50,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 10 April 2022.
+   This Internet-Draft will expire on 11 April 2022.
 
 Copyright Notice
 
@@ -652,7 +652,7 @@ Table of Contents
    register public keys without proving knowledge of the private key,
    SIGMA [SIGMA] enforces a MAC to be calculated over the "identity".
    EDHOC follows SIGMA by calculating a MAC over the whole credential,
-   which in case of a X.509 or C509 certificate includes the "subject"
+   which in case of an X.509 or C509 certificate includes the "subject"
    and "subjectAltName" fields, and in the case of CWT or CCS includes
    the "sub" claim.  While the SIGMA paper only focuses on the identity,
    the same principle is true for other information such as policies
@@ -710,8 +710,8 @@ Table of Contents
    order of their deterministic encodings as specified in Section 4.2.1
    of [RFC8949].
 
-   *  When the authentication credential is a X.509 certificate, CRED_x
-      SHALL be the end-entity DER encoded certificate encoded as a bstr
+   *  When the authentication credential is an X.509 certificate, CRED_x
+      SHALL be the end-entity DER encoded certificate, encoded as a bstr
       [I-D.ietf-cose-x509].
 
    *  When the authentication credential is a C509 certificate, CRED_x
@@ -802,7 +802,7 @@ Table of Contents
    curves, but any Key Encapsulation Method (KEM), including Post-
    Quantum Cryptography (PQC) KEMs, can be used in method 0, see
    Section 8.4.  Use of other types of key exchange algorithms to
-   replace Static DH authentication (method 1,2,3) would likely require
+   replace static DH authentication (method 1,2,3) would likely require
    a specification updating EDHOC with new methods.
 
    EDHOC supports all signature algorithms defined by COSE, including
@@ -816,8 +816,8 @@ Table of Contents
    authentication key and the authentication key algorithm.  The
    authentication key algorithm needs to be compatible with the EDHOC
    key exchange algorithm when static Diffie-Hellman authentication is
-   used and compatible with the EDHOC signature algorithm when signature
-   authentication is used.
+   used, and compatible with the EDHOC signature algorithm when
+   signature authentication is used.
 
    *  EDHOC AEAD algorithm
 
@@ -843,9 +843,9 @@ Table of Contents
    -21.
 
    The following CCM cipher suites are for constrained IoT where message
-   overhead is a very important factor.  AES-CCM-16-64-128 and AES-CCM-
-   16-64-128 are compatible with the IEEE CCM* mode.  Cipher suites 1
-   and 3 use a larger tag length (128-bit) in EDHOC than in the
+   overhead is a very important factor.  Note that AES-CCM-16-64-128 and
+   AES-CCM-16-64-128 are compatible with the IEEE CCM* mode.  Cipher
+   suites 1 and 3 use a larger tag length (128-bit) in EDHOC than in the
    Application AEAD algorithm (64-bit):
 
       0. ( 10, -16, 8, 4, -8, 10, -16 )
@@ -2117,15 +2117,15 @@ Table of Contents
 
 8.4.  Post-Quantum Considerations
 
-   As of the publication of the specification, it is unclear when of
+   As of the publication of this specification, it is unclear when or
    even if a quantum computer of sufficient size and power to exploit
    public key cryptography will exist.  Deployments that need to
    consider risks decades into the future should transition to Post-
    Quantum Cryptography (PQC) in the not-too-distant future.  Many other
    systems should take a slower wait-and-see approach where PQC is
-   phased in when the quantum threat is more eminent.  Current PQC
+   phased in when the quantum threat is more imminent.  Current PQC
    algorithms have limitations compared to Elliptic Curve Cryptography
-   (ECC) and the sizes would be problematic in many constrained IoT
+   (ECC) and the data sizes would be problematic in many constrained IoT
    systems.
 
    All symmetric algorithms used in EDHOC such as SHA-256 and AES-CCM-
@@ -2135,11 +2135,11 @@ Table of Contents
    currently only specified for use with key exchange algorithms of type
    ECDH curves, but any Key Encapsulation Method (KEM), including PQC
    KEMs, can be used in method 0.  While the key exchange in method 0 is
-   specified with terms from the Diffie-Hellman protocol, the key
-   exchange adheres to a KEM interface.  G_X is then the public key of
-   the Initiator, G_Y is the encapsulation, and G_XY is the shared
-   secret.  Use of PQC KEMs to replace Static DH authentication would
-   likely require a specification updating EDHOC with new methods.
+   specified with terms of the Diffie-Hellman protocol, the key exchange
+   adheres to a KEM interface: G_X is then the public key of the
+   Initiator, G_Y is the encapsulation, and G_XY is the shared secret.
+   Use of PQC KEMs to replace static DH authentication would likely
+   require a specification updating EDHOC with new methods.
 
 8.5.  Unprotected Data
 
