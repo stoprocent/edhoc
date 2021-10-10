@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-10-07T01:06:27.811563+00:00",
+  "timestamp": "2021-10-10T01:06:05.172612+00:00",
   "repo": "lake-wg/edhoc",
   "labels": [
     {
@@ -77,6 +77,11 @@
       "name": "work in progress -11",
       "description": "",
       "color": "599A2C"
+    },
+    {
+      "name": "v-12",
+      "description": "",
+      "color": "646BE7"
     }
   ],
   "issues": [
@@ -649,15 +654,19 @@
       "id": "MDU6SXNzdWU3MzQ2NDg2NzM=",
       "title": "Specify key exchange as KEM?",
       "url": "https://github.com/lake-wg/edhoc/issues/17",
-      "state": "CLOSED",
+      "state": "OPEN",
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
-      "assignees": [],
-      "labels": [],
+      "assignees": [
+        "emanjon"
+      ],
+      "labels": [
+        "v-12"
+      ],
       "body": "All new PQC algorithms from NIST is expected to be specified as Key Encapsulation Methods (KEM). Might be a good idea to specify the key exchange in EDHOC so that is is prepared to be used with future KEMs\r\n\r\nInitiator: Generate ephemeral public key PK and send to R\r\nResponder: Use PK use it to encapsulate. Send ciphertext to I\r\nInitiator: Decapsulate\r\n\r\nECDHE can quite easily be specified as a KEM. CFRG HPKE does exactly this.",
       "createdAt": "2020-11-02T16:32:16Z",
-      "updatedAt": "2021-01-26T05:15:57Z",
-      "closedAt": "2021-01-26T05:15:56Z",
+      "updatedAt": "2021-10-07T08:38:19Z",
+      "closedAt": null,
       "comments": [
         {
           "author": "pbtgit",
@@ -700,6 +709,13 @@
           "body": "We tried this in #38, discussed at the interim Dec. 2020 and agreed not to do it.",
           "createdAt": "2021-01-26T05:15:56Z",
           "updatedAt": "2021-01-26T05:15:56Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "This issue was brought up again in #180. Method 0 uses ECC in traditional KEM and Signature interfaces and will work with KEM and Signatures specified including PQC. I think this should be made clear in the text even if COSE has not specified any other KEMs right now. This would not be a technical change. G_X and G_Y are already confirming to a KEM interface.\r\n\r\nMethod 1,2,3 does not use ECC as a KEM and cannot do so without additional overhead. ",
+          "createdAt": "2021-10-07T07:26:06Z",
+          "updatedAt": "2021-10-07T07:26:06Z"
         }
       ]
     },
@@ -1807,12 +1823,10 @@
       "author": "fpalombini",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
-      "labels": [
-        "LAKE interim Oct 21"
-      ],
+      "labels": [],
       "body": "as requested from interop:\r\n\r\n- [x] obsolete PSK test vectors\r\n- [x] add TH4 output\r\n- [x] add exporter, exporter outputs, keyupdate, to all test vectors\r\n- [x] add KEYSTREAM_2\r\n- [x] print out public keys.\r\n- [x] Add error message\r\n- [x] Add message_4\r\n- [x] Add ead\r\n- [x] Update test vectors to -10\r\n- [x] Add JSON format\r\n- [ ] add real certificates to test vectors - 0:CBOR native and DER (and possibly later 1:ASN.1 translated)\r\n- [ ] Add ciphersuites 2 and 3 to test vectors, ECDSA keys should print out full y coordinate\r\n",
       "createdAt": "2020-12-14T12:41:48Z",
-      "updatedAt": "2021-09-27T09:33:30Z",
+      "updatedAt": "2021-10-07T07:29:09Z",
       "closedAt": null,
       "comments": [
         {
@@ -2954,11 +2968,11 @@
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [
-        "LAKE interim Oct 21"
+        "v-12"
       ],
       "body": "The things that are Mandatory or optional to support or now spread out in various places.",
       "createdAt": "2021-02-21T07:07:26Z",
-      "updatedAt": "2021-09-13T07:48:03Z",
+      "updatedAt": "2021-10-07T08:40:07Z",
       "closedAt": null,
       "comments": [
         {
@@ -3449,14 +3463,13 @@
       "state": "OPEN",
       "author": "chrysn",
       "authorAssociation": "NONE",
-      "assignees": [],
-      "labels": [
-        "Close?",
-        "LAKE interim Oct 21"
+      "assignees": [
+        "gselander"
       ],
+      "labels": [],
       "body": "Randomness can be limited in constrained devices, and that can affect EDHOC.\r\n\r\n8.2. Cryptographic Considerations does talk about the necessity of randomness, but it did not become apparent to me from reading that alone that without a new fresh key I not only lose liveness and open up to interleaving, but also run into loss of all security properties when deriving an OSCORE secret from it and neither party has any randomness to put in.\r\n\r\nIf one of the involved parties of EDHOC is just scraping together a few bits of entropy (which is as good as having none), is there a direction in which EDHOC can be used with limited loss of properties? (Gut feeling says no because an attacker can replay a previous EDHOC exchange with them).\r\n\r\nIt may be helpful to also outline how a monotonous counter (similar to that of OSCORE B.1.1) can be used together with a private secret to obtain sufficient randomness. (That may follow from RFC 8937 already, not sure).",
       "createdAt": "2021-03-03T13:14:20Z",
-      "updatedAt": "2021-10-05T15:52:29Z",
+      "updatedAt": "2021-10-07T08:31:41Z",
       "closedAt": null,
       "comments": [
         {
@@ -3486,6 +3499,13 @@
           "body": "@gselander @emanjon Check out [RFC 4086](https://datatracker.ietf.org/doc/rfc4086/). There is a section on mixing.",
           "createdAt": "2021-10-05T15:52:29Z",
           "updatedAt": "2021-10-05T15:52:29Z"
+        },
+        {
+          "author": "gselander",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@seanturner @sftcd Thanks for good input here and during the interim! I did not do a good job in explaining what I think remains to do about this issue. Let me try again. \r\n\r\nAssume for the sake of the argument that there is no randomness contribution at all to the device during operation. The only source of randomness is an initial seed, denoted \"private secret\" above, which we require to have a good amount of randomness, generated or provisioned during manufacture. We also assume that the device can keep state by writing to non-volatile memory, but this write operation has a cost. In particular the number of write operations are limited. \r\n\r\nWe can now generate pseudo random numbers using the private secret and, say a counter, but we must ensure that each counter value is different and we can't afford storing the counter each time.\r\n\r\nSection B.1.1 in RFC 8613 describes a procedure with write to flash every K:th step of the counter, where K is set by the application. If the device reboots, it sets counter to K + the value read from flash. More details in the section.\r\n\r\nNow for potential updates of the draft. \r\n\r\n1. Section 8.6 outlines the above. Should we also (in an appendix) give an example (like in RFC 8613 B.1.1.) how to generate random numbers using  a secure PRF, the private secret, and sequence numbers, including a procedure for how to read/write from/to flash? Or is that obvious from the references?\r\n\r\n2. Section 8.6 says \"A good amount of randomness is important for the key generation, to provide liveness, and to protect against interleavin attacks.\"  Should we add something like  \"and to guard against deriving the same keys twice\"?\r\n\r\n3. @chrysn also mentions another optimization whereby the write to flash operation by I is deferred to after R is authenticated. The purpose being to reduce potential write operations. This optimization is contradicting \"the ephemeral keys MUST NOT be used in more than one EHDOC message\", but could potentially be made secure by aborting after message 2 if the ephemeral key is not fresh.\r\n\r\nI think we should do 1, neutral about 2, and hesitant to 3. It is not clear to me that not making this optimization will cause a lot of write to flash.\r\n\r\n",
+          "createdAt": "2021-10-07T07:22:34Z",
+          "updatedAt": "2021-10-07T07:22:34Z"
         }
       ]
     },
@@ -3575,12 +3595,11 @@
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [
-        "Close?",
-        "LAKE interim Oct 21"
+        "Close?"
       ],
       "body": "Given we're now moving towards that EDHOC needs to know the application (with its applicability statement), it would make sense to move the definition of the .well-known/edhoc resource over to @fpalombini's draft on EDHOC/OSCORE.\r\n\r\nThe general mechanisms of EDHOC-over-CoAP could stay here (which eg. say which corr to use, and which content format), but using it for OSCORE key extraction could be the exclusive user of .well-known/edhoc (which may get a different name in the course of this). Other applications would then be indicated with different paths.",
       "createdAt": "2021-03-04T16:23:53Z",
-      "updatedAt": "2021-09-27T17:55:21Z",
+      "updatedAt": "2021-10-07T07:29:10Z",
       "closedAt": null,
       "comments": [
         {
@@ -5366,11 +5385,13 @@
       "state": "OPEN",
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
-      "assignees": [],
+      "assignees": [
+        "emanjon"
+      ],
       "labels": [],
       "body": "The EDHOC compact representation was formalized after a comment in CFRG on HPKE. Now Dan Harkins has submitted a new draft. We should maybe consider aligning with this draft. Note that the draft is still an individual draft and will likely not be published before EDHOC. ",
       "createdAt": "2021-07-29T19:28:21Z",
-      "updatedAt": "2021-07-29T19:28:21Z",
+      "updatedAt": "2021-10-07T08:32:22Z",
       "closedAt": null,
       "comments": []
     },
@@ -5925,12 +5946,11 @@
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [
-        "Close?",
-        "LAKE interim Oct 21"
+        "Close?"
       ],
       "body": "ID_CRED_x are COSE header maps and everything with them follows from COSE. The only thing EDHOC adds is to define the format of CRED_x.\r\n\r\nThis is not clear in the current version of the draft. The term \"COSE header map\" has disappeared and it is not clear that the quite long section on ID_CRED_x are just examples of COSE and not new specification.\r\n\r\nCDDL for ID_CRED_x should be added. They are of type header_map defined in the COSE RFC.\r\n",
       "createdAt": "2021-09-04T08:24:45Z",
-      "updatedAt": "2021-09-27T09:42:18Z",
+      "updatedAt": "2021-10-07T07:29:10Z",
       "closedAt": null,
       "comments": [
         {
@@ -5993,13 +6013,10 @@
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
-      "labels": [
-        "Close?",
-        "LAKE interim Oct 21"
-      ],
+      "labels": [],
       "body": "The IANA section currectly specified that CWT can be sent tagged or untagged while UCCS can only be sent untagged. That is probably not how it should be.",
       "createdAt": "2021-09-08T06:04:04Z",
-      "updatedAt": "2021-09-27T09:42:18Z",
+      "updatedAt": "2021-10-08T13:06:48Z",
       "closedAt": null,
       "comments": [
         {
@@ -6057,6 +6074,48 @@
           "body": "New name (kcwt/kccs) and description: 4910a42f",
           "createdAt": "2021-09-20T07:36:53Z",
           "updatedAt": "2021-09-20T07:36:53Z"
+        },
+        {
+          "author": "gselander",
+          "authorAssociation": "COLLABORATOR",
+          "body": ">  When the authentication credential is a X.509 certificate, CRED_x\r\n>  SHALL be the end-entity DER encoded certificate wrapped in a bstr\r\n>  [I-D.ietf-cose-x509].\r\n\r\n@cabo commented in the interim on \"wrapped in a bstr\" needs to be clarified.\r\n\r\n",
+          "createdAt": "2021-10-07T08:36:54Z",
+          "updatedAt": "2021-10-07T08:36:54Z"
+        },
+        {
+          "author": "gselander",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@cabo: Is this following minor change (in #182) sufficient, or do we need to provide more details?\r\n\r\nOLD\r\nWhen the authentication credential is a X.509 certificate, CRED_x SHALL be the end-entity DER encoded certificate wrapped in a bstr {{I-D.ietf-cose-x509}}.\r\n\r\nNEW\r\nWhen the authentication credential is an X.509 certificate, CRED_x SHALL be the end-entity DER encoded certificate, encoded as a bstr {{I-D.ietf-cose-x509}}.",
+          "createdAt": "2021-10-08T06:51:58Z",
+          "updatedAt": "2021-10-08T06:51:58Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "NONE",
+          "body": "Do you have a nested encoding step or *is* this just a byte string with the encoded X.509 certificate?",
+          "createdAt": "2021-10-08T06:55:45Z",
+          "updatedAt": "2021-10-08T06:55:45Z"
+        },
+        {
+          "author": "gselander",
+          "authorAssociation": "COLLABORATOR",
+          "body": "As this is referring to the *end-entity* certificate I would say the latter. \r\n\r\n@emanjon?",
+          "createdAt": "2021-10-08T06:58:25Z",
+          "updatedAt": "2021-10-08T06:58:25Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "NONE",
+          "body": "Or in other words, we need to make sure we don't use terminology that implies nested encoding steps in cases where we simply have a plain data item in the CBOR. \r\n\r\nIn CBOR diagnostic, if 'foo' is the encoded foreign data:\r\n\r\n## Plain:\r\n\r\n'foo'\r\n\r\nInside the overall encoded data item:\r\n\r\n``` \r\n43        # bytes(3)\r\n   666f6f # \"foo\"\r\n``` \r\n\r\n## Wrapped/nested/whatever:\r\n\r\n<< 'foo' >>\r\n\r\nInside the overall encoded data item:\r\n\r\n``` \r\n44          # bytes(4)\r\n   43666f6f # \"Cfoo\"\r\n``` ",
+          "createdAt": "2021-10-08T09:44:01Z",
+          "updatedAt": "2021-10-08T09:44:37Z"
+        },
+        {
+          "author": "gselander",
+          "authorAssociation": "COLLABORATOR",
+          "body": "As I read it\r\n\r\n\"end-entity DER encoded certificate, encoded as a bstr\"\r\n\r\nindicates a \"plain\" CBOR encoding of the non-CBOR X.509 certificate data. \r\n\r\nAny objection / disagreement to this definition / interpretation?\r\n\r\n",
+          "createdAt": "2021-10-08T13:06:48Z",
+          "updatedAt": "2021-10-08T13:06:48Z"
         }
       ]
     },
@@ -6209,13 +6268,15 @@
       "state": "OPEN",
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
-      "assignees": [],
+      "assignees": [
+        "emanjon"
+      ],
       "labels": [
-        "LAKE interim Oct 21"
+        "Close?"
       ],
       "body": "Currently a mixture of:\r\nThe registration procedure is \"Expert Review\".\r\nThe registration procedure is \"Specification Required\". \r\n",
       "createdAt": "2021-09-10T12:55:40Z",
-      "updatedAt": "2021-09-13T07:48:22Z",
+      "updatedAt": "2021-10-07T08:31:54Z",
       "closedAt": null,
       "comments": [
         {
@@ -6236,12 +6297,10 @@
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
-      "labels": [
-        "LAKE interim Oct 21"
-      ],
+      "labels": [],
       "body": "We should discuss how many test vectors draft-selander-lake-traces should contain and what the content should be.\r\n\r\nThis applied to the old appendix as well, but is now even more obvious that we need to use a real X509 certificate. E.g. the example one from https://datatracker.ietf.org/doc/draft-ietf-cose-cbor-encoded-cert/ The cipher suite should probably be one with ECDSA, e.g. cipher suite 2.\r\n\r\n   CRED_R (CBOR Data Item) (113 bytes)\r\n   58 6f 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13 14\r\n   15 16 17 18 19 1a 1b 1c 1d 1e 1f 20 21 22 23 24 25 26 27 28 29 2a 2b\r\n   2c 2d 2e 2f 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f 40 41 42\r\n   43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f 50 51 52 53 54 55 56 57 58 59\r\n   5a 5b 5c 5d 5e 5f 60 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e\r\n\r\n",
       "createdAt": "2021-09-13T07:54:02Z",
-      "updatedAt": "2021-09-19T04:23:22Z",
+      "updatedAt": "2021-10-07T07:29:11Z",
       "closedAt": null,
       "comments": [
         {
@@ -6308,13 +6367,25 @@
       "state": "OPEN",
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
-      "assignees": [],
-      "labels": [],
+      "assignees": [
+        "gselander"
+      ],
+      "labels": [
+        "Close?"
+      ],
       "body": "Several things in the document is not specification but rather clarification of how COSE works. The additon of this and the integration in the main body was requested by several implementors. It should be more clearly marked that these parts just explain COSE and does not define anything. If soemthing would be wrong. The COSE specification apply.\r\n\r\nE.g.\r\n\r\n```\r\n\r\n\r\n   COSE constructs the input to the Signature Algorithm as:\r\n\r\n      -  The key is the private authentication key of the Responder.\r\n\r\n      -  The message M to be signed =\r\n\r\n         [ \"Signature1\", << ID_CRED_R >>, << TH_2, CRED_R, ? EAD_2 >>,\r\n         MAC_2 ]\r\n\r\n\r\n\r\n\r\n\r\n  COSE constructs the input to the AEAD [RFC5116] as follows:\r\n\r\n      -  Key K = EDHOC-KDF( PRK_3e2m, TH_3, \"K_3ae\", h'', length )\r\n\r\n      -  Nonce N = EDHOC-KDF( PRK_3e2m, TH_3, \"IV_3ae\", h'', length )\r\n\r\n      -  Plaintext P = ( ID_CRED_I / bstr / int, Signature_or_MAC_3, ?\r\n         EAD_3 )\r\n\r\n      -  Associated data A = [ \"Encrypt0\", h'', TH_3 ]\r\n\r\n\r\n\r\n *  by a hash value with the 'x5t' or 'c5t' parameters, respectively:\r\n\r\n      -  ID_CRED_x = { 34 : COSE_CertHash }, for x = I or R,\r\n\r\n      -  ID_CRED_x = { TBD3 : COSE_CertHash }, for x = I or R;\r\n\r\n   *  or by a URI with the 'x5u' or 'c5u' parameters, respectively:\r\n\r\n      -  ID_CRED_x = { 35 : uri }, for x = I or R,\r\n\r\n      -  ID_CRED_x = { TBD4 : uri }, for x = I or R.\r\n\r\n\r\n\r\n\r\n```\r\n\r\n",
       "createdAt": "2021-09-17T07:47:57Z",
-      "updatedAt": "2021-09-17T08:14:52Z",
+      "updatedAt": "2021-10-07T19:49:52Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "gselander",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The explanations of COSE are moved to C.3 in PR #179.",
+          "createdAt": "2021-10-07T19:49:52Z",
+          "updatedAt": "2021-10-07T19:49:52Z"
+        }
+      ]
     },
     {
       "number": 172,
@@ -6366,12 +6437,11 @@
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [
-        "Close?",
-        "LAKE interim Oct 21"
+        "Close?"
       ],
       "body": "Following a discussion recently had with Carsten and the CoAP-EAP authors, I stumbled upon this sentence:\r\n\r\n> According to this specification, EDHOC messages are carried in Confirmable messages, which is beneficial especially if fragmentation is used.\r\n\r\nNo other part of the spec mentions CONs (apart from the deduplication part where it does fit well), so maybe this is not intended anyway. At most, it could say:\r\n\r\n> To avoid that the EDHOC exchange gets stuck (especially when fragmentation is used), the underlying CoAP transport should be used in reliable mode.",
       "createdAt": "2021-09-17T17:46:55Z",
-      "updatedAt": "2021-09-24T11:25:11Z",
+      "updatedAt": "2021-10-07T08:17:32Z",
       "closedAt": null,
       "comments": [
         {
@@ -6443,11 +6513,15 @@
       "state": "OPEN",
       "author": "gselander",
       "authorAssociation": "COLLABORATOR",
-      "assignees": [],
-      "labels": [],
+      "assignees": [
+        "gselander"
+      ],
+      "labels": [
+        "v-12"
+      ],
       "body": "@emanjon In #176 you added \"Explanation:\" to COSE processing description of Section 5. I removed that as out context for that PR and instead opened this issue as placeholder.",
       "createdAt": "2021-09-24T07:34:03Z",
-      "updatedAt": "2021-09-28T08:55:24Z",
+      "updatedAt": "2021-10-07T19:45:52Z",
       "closedAt": null,
       "comments": [
         {
@@ -6519,6 +6593,20 @@
           "body": "In C.3. we may e.g. describe how Sig_structure and Enc_structure are used ",
           "createdAt": "2021-09-28T08:55:24Z",
           "updatedAt": "2021-09-28T08:55:24Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "C.3 used to contain the \"COSE constructs\" parts. I.e. explanation of how COSE takes the input to its API and transform them to input to the AEAD/Signature interfaces. Some implementor a long time ago suggested to integrate this into the body, but maybe it is better to have it in the appendix to make it clearer what is EDHOC and what is COSE",
+          "createdAt": "2021-10-07T11:02:02Z",
+          "updatedAt": "2021-10-07T11:02:02Z"
+        },
+        {
+          "author": "gselander",
+          "authorAssociation": "COLLABORATOR",
+          "body": "in PR #179 the \"COSE constructs\" explanations for COSE_Sign1 and COSE_Encrypt0 are now back in C.3, with reference to it from the message processing sections 5.3-5.5.",
+          "createdAt": "2021-10-07T19:45:52Z",
+          "updatedAt": "2021-10-07T19:45:52Z"
         }
       ]
     },
@@ -6546,11 +6634,15 @@
       "state": "OPEN",
       "author": "StefanHri",
       "authorAssociation": "NONE",
-      "assignees": [],
-      "labels": [],
+      "assignees": [
+        "emanjon"
+      ],
+      "labels": [
+        "v-12"
+      ],
       "body": "Is it relevant to have post-quantum cipher suites see https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions",
       "createdAt": "2021-09-30T09:19:12Z",
-      "updatedAt": "2021-10-06T13:42:28Z",
+      "updatedAt": "2021-10-07T23:19:37Z",
       "closedAt": null,
       "comments": [
         {
@@ -6566,6 +6658,62 @@
           "body": "We also looked into if EDHOC with ECC should be moved to KEMs to be able to (more or less) automatically support PQC Kems, but the resulting protocol would have been more heavy as some properties of ECC could not be used in a strict KEM design.\r\n\r\nI think both PAKEs and KEMs would require new methods. Each PAKE might require its own method while all KEMs could likely be supported together. Unclear if 3x PQX KEM is better than 1 PQC KEM and 2 PQC Signatures, that requires some analysis.",
           "createdAt": "2021-10-06T13:42:28Z",
           "updatedAt": "2021-10-06T13:42:28Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Maybe we looked a bit to much on the Static DH mode when KEM was discussed last. Mehtod 0 will automatically work with PQC KEMs.\r\n\r\nG_X is the public key and G_Y is an key encapsulation / ciphertext. We should likely describe that in the text. Good that you brought this up again @StefanHri \r\n\r\nThis would not be a technical change at all for method 0. The other methods would not work for general KEMs.",
+          "createdAt": "2021-10-07T07:21:43Z",
+          "updatedAt": "2021-10-07T07:21:43Z"
+        },
+        {
+          "author": "pbtgit",
+          "authorAssociation": "NONE",
+          "body": "Although I'm not convinced all aspects of \"PQ\" can be solved in EDHOC timeframe, I still think it makes sense to put this in the document already.   ",
+          "createdAt": "2021-10-07T07:47:28Z",
+          "updatedAt": "2021-10-07T07:47:28Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "My current plan would be to point out that the Key Exchange in method 0 is already following the KEM interface and can be replaced by any KEM including PQC KEMs. Might also be good to point out that method works with any signature algorithm including the PQC signature algorithm LMS that COSE has already specified. ",
+          "createdAt": "2021-10-07T08:39:25Z",
+          "updatedAt": "2021-10-07T08:39:25Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@pbtgit that for raising the issue earlier in #17\r\n\r\n@pbtgit and @StefanHri please review the new PR #182\r\n\r\nMethod 0 is well-prepared for PQC algorithms, you can just replace the current KEM and Signature algorithms with PQC algorithms. Many of the PQC algorithms are very fast. Note that using PQC algorithms _significantly_ increases the message sizes. Signatures, public keys, and encapsulations would be around 800 bytes instead of the current 32-64 bytes.\r\n  ",
+          "createdAt": "2021-10-07T12:35:55Z",
+          "updatedAt": "2021-10-07T12:35:55Z"
+        },
+        {
+          "author": "StefanHri",
+          "authorAssociation": "NONE",
+          "body": "Does it make sense to specify a suite?",
+          "createdAt": "2021-10-07T17:37:42Z",
+          "updatedAt": "2021-10-07T17:37:42Z"
+        },
+        {
+          "author": "pbtgit",
+          "authorAssociation": "NONE",
+          "body": "Regarding increased size, it does not meet the charter objective/fragmentation limit of 6TiSCH, but it still fits the MTU 6lowpan and may be a price to pay to reach PQC. \r\n\r\nCan the OSCORE re-keying proposals also meet PQC requirements? If so, and a  \"relatively expensive\" key-exchange can be done very infrequently - the overhead is less of an issue. ",
+          "createdAt": "2021-10-07T19:42:39Z",
+          "updatedAt": "2021-10-07T19:42:39Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Does it make sense to specify a suite?\r\n\r\nNot right now I think. I think EDHOC needs to wait until COSE has registered PQC Key exchange algorithms. Which will probable happen after NIST standards. I don't think combining LMS signatures with ECC key exchange makes sense. NIST stated that round 3 will end close to the end of 2021. Draft standards will be available 2022-2023 and final standards hopefully 2024.\r\n\r\nNSA has stated that will update their CNSA suite at the end of NIST round 3. I think that makes a lot of sense for US TOP SECRET that requires protection for maybe 50-100 years. For many other use cases I think the quantum threat might bw a bit exagerated. It is unclear if CRQC will ever be built. If the number of qubits double every 18 months like transistor based chips did it will take 25-30 years. ",
+          "createdAt": "2021-10-07T23:08:48Z",
+          "updatedAt": "2021-10-07T23:08:48Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": ">Regarding increased size, it does not meet the charter objective/fragmentation limit of 6TiSCH, but it still fits the MTU 6lowpan and may be a price to pay to reach PQC.\r\n\r\nCOSE/EDHOC will definitly have PQC algorithms in a few years. A big US company asked for a CNSA compliant suite which was added. CNSA will be updated to PQC is just a few months, but I think EDHOC should wait for COSE when it comes to PQC.\r\n\r\n>Can the OSCORE re-keying proposals also meet PQC requirements? If so, and a \"relatively expensive\" key-exchange can be done very infrequently - the overhead is less of an issue.\r\n\r\nBasically any symmetric construction will be PQC. The current It is unclear if CRQC breaking RSA will ever be built. If such CRQC are ever built, it would take millions of such CRQC hundreds of years to break AES-128. SHA-256 is more quantum resistant then AES-128 and HMAC-SHA-256 is more resistant than SHA-256. NIST currently draft documents label AES-128 and SHA-256 as quantum resistant which make a lot of sense to me. The EDHOC Key-Update use HMAC-SHA-256 and the OSOCRE key update use HKDF-SHA-256. They would both be highly resistant to quantum computers. \r\n",
+          "createdAt": "2021-10-07T23:19:37Z",
+          "updatedAt": "2021-10-07T23:19:37Z"
         }
       ]
     }
@@ -8395,18 +8543,26 @@
       "labels": [],
       "body": "",
       "createdAt": "2021-09-27T16:11:24Z",
-      "updatedAt": "2021-09-28T07:43:39Z",
+      "updatedAt": "2021-10-07T19:34:54Z",
       "baseRepository": "lake-wg/edhoc",
       "baseRefName": "master",
       "baseRefOid": "5dd0a227778a776b0dff9d16bb5d7d406c8b774c",
       "headRepository": "lake-wg/edhoc",
       "headRefName": "clarifying-processing",
-      "headRefOid": "5e5f887f1dd192ca7a95f459e6a18698e46c1acd",
+      "headRefOid": "c239e2ee2be512ae53813608ae7a490f9f6f38cc",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "As discussed, the \"COSE construct\" parts should be moved to the appendix instead of subsection as discussed in the issues.\r\n\r\nMight be good to write that the text is an explanation of how COSE calls the AEAD/Signature interface. This description was used to generate the current test vectors.",
+          "createdAt": "2021-10-07T10:58:56Z",
+          "updatedAt": "2021-10-07T10:58:56Z"
+        }
+      ],
       "reviews": []
     },
     {
@@ -8414,25 +8570,61 @@
       "id": "PR_kwDOEItXAM4syVb3",
       "title": "MTI section #73",
       "url": "https://github.com/lake-wg/edhoc/pull/181",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Suggestion base the discussion during the October interim. There was no strong opinions. This PR updates the MTI for header parameters and credential types to align with the choices made for method (none is MTI).\r\n\r\nEAD is explicitly optional to support. It is used in specific cases and requires additional mechanics for each use case.\r\n\r\n#73",
       "createdAt": "2021-10-06T10:46:30Z",
-      "updatedAt": "2021-10-06T10:46:30Z",
+      "updatedAt": "2021-10-07T08:40:36Z",
       "baseRepository": "lake-wg/edhoc",
       "baseRefName": "master",
       "baseRefOid": "5dd0a227778a776b0dff9d16bb5d7d406c8b774c",
       "headRepository": "lake-wg/edhoc",
       "headRefName": "MTI-section-#73",
-      "headRefOid": "a7e8cc9331376a68c44c22c7a26d268087c855ab",
+      "headRefOid": "7d57bd3ab3df17052f41402a42f8d6d773f9ae7b",
+      "closedAt": "2021-10-07T08:40:36Z",
+      "mergedAt": "2021-10-07T08:40:36Z",
+      "mergedBy": "gselander",
+      "mergeCommit": {
+        "oid": "a9a9807e1b92f9e0b7efe4d6b3b3bb48404a710a"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 182,
+      "id": "PR_kwDOEItXAM4s4-F0",
+      "title": "COSE algorithms, KEMs, and PQC",
+      "url": "https://github.com/lake-wg/edhoc/pull/182",
+      "state": "OPEN",
+      "author": "emanjon",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-10-07T12:24:18Z",
+      "updatedAt": "2021-10-08T06:49:39Z",
+      "baseRepository": "lake-wg/edhoc",
+      "baseRefName": "master",
+      "baseRefOid": "a9a9807e1b92f9e0b7efe4d6b3b3bb48404a710a",
+      "headRepository": "lake-wg/edhoc",
+      "headRefName": "COSE-algorithms,-KEMs,-and-PQC",
+      "headRefOid": "e37871cd656594ce2ef3eb9f624140fa1f611119",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "This PR addresses #17 and #180 as well as parts of  #171 and #177. \r\n\r\n- I also thought is was good to point out that AES-CCM-16-64-128 and AES-CCM-16-64-128 are compatible with the IEEE CCM* mode.\r\n\r\n- I also corrected the sentence \"wrapped in a bstr\" that Carsten pointed out during the interim. #162",
+          "createdAt": "2021-10-07T12:28:49Z",
+          "updatedAt": "2021-10-07T12:28:49Z"
+        }
+      ],
       "reviews": []
     }
   ]
