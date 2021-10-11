@@ -2130,7 +2130,7 @@ Table of Contents
    (ECC) and the data sizes would be problematic in many constrained IoT
    systems.
 
-   All symmetric algorithms used in EDHOC such as SHA-256 and AES-CCM-
+   Symmetric algorithms used in EDHOC such as SHA-256 and AES-CCM-
    16-64-128 are practically secure against even large quantum
    computers.  EDHOC supports all signature algorithms defined by COSE,
    including PQC signature algorithms such as HSS-LMS.  EDHOC is
