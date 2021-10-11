@@ -5,8 +5,8 @@
 Network Working Group                                        G. Selander
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                            F. Palombini
-Expires: 10 April 2022                                          Ericsson
-                                                          7 October 2021
+Expires: 14 April 2022                                          Ericsson
+                                                         11 October 2021
 
 
                Ephemeral Diffie-Hellman Over COSE (EDHOC)
@@ -50,7 +50,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 10 April 2022.
+   This Internet-Draft will expire on 14 April 2022.
 
 Copyright Notice
 
@@ -1467,7 +1467,7 @@ Table of Contents
 
    *  Retrieve the protocol state using the message correlation provided
       by the transport (e.g., the CoAP Token, the 5-tuple, or the
-      prepended C_I, see Section 3.3.2).
+      prepended C_I, see Appendix A.3).
 
    *  Decrypt CIPHERTEXT_2, see Section 5.3.2.
 
@@ -1601,7 +1601,7 @@ Table of Contents
 
    *  Retrieve the protocol state using the message correlation provided
       by the transport (e.g., the CoAP Token, the 5-tuple, or the
-      prepended C_I, see Section 3.3.2).
+      prepended C_I, see Appendix A.3).
 
    *  Decrypt and verify the COSE_Encrypt0 as defined in Section 5.3 of
       [I-D.ietf-cose-rfc8152bis-struct], with the EDHOC AEAD algorithm
@@ -1707,7 +1707,7 @@ Table of Contents
 
    *  Retrieve the protocol state using the message correlation provided
       by the transport (e.g., the CoAP Token, the 5-tuple, or the
-      prepended C_I, see Section 3.3.2).
+      prepended C_I, see Appendix A.3).
 
    *  Decrypt and verify the COSE_Encrypt0 as defined in Section 5.3 of
       [I-D.ietf-cose-rfc8152bis-struct], with the EDHOC AEAD algorithm
