@@ -667,7 +667,7 @@ Table of Contents
    Hellman key.  The authentication key algorithm needs to be compatible
    with the method and the cipher suite.  The authentication key
    algorithm needs to be compatible with the EDHOC key exchange
-   algorithm when static Diffie-Hellman authentication is used and
+   algorithm when static Diffie-Hellman authentication is used, and
    compatible with the EDHOC signature algorithm when signature
    authentication is used.
 
@@ -814,10 +814,7 @@ Table of Contents
    supports different formats for storing the public authentication keys
    including COSE_Key and X.509, which have different names and ways to
    represent the authentication key and the authentication key
-   algorithm.  The authentication key algorithm needs to be compatible
-   with the EDHOC key exchange algorithm when static Diffie-Hellman
-   authentication is used, and compatible with the EDHOC signature
-   algorithm when signature authentication is used.
+   algorithm.
 
    An EDHOC cipher suite consists of the following parameters:
 
