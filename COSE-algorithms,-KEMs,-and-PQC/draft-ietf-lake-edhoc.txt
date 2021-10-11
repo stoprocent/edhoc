@@ -5,8 +5,8 @@
 Network Working Group                                        G. Selander
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                            F. Palombini
-Expires: 11 April 2022                                          Ericsson
-                                                          8 October 2021
+Expires: 14 April 2022                                          Ericsson
+                                                         11 October 2021
 
 
                Ephemeral Diffie-Hellman Over COSE (EDHOC)
@@ -50,7 +50,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 11 April 2022.
+   This Internet-Draft will expire on 14 April 2022.
 
 Copyright Notice
 
@@ -806,18 +806,18 @@ Table of Contents
    a specification updating EDHOC with new methods.
 
    EDHOC supports all signature algorithms defined by COSE, including
-   PQC signature algorithms such as HSS-LMS.  Just like in TLS and
-   IKEv2, a signature in COSE is determined by the signature algorithm
-   and the authentication key algorithm together, see Section 3.5.2.
-   The exact details of the authentication key algorithm depend on the
-   type of authentication credential.  COSE supports different formats
-   for storing the public authentication keys including COSE_Key and
-   X.509, which have different names and ways to represent the
-   authentication key and the authentication key algorithm.  The
-   authentication key algorithm needs to be compatible with the EDHOC
-   key exchange algorithm when static Diffie-Hellman authentication is
-   used, and compatible with the EDHOC signature algorithm when
-   signature authentication is used.
+   PQC signature algorithms such as HSS-LMS.  Just like in TLS 1.3
+   [RFC8446] and IKEv2 [RFC7296], a signature in COSE is determined by
+   the signature algorithm and the authentication key algorithm
+   together, see Section 3.5.2.  The exact details of the authentication
+   key algorithm depend on the type of authentication credential.  COSE
+   supports different formats for storing the public authentication keys
+   including COSE_Key and X.509, which have different names and ways to
+   represent the authentication key and the authentication key
+   algorithm.  The authentication key algorithm needs to be compatible
+   with the EDHOC key exchange algorithm when static Diffie-Hellman
+   authentication is used, and compatible with the EDHOC signature
+   algorithm when signature authentication is used.
 
    *  EDHOC AEAD algorithm
 
