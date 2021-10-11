@@ -105,9 +105,10 @@ Table of Contents
      8.1.  Security Properties
      8.2.  Cryptographic Considerations
      8.3.  Cipher Suites and Cryptographic Algorithms
-     8.4.  Unprotected Data
-     8.5.  Denial-of-Service
-     8.6.  Implementation Considerations
+     8.4.  Post-Quantum Considerations
+     8.5.  Unprotected Data
+     8.6.  Denial-of-Service
+     8.7.  Implementation Considerations
    9.  IANA Considerations
      9.1.  EDHOC Exporter Label Registry
      9.2.  EDHOC Cipher Suites Registry
@@ -651,7 +652,7 @@ Table of Contents
    register public keys without proving knowledge of the private key,
    SIGMA [SIGMA] enforces a MAC to be calculated over the "identity".
    EDHOC follows SIGMA by calculating a MAC over the whole credential,
-   which in case of a X.509 or C509 certificate includes the "subject"
+   which in case of an X.509 or C509 certificate includes the "subject"
    and "subjectAltName" fields, and in the case of CWT or CCS includes
    the "sub" claim.  While the SIGMA paper only focuses on the identity,
    the same principle is true for other information such as policies
@@ -666,7 +667,7 @@ Table of Contents
    Hellman key.  The authentication key algorithm needs to be compatible
    with the method and the cipher suite.  The authentication key
    algorithm needs to be compatible with the EDHOC key exchange
-   algorithm when static Diffie-Hellman authentication is used and
+   algorithm when static Diffie-Hellman authentication is used, and
    compatible with the EDHOC signature algorithm when signature
    authentication is used.
 
@@ -709,8 +710,8 @@ Table of Contents
    order of their deterministic encodings as specified in Section 4.2.1
    of [RFC8949].
 
-   *  When the authentication credential is a X.509 certificate, CRED_x
-      SHALL be the end-entity DER encoded certificate wrapped in a bstr
+   *  When the authentication credential is an X.509 certificate, CRED_x
+      SHALL be the end-entity DER encoded certificate, encoded as a bstr
       [I-D.ietf-cose-x509].
 
    *  When the authentication credential is a C509 certificate, CRED_x
@@ -796,16 +797,26 @@ Table of Contents
    An EDHOC cipher suite consists of an ordered set of algorithms from
    the "COSE Algorithms" and "COSE Elliptic Curves" registries as well
    as the EDHOC MAC length.  Algorithms need to be specified with enough
-   parameters to make them completely determined.  EDHOC is only
-   specified for use with key exchange algorithms of type ECDH curves.
-   Use with other types of key exchange algorithms would likely require
-   a specification updating EDHOC.  Note that for most signature
-   algorithms, the signature is determined by the signature algorithm
-   and the authentication key algorithm together, see Section 3.5.2.
-   The authentication key algorithm needs to be compatible with the
-   EDHOC key exchange algorithm when static Diffie-Hellman
-   authentication is used and compatible with the EDHOC signature
-   algorithm when signature authentication is used.
+   parameters to make them completely determined.  EDHOC is currently
+   only specified for use with key exchange algorithms of type ECDH
+   curves, but any Key Encapsulation Method (KEM), including Post-
+   Quantum Cryptography (PQC) KEMs, can be used in method 0, see
+   Section 8.4.  Use of other types of key exchange algorithms to
+   replace static DH authentication (method 1,2,3) would likely require
+   a specification updating EDHOC with new methods.
+
+   EDHOC supports all signature algorithms defined by COSE, including
+   PQC signature algorithms such as HSS-LMS.  Just like in TLS 1.3
+   [RFC8446] and IKEv2 [RFC7296], a signature in COSE is determined by
+   the signature algorithm and the authentication key algorithm
+   together, see Section 3.5.2.  The exact details of the authentication
+   key algorithm depend on the type of authentication credential.  COSE
+   supports different formats for storing the public authentication keys
+   including COSE_Key and X.509, which have different names and ways to
+   represent the authentication key and the authentication key
+   algorithm.
+
+   An EDHOC cipher suite consists of the following parameters:
 
    *  EDHOC AEAD algorithm
 
@@ -831,9 +842,10 @@ Table of Contents
    -21.
 
    The following CCM cipher suites are for constrained IoT where message
-   overhead is a very important factor.  Cipher suites 1 and 3 use a
-   larger tag length (128-bit) in EDHOC than in the Application AEAD
-   algorithm (64-bit):
+   overhead is a very important factor.  Note that AES-CCM-16-64-128 and
+   AES-CCM-16-64-128 are compatible with the IEEE CCM* mode.  Cipher
+   suites 1 and 3 use a larger tag length (128-bit) in EDHOC than in the
+   Application AEAD algorithm (64-bit):
 
       0. ( 10, -16, 8, 4, -8, 10, -16 )
          (AES-CCM-16-64-128, SHA-256, 8, X25519, EdDSA,
@@ -920,7 +932,7 @@ Table of Contents
    EDHOC allows opaque external authorization data (EAD) to be sent in
    the EDHOC messages.  External authorization data sent in message_1
    (EAD_1) or message_2 (EAD_2) should be considered unprotected by
-   EDHOC, see Section 8.4.  External authorization data sent in
+   EDHOC, see Section 8.5.  External authorization data sent in
    message_3 (EAD_3) or message_4 (EAD_4) is protected between Initiator
    and Responder.
 
@@ -1261,7 +1273,7 @@ Table of Contents
        provided by the transport, see Section 3.4.  If there is no
        protocol state, in the case of message_1, a new protocol state is
        created.  The Responder endpoint needs to make use of available
-       Denial-of-Service mitigation (Section 8.5).
+       Denial-of-Service mitigation (Section 8.6).
 
    3.  If the message received is an error message, then process
        according to Section 6, else process as the expected next message
@@ -1366,7 +1378,7 @@ Table of Contents
    error message back, formatted as defined in Section 6, and the
    session MUST be discontinued.  Sending error messages is essential
    for debugging but MAY e.g., be skipped due to denial-of-service
-   reasons, see Section 8.5.  If an error message is sent, the session
+   reasons, see Section 8.6.  If an error message is sent, the session
    MUST be discontinued.
 
 5.3.  EDHOC Message 2
@@ -1484,7 +1496,7 @@ Table of Contents
    error message back, formatted as defined in Section 6.  Sending error
    messages is essential for debugging but MAY e.g., be skipped if a
    session cannot be found or due to denial-of-service reasons, see
-   Section 8.5.  If an error message is sent, the session MUST be
+   Section 8.6.  If an error message is sent, the session MUST be
    discontinued.
 
 5.4.  EDHOC Message 3
@@ -1626,7 +1638,7 @@ Table of Contents
    error message back, formatted as defined in Section 6.  Sending error
    messages is essential for debugging but MAY e.g., be skipped if a
    session cannot be found or due to denial-of-service reasons, see
-   Section 8.5.  If an error message is sent, the session MUST be
+   Section 8.6.  If an error message is sent, the session MUST be
    discontinued.
 
    After verifying message_3, the Responder is assured that the
@@ -1720,7 +1732,7 @@ Table of Contents
    error message back, formatted as defined in Section 6.  Sending error
    messages is essential for debugging but MAY e.g., be skipped if a
    session cannot be found or due to denial-of-service reasons, see
-   Section 8.5.  If an error message is sent, the session MUST be
+   Section 8.6.  If an error message is sent, the session MUST be
    discontinued.
 
 6.  Error Handling
@@ -2100,7 +2112,33 @@ Table of Contents
    COSE algorithms are marked as not recommended in the COSE IANA
    registry.
 
-8.4.  Unprotected Data
+8.4.  Post-Quantum Considerations
+
+   As of the publication of this specification, it is unclear when or
+   even if a quantum computer of sufficient size and power to exploit
+   public key cryptography will exist.  Deployments that need to
+   consider risks decades into the future should transition to Post-
+   Quantum Cryptography (PQC) in the not-too-distant future.  Many other
+   systems should take a slower wait-and-see approach where PQC is
+   phased in when the quantum threat is more imminent.  Current PQC
+   algorithms have limitations compared to Elliptic Curve Cryptography
+   (ECC) and the data sizes would be problematic in many constrained IoT
+   systems.
+
+   Symmetric algorithms used in EDHOC such as SHA-256 and AES-CCM-
+   16-64-128 are practically secure against even large quantum
+   computers.  EDHOC supports all signature algorithms defined by COSE,
+   including PQC signature algorithms such as HSS-LMS.  EDHOC is
+   currently only specified for use with key exchange algorithms of type
+   ECDH curves, but any Key Encapsulation Method (KEM), including PQC
+   KEMs, can be used in method 0.  While the key exchange in method 0 is
+   specified with terms of the Diffie-Hellman protocol, the key exchange
+   adheres to a KEM interface: G_X is then the public key of the
+   Initiator, G_Y is the encapsulation, and G_XY is the shared secret.
+   Use of PQC KEMs to replace static DH authentication would likely
+   require a specification updating EDHOC with new methods.
+
+8.5.  Unprotected Data
 
    The Initiator and the Responder must make sure that unprotected data
    and metadata do not reveal any sensitive information.  This also
@@ -2115,7 +2153,7 @@ Table of Contents
    unauthenticated data does not trigger any harmful actions.  In
    particular, this applies to EAD_1 and error messages.
 
-8.5.  Denial-of-Service
+8.6.  Denial-of-Service
 
    EDHOC itself does not provide countermeasures against Denial-of-
    Service attacks.  By sending a number of new or replayed message_1 an
@@ -2133,7 +2171,7 @@ Table of Contents
    attacker and ignore it without sending an error message or
    discontinuing the session.
 
-8.6.  Implementation Considerations
+8.7.  Implementation Considerations
 
    The availability of a secure random number generator is essential for
    the security of EDHOC.  If no true random number generator is

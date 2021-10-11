@@ -1244,13 +1244,16 @@ address div.right {
                 <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="xref">8.3</a>.  <a href="#name-cipher-suites-and-cryptogra" class="xref">Cipher Suites and Cryptographic Algorithms</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4">
-                <p id="section-toc.1-1.8.2.4.1"><a href="#section-8.4" class="xref">8.4</a>.  <a href="#name-unprotected-data" class="xref">Unprotected Data</a></p>
+                <p id="section-toc.1-1.8.2.4.1"><a href="#section-8.4" class="xref">8.4</a>.  <a href="#name-post-quantum-considerations" class="xref">Post-Quantum Considerations</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.5">
-                <p id="section-toc.1-1.8.2.5.1"><a href="#section-8.5" class="xref">8.5</a>.  <a href="#name-denial-of-service" class="xref">Denial-of-Service</a></p>
+                <p id="section-toc.1-1.8.2.5.1"><a href="#section-8.5" class="xref">8.5</a>.  <a href="#name-unprotected-data" class="xref">Unprotected Data</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.6">
-                <p id="section-toc.1-1.8.2.6.1"><a href="#section-8.6" class="xref">8.6</a>.  <a href="#name-implementation-consideratio" class="xref">Implementation Considerations</a></p>
+                <p id="section-toc.1-1.8.2.6.1"><a href="#section-8.6" class="xref">8.6</a>.  <a href="#name-denial-of-service" class="xref">Denial-of-Service</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.7">
+                <p id="section-toc.1-1.8.2.7.1"><a href="#section-8.7" class="xref">8.7</a>.  <a href="#name-implementation-consideratio" class="xref">Implementation Considerations</a></p>
 </li>
             </ul>
 </li>
@@ -1666,7 +1669,7 @@ Initiator                                                   Responder
             <li class="normal" id="section-3.5.1-3.3">When PKI is not used (CCS, self-signed certificate/CWT), the trust anchor is the authentication key of the other party. In this case, the identity is typically directly associated to the authentication key of the other party. For example, the name of the subject may be a canonical representation of the public key. Alternatively, if identities can be expressed in the form of unique subject names assigned to public keys, then a binding to identity can be achieved by including both public key and associated subject name in the protocol message computation: CRED_I or CRED_R may be a self-signed certificate/CWT or CCS containing the authentication key and the subject name, see <a href="#auth-cred" class="xref">Section 3.5.3</a>. In order to run EDHOC, each endpoint needs a specific authentication key/unique associated subject name, or a set of public authentication keys/unique associated subject names, which it is allowed to communicate with. EDHOC provides the proof that the other party possesses the private authentication key corresponding to the public authentication key.<a href="#section-3.5.1-3.3" class="pilcrow">¶</a>
 </li>
           </ul>
-<p id="section-3.5.1-4">To prevent misbinding attacks in systems where an attacker can register public keys without proving knowledge of the private key, SIGMA <span>[<a href="#SIGMA" class="xref">SIGMA</a>]</span> enforces a MAC to be calculated over the "identity". EDHOC follows SIGMA by calculating a MAC over the whole credential, which in case of a X.509 or C509 certificate includes the "subject" and "subjectAltName" fields, and in the case of CWT or CCS includes the "sub" claim. While the SIGMA paper only focuses on the identity, the same principle is true for other information such as policies associated to the public key.<a href="#section-3.5.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.5.1-4">To prevent misbinding attacks in systems where an attacker can register public keys without proving knowledge of the private key, SIGMA <span>[<a href="#SIGMA" class="xref">SIGMA</a>]</span> enforces a MAC to be calculated over the "identity". EDHOC follows SIGMA by calculating a MAC over the whole credential, which in case of an X.509 or C509 certificate includes the "subject" and "subjectAltName" fields, and in the case of CWT or CCS includes the "sub" claim. While the SIGMA paper only focuses on the identity, the same principle is true for other information such as policies associated to the public key.<a href="#section-3.5.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="auth-keys">
@@ -1674,7 +1677,7 @@ Initiator                                                   Responder
           <h4 id="name-authentication-keys">
 <a href="#section-3.5.2" class="section-number selfRef">3.5.2. </a><a href="#name-authentication-keys" class="section-name selfRef">Authentication Keys</a>
           </h4>
-<p id="section-3.5.2-1">The authentication key (i.e. the public key used for authentication) MUST be a signature key or static Diffie-Hellman key. The Initiator and the Responder MAY use different types of authentication keys, e.g., one uses a signature key and the other uses a static Diffie-Hellman key. The authentication key algorithm needs to be compatible with the method and the cipher suite. The authentication key algorithm needs to be compatible with the EDHOC key exchange algorithm when static Diffie-Hellman authentication is used and compatible with the EDHOC signature algorithm when signature authentication is used.<a href="#section-3.5.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.5.2-1">The authentication key (i.e. the public key used for authentication) MUST be a signature key or static Diffie-Hellman key. The Initiator and the Responder MAY use different types of authentication keys, e.g., one uses a signature key and the other uses a static Diffie-Hellman key. The authentication key algorithm needs to be compatible with the method and the cipher suite. The authentication key algorithm needs to be compatible with the EDHOC key exchange algorithm when static Diffie-Hellman authentication is used, and compatible with the EDHOC signature algorithm when signature authentication is used.<a href="#section-3.5.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.5.2-2">Note that for most signature algorithms, the signature is determined by the signature algorithm and the authentication key algorithm together. When using static Diffie-Hellman keys the Initiator's and Responder's private authentication keys are called I and R, respectively, and the public authentication keys are called G_I and G_R, respectively.<a href="#section-3.5.2-2" class="pilcrow">¶</a></p>
 <p id="section-3.5.2-3">For X.509 the authentication key is represented with a SubjectPublicKeyInfo field. For CWT and CCS, the authentication key is represented with a 'cnf' claim <span>[<a href="#RFC8747" class="xref">RFC8747</a>]</span> containing a COSE_Key <span>[<a href="#I-D.ietf-cose-rfc8152bis-struct" class="xref">I-D.ietf-cose-rfc8152bis-struct</a>]</span>.<a href="#section-3.5.2-3" class="pilcrow">¶</a></p>
 </section>
@@ -1688,7 +1691,7 @@ Initiator                                                   Responder
 <p id="section-3.5.3-2">EDHOC relies on COSE for identification of authentication credentials (see <a href="#id_cred" class="xref">Section 3.5.4</a>) and supports all credential types for which COSE header parameters are defined including X.509 <span>[<a href="#RFC5280" class="xref">RFC5280</a>]</span>, C509 <span>[<a href="#I-D.ietf-cose-cbor-encoded-cert" class="xref">I-D.ietf-cose-cbor-encoded-cert</a>]</span>, CWT <span>[<a href="#RFC8392" class="xref">RFC8392</a>]</span> and CWT Claims Set (CCS) <span>[<a href="#RFC8392" class="xref">RFC8392</a>]</span>. When the identified credential is a chain or bag, CRED_x is just the end-entity X.509 or C509 certificate / CWT. In X.509 and C509 certificates, signature keys typically have key usage "digitalSignature" and Diffie-Hellman public keys typically have key usage "keyAgreement".<a href="#section-3.5.3-2" class="pilcrow">¶</a></p>
 <p id="section-3.5.3-3">CRED_x needs to be defined such that it is identical when used by Initiator or Responder. The Initiator and Responder are expected to agree on a specific encoding of the credential, see <a href="#applicability" class="xref">Section 3.9</a>. It is RECOMMENDED that the COSE 'kid' parameter, when used, refers to a specific encoding. The Initiator and Responder SHOULD use an available authentication credential (transported in EDHOC or otherwise provisioned) without re-encoding. If for some reason re-encoding of the authentication credential may occur, then a potential common encoding for CBOR based credentials is bytewise lexicographic order of their deterministic encodings as specified in Section 4.2.1 of <span>[<a href="#RFC8949" class="xref">RFC8949</a>]</span>.<a href="#section-3.5.3-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.5.3-4.1">When the authentication credential is a X.509 certificate, CRED_x SHALL be the end-entity DER encoded certificate wrapped in a bstr <span>[<a href="#I-D.ietf-cose-x509" class="xref">I-D.ietf-cose-x509</a>]</span>.<a href="#section-3.5.3-4.1" class="pilcrow">¶</a>
+<li class="normal" id="section-3.5.3-4.1">When the authentication credential is an X.509 certificate, CRED_x SHALL be the end-entity DER encoded certificate, encoded as a bstr <span>[<a href="#I-D.ietf-cose-x509" class="xref">I-D.ietf-cose-x509</a>]</span>.<a href="#section-3.5.3-4.1" class="pilcrow">¶</a>
 </li>
             <li class="normal" id="section-3.5.3-4.2">When the authentication credential is a C509 certificate, CRED_x SHALL be the end-entity C509Certificate <span>[<a href="#I-D.ietf-cose-cbor-encoded-cert" class="xref">I-D.ietf-cose-cbor-encoded-cert</a>]</span><a href="#section-3.5.3-4.2" class="pilcrow">¶</a>
 </li>
@@ -1759,27 +1762,29 @@ Initiator                                                   Responder
         <h3 id="name-cipher-suites">
 <a href="#section-3.6" class="section-number selfRef">3.6. </a><a href="#name-cipher-suites" class="section-name selfRef">Cipher Suites</a>
         </h3>
-<p id="section-3.6-1">An EDHOC cipher suite consists of an ordered set of algorithms from the "COSE Algorithms" and "COSE Elliptic Curves" registries as well as the EDHOC MAC length. Algorithms need to be specified with enough parameters to make them completely determined. EDHOC is only specified for use with key exchange algorithms of type ECDH curves. Use with other types of key exchange algorithms would likely require a specification updating EDHOC. Note that for most signature algorithms, the signature is determined by the signature algorithm and the authentication key algorithm together, see <a href="#auth-keys" class="xref">Section 3.5.2</a>. The authentication key algorithm needs to be compatible with the EDHOC key exchange algorithm when static Diffie-Hellman authentication is used and compatible with the EDHOC signature algorithm when signature authentication is used.<a href="#section-3.6-1" class="pilcrow">¶</a></p>
+<p id="section-3.6-1">An EDHOC cipher suite consists of an ordered set of algorithms from the "COSE Algorithms" and "COSE Elliptic Curves" registries as well as the EDHOC MAC length. Algorithms need to be specified with enough parameters to make them completely determined. EDHOC is currently only specified for use with key exchange algorithms of type ECDH curves, but any Key Encapsulation Method (KEM), including Post-Quantum Cryptography (PQC) KEMs, can be used in method 0, see <a href="#pqc" class="xref">Section 8.4</a>. Use of other types of key exchange algorithms to replace static DH authentication (method 1,2,3) would likely require a specification updating EDHOC with new methods.<a href="#section-3.6-1" class="pilcrow">¶</a></p>
+<p id="section-3.6-2">EDHOC supports all signature algorithms defined by COSE, including PQC signature algorithms such as HSS-LMS. Just like in TLS 1.3 <span>[<a href="#RFC8446" class="xref">RFC8446</a>]</span> and IKEv2 <span>[<a href="#RFC7296" class="xref">RFC7296</a>]</span>, a signature in COSE is determined by the signature algorithm and the authentication key algorithm together, see <a href="#auth-keys" class="xref">Section 3.5.2</a>. The exact details of the authentication key algorithm depend on the type of authentication credential. COSE supports different formats for storing the public authentication keys including COSE_Key and X.509, which have different names and ways to represent the authentication key and the authentication key algorithm.<a href="#section-3.6-2" class="pilcrow">¶</a></p>
+<p id="section-3.6-3">An EDHOC cipher suite consists of the following parameters:<a href="#section-3.6-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.6-2.1">EDHOC AEAD algorithm<a href="#section-3.6-2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-3.6-4.1">EDHOC AEAD algorithm<a href="#section-3.6-4.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-3.6-2.2">EDHOC hash algorithm<a href="#section-3.6-2.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.6-4.2">EDHOC hash algorithm<a href="#section-3.6-4.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-3.6-2.3">EDHOC MAC length in bytes (Static DH)<a href="#section-3.6-2.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.6-4.3">EDHOC MAC length in bytes (Static DH)<a href="#section-3.6-4.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-3.6-2.4">EDHOC key exchange algorithm (ECDH curve)<a href="#section-3.6-2.4" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.6-4.4">EDHOC key exchange algorithm (ECDH curve)<a href="#section-3.6-4.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-3.6-2.5">EDHOC signature algorithm<a href="#section-3.6-2.5" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.6-4.5">EDHOC signature algorithm<a href="#section-3.6-4.5" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-3.6-2.6">Application AEAD algorithm<a href="#section-3.6-2.6" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.6-4.6">Application AEAD algorithm<a href="#section-3.6-4.6" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-3.6-2.7">Application hash algorithm<a href="#section-3.6-2.7" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.6-4.7">Application hash algorithm<a href="#section-3.6-4.7" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-3.6-3">Each cipher suite is identified with a pre-defined int label.<a href="#section-3.6-3" class="pilcrow">¶</a></p>
-<p id="section-3.6-4">EDHOC can be used with all algorithms and curves defined for COSE. Implementation can either use one of the pre-defined cipher suites (<a href="#suites-registry" class="xref">Section 9.2</a>) or use any combination of COSE algorithms and parameters to define their own private cipher suite. Private cipher suites can be identified with any of the four values -24, -23, -22, -21.<a href="#section-3.6-4" class="pilcrow">¶</a></p>
-<p id="section-3.6-5">The following CCM cipher suites are for constrained IoT where message overhead is a very important factor. Cipher suites 1 and 3 use a larger tag length (128-bit) in EDHOC than in the Application AEAD algorithm (64-bit):<a href="#section-3.6-5" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.6-6">
+<p id="section-3.6-5">Each cipher suite is identified with a pre-defined int label.<a href="#section-3.6-5" class="pilcrow">¶</a></p>
+<p id="section-3.6-6">EDHOC can be used with all algorithms and curves defined for COSE. Implementation can either use one of the pre-defined cipher suites (<a href="#suites-registry" class="xref">Section 9.2</a>) or use any combination of COSE algorithms and parameters to define their own private cipher suite. Private cipher suites can be identified with any of the four values -24, -23, -22, -21.<a href="#section-3.6-6" class="pilcrow">¶</a></p>
+<p id="section-3.6-7">The following CCM cipher suites are for constrained IoT where message overhead is a very important factor. Note that AES-CCM-16-64-128 and AES-CCM-16-64-128 are compatible with the IEEE CCM* mode. Cipher suites 1 and 3 use a larger tag length (128-bit) in EDHOC than in the Application AEAD algorithm (64-bit):<a href="#section-3.6-7" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.6-8">
 <pre>
    0. ( 10, -16, 8, 4, -8, 10, -16 )
       (AES-CCM-16-64-128, SHA-256, 8, X25519, EdDSA,
@@ -1796,10 +1801,10 @@ Initiator                                                   Responder
    3. ( 30, -16, 16, 1, -7, 10, -16 )
       (AES-CCM-16-128-128, SHA-256, 16, P-256, ES256,
        AES-CCM-16-64-128, SHA-256)
-</pre><a href="#section-3.6-6" class="pilcrow">¶</a>
+</pre><a href="#section-3.6-8" class="pilcrow">¶</a>
 </div>
-<p id="section-3.6-7">The following ChaCha20 cipher suites are for less constrained applications and only use 128-bit tag lengths.<a href="#section-3.6-7" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.6-8">
+<p id="section-3.6-9">The following ChaCha20 cipher suites are for less constrained applications and only use 128-bit tag lengths.<a href="#section-3.6-9" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.6-10">
 <pre>
    4. ( 24, -16, 16, 4, -8, 24, -16 )
       (ChaCha20/Poly1305, SHA-256, 16, X25519, EdDSA,
@@ -1808,18 +1813,18 @@ Initiator                                                   Responder
    5. ( 24, -16, 16, 1, -7, 24, -16 )
       (ChaCha20/Poly1305, SHA-256, 16, P-256, ES256,
        ChaCha20/Poly1305, SHA-256)
-</pre><a href="#section-3.6-8" class="pilcrow">¶</a>
+</pre><a href="#section-3.6-10" class="pilcrow">¶</a>
 </div>
-<p id="section-3.6-9">The following GCM cipher suite is for general non-constrained applications. It uses high performance algorithms that are widely supported:<a href="#section-3.6-9" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.6-10">
+<p id="section-3.6-11">The following GCM cipher suite is for general non-constrained applications. It uses high performance algorithms that are widely supported:<a href="#section-3.6-11" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.6-12">
 <pre>
    6. ( 1, -16, 16, 4, -7, 1, -16 )
       (A128GCM, SHA-256, 16, X25519, ES256,
        A128GCM, SHA-256)
-</pre><a href="#section-3.6-10" class="pilcrow">¶</a>
+</pre><a href="#section-3.6-12" class="pilcrow">¶</a>
 </div>
-<p id="section-3.6-11">The following two cipher suites are for high security application such as government use and financial applications. The two cipher suites do not share any algorithms. The first of the two cipher suites is compatible with the CNSA suite <span>[<a href="#CNSA" class="xref">CNSA</a>]</span>.<a href="#section-3.6-11" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.6-12">
+<p id="section-3.6-13">The following two cipher suites are for high security application such as government use and financial applications. The two cipher suites do not share any algorithms. The first of the two cipher suites is compatible with the CNSA suite <span>[<a href="#CNSA" class="xref">CNSA</a>]</span>.<a href="#section-3.6-13" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.6-14">
 <pre>
   24. ( 3, -43, 16, 2, -35, 3, -43 )
       (A256GCM, SHA-384, 16, P-384, ES384,
@@ -1828,10 +1833,10 @@ Initiator                                                   Responder
   25. ( 24, -45, 16, 5, -8, 24, -45 )
       (ChaCha20/Poly1305, SHAKE256, 16, X448, EdDSA,
        ChaCha20/Poly1305, SHAKE256)
-</pre><a href="#section-3.6-12" class="pilcrow">¶</a>
+</pre><a href="#section-3.6-14" class="pilcrow">¶</a>
 </div>
-<p id="section-3.6-13">The different methods use the same cipher suites, but some algorithms are not used in some methods. The EDHOC signature algorithm is not used in methods without signature authentication.<a href="#section-3.6-13" class="pilcrow">¶</a></p>
-<p id="section-3.6-14">The Initiator needs to have a list of cipher suites it supports in order of preference. The Responder needs to have a list of cipher suites it supports. SUITES_I contains cipher suites supported by the Initiator, formatted and processed as detailed in <a href="#asym-msg1-form" class="xref">Section 5.2.1</a> to secure the cipher suite negotiation. Examples of cipher suite negotiation are given in <a href="#ex-neg" class="xref">Section 6.3.2</a>.<a href="#section-3.6-14" class="pilcrow">¶</a></p>
+<p id="section-3.6-15">The different methods use the same cipher suites, but some algorithms are not used in some methods. The EDHOC signature algorithm is not used in methods without signature authentication.<a href="#section-3.6-15" class="pilcrow">¶</a></p>
+<p id="section-3.6-16">The Initiator needs to have a list of cipher suites it supports in order of preference. The Responder needs to have a list of cipher suites it supports. SUITES_I contains cipher suites supported by the Initiator, formatted and processed as detailed in <a href="#asym-msg1-form" class="xref">Section 5.2.1</a> to secure the cipher suite negotiation. Examples of cipher suite negotiation are given in <a href="#ex-neg" class="xref">Section 6.3.2</a>.<a href="#section-3.6-16" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="cose_key">
@@ -1848,7 +1853,7 @@ Initiator                                                   Responder
 <a href="#section-3.8" class="section-number selfRef">3.8. </a><a href="#name-external-authorization-data" class="section-name selfRef">External Authorization Data (EAD)</a>
         </h3>
 <p id="section-3.8-1">In order to reduce round trips and number of messages or to simplify processing, external security applications may be integrated into EDHOC by transporting authorization related data in the messages. One example is third-party identity and authorization information protected out of scope of EDHOC <span>[<a href="#I-D.selander-ace-ake-authz" class="xref">I-D.selander-ace-ake-authz</a>]</span>. Another example is a certificate enrolment request or the resulting issued certificate.<a href="#section-3.8-1" class="pilcrow">¶</a></p>
-<p id="section-3.8-2">EDHOC allows opaque external authorization data (EAD) to be sent in the EDHOC messages. External authorization data sent in message_1 (EAD_1) or message_2 (EAD_2) should be considered unprotected by EDHOC, see <a href="#unprot-data" class="xref">Section 8.4</a>. External authorization data sent in message_3 (EAD_3) or message_4 (EAD_4) is protected between Initiator and Responder.<a href="#section-3.8-2" class="pilcrow">¶</a></p>
+<p id="section-3.8-2">EDHOC allows opaque external authorization data (EAD) to be sent in the EDHOC messages. External authorization data sent in message_1 (EAD_1) or message_2 (EAD_2) should be considered unprotected by EDHOC, see <a href="#unprot-data" class="xref">Section 8.5</a>. External authorization data sent in message_3 (EAD_3) or message_4 (EAD_4) is protected between Initiator and Responder.<a href="#section-3.8-2" class="pilcrow">¶</a></p>
 <p id="section-3.8-3">External authorization data is a CBOR sequence (see <a href="#CBOR" class="xref">Appendix C.1</a>) consisting of one or more (ead_label, ead_value) pairs as defined below:<a href="#section-3.8-3" class="pilcrow">¶</a></p>
 <div id="section-3.8-4">
 <pre class="lang-CDDL sourcecode">
@@ -2097,7 +2102,7 @@ Additional optimizations are made to reduce message overhead.<a href="#section-5
 <ol start="1" type="1" class="normal type-1" id="section-5.1-4">
 <li id="section-5.1-4.1">Detect that an EDHOC message has been received, for example by means of port number, URI, or media type (<a href="#applicability" class="xref">Section 3.9</a>).<a href="#section-5.1-4.1" class="pilcrow">¶</a>
 </li>
-          <li id="section-5.1-4.2">Retrieve the protocol state according to the message correlation provided by the transport, see <a href="#transport" class="xref">Section 3.4</a>. If there is no protocol state, in the case of message_1, a new protocol state is created. The Responder endpoint needs to make use of available Denial-of-Service mitigation (<a href="#dos" class="xref">Section 8.5</a>).<a href="#section-5.1-4.2" class="pilcrow">¶</a>
+          <li id="section-5.1-4.2">Retrieve the protocol state according to the message correlation provided by the transport, see <a href="#transport" class="xref">Section 3.4</a>. If there is no protocol state, in the case of message_1, a new protocol state is created. The Responder endpoint needs to make use of available Denial-of-Service mitigation (<a href="#dos" class="xref">Section 8.6</a>).<a href="#section-5.1-4.2" class="pilcrow">¶</a>
 </li>
           <li id="section-5.1-4.3">If the message received is an error message, then process according to <a href="#error" class="xref">Section 6</a>, else process as the expected next message according to the protocol state.<a href="#section-5.1-4.3" class="pilcrow">¶</a>
 </li>
@@ -2188,7 +2193,7 @@ suites = [ 2* int ] / int
             <li class="normal" id="section-5.2.3-2.3">Pass EAD_1 to the security application.<a href="#section-5.2.3-2.3" class="pilcrow">¶</a>
 </li>
           </ul>
-<p id="section-5.2.3-3">If any processing step fails, the Responder SHOULD send an EDHOC error message back, formatted as defined in <a href="#error" class="xref">Section 6</a>, and the session MUST be discontinued. Sending error messages is essential for debugging but MAY e.g., be skipped due to denial-of-service reasons, see <a href="#dos" class="xref">Section 8.5</a>. If an error message is sent, the session MUST be discontinued.<a href="#section-5.2.3-3" class="pilcrow">¶</a></p>
+<p id="section-5.2.3-3">If any processing step fails, the Responder SHOULD send an EDHOC error message back, formatted as defined in <a href="#error" class="xref">Section 6</a>, and the session MUST be discontinued. Sending error messages is essential for debugging but MAY e.g., be skipped due to denial-of-service reasons, see <a href="#dos" class="xref">Section 8.6</a>. If an error message is sent, the session MUST be discontinued.<a href="#section-5.2.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2297,7 +2302,7 @@ message_2 = (
             <li class="normal" id="section-5.3.3-2.6">Verify Signature_or_MAC_2 using the algorithm in the selected cipher suite. The verification process depends on the method, see <a href="#asym-msg2-proc" class="xref">Section 5.3.2</a>.<a href="#section-5.3.3-2.6" class="pilcrow">¶</a>
 </li>
           </ul>
-<p id="section-5.3.3-3">If any processing step fails, the Initiator SHOULD send an EDHOC error message back, formatted as defined in <a href="#error" class="xref">Section 6</a>. Sending error messages is essential for debugging but MAY e.g., be skipped if a session cannot be found or due to denial-of-service reasons, see <a href="#dos" class="xref">Section 8.5</a>. If an error message is sent, the session MUST be discontinued.<a href="#section-5.3.3-3" class="pilcrow">¶</a></p>
+<p id="section-5.3.3-3">If any processing step fails, the Initiator SHOULD send an EDHOC error message back, formatted as defined in <a href="#error" class="xref">Section 6</a>. Sending error messages is essential for debugging but MAY e.g., be skipped if a session cannot be found or due to denial-of-service reasons, see <a href="#dos" class="xref">Section 8.6</a>. If an error message is sent, the session MUST be discontinued.<a href="#section-5.3.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2418,7 +2423,7 @@ CIPHERTEXT_3 is the 'ciphertext' of COSE_Encrypt0.<a href="#section-5.4.2-2.4.5"
             <li class="normal" id="section-5.4.3-2.7">Pass the connection identifiers (C_I, C_R), and the application algorithms in the selected cipher suite to the security application. The application can now derive application keys using the EDHOC-Exporter interface.<a href="#section-5.4.3-2.7" class="pilcrow">¶</a>
 </li>
           </ul>
-<p id="section-5.4.3-3">If any processing step fails, the Responder SHOULD send an EDHOC error message back, formatted as defined in <a href="#error" class="xref">Section 6</a>. Sending error messages is essential for debugging but MAY e.g., be skipped if a session cannot be found or due to denial-of-service reasons, see <a href="#dos" class="xref">Section 8.5</a>. If an error message is sent, the session MUST be discontinued.<a href="#section-5.4.3-3" class="pilcrow">¶</a></p>
+<p id="section-5.4.3-3">If any processing step fails, the Responder SHOULD send an EDHOC error message back, formatted as defined in <a href="#error" class="xref">Section 6</a>. Sending error messages is essential for debugging but MAY e.g., be skipped if a session cannot be found or due to denial-of-service reasons, see <a href="#dos" class="xref">Section 8.6</a>. If an error message is sent, the session MUST be discontinued.<a href="#section-5.4.3-3" class="pilcrow">¶</a></p>
 <p id="section-5.4.3-4">After verifying message_3, the Responder is assured that the Initiator has calculated the key PRK_4x3m (explicit key confirmation) and that no other party than the Responder can compute the key. The Responder can securely send protected application data and store the keying material PRK_4x3m and TH_4.<a href="#section-5.4.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2516,7 +2521,7 @@ CIPHERTEXT_4 is the 'ciphertext' of COSE_Encrypt0.<a href="#section-5.5.2-2.1.5"
             <li class="normal" id="section-5.5.3-2.4">Pass EAD_4 to the security application.<a href="#section-5.5.3-2.4" class="pilcrow">¶</a>
 </li>
           </ul>
-<p id="section-5.5.3-3">If any processing step fails, the Responder SHOULD send an EDHOC error message back, formatted as defined in <a href="#error" class="xref">Section 6</a>. Sending error messages is essential for debugging but MAY e.g., be skipped if a session cannot be found or due to denial-of-service reasons, see <a href="#dos" class="xref">Section 8.5</a>. If an error message is sent, the session MUST be discontinued.<a href="#section-5.5.3-3" class="pilcrow">¶</a></p>
+<p id="section-5.5.3-3">If any processing step fails, the Responder SHOULD send an EDHOC error message back, formatted as defined in <a href="#error" class="xref">Section 6</a>. Sending error messages is essential for debugging but MAY e.g., be skipped if a session cannot be found or due to denial-of-service reasons, see <a href="#dos" class="xref">Section 8.6</a>. If an error message is sent, the session MUST be discontinued.<a href="#section-5.5.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2725,37 +2730,46 @@ authenticated encryption. Hence the message authenticating functionality of the 
 <p id="section-8.3-2">The hash algorithms SHA-1 and SHA-256/64 (SHA-256 truncated to 64-bits) SHALL NOT be supported for use in EDHOC except for certificate identification with x5t and c5t. Note that secp256k1 is only defined for use with ECDSA and not for ECDH. Note that some COSE algorithms are marked as not recommended in the COSE IANA registry.<a href="#section-8.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="unprot-data">
+<div id="pqc">
 <section id="section-8.4">
-        <h3 id="name-unprotected-data">
-<a href="#section-8.4" class="section-number selfRef">8.4. </a><a href="#name-unprotected-data" class="section-name selfRef">Unprotected Data</a>
+        <h3 id="name-post-quantum-considerations">
+<a href="#section-8.4" class="section-number selfRef">8.4. </a><a href="#name-post-quantum-considerations" class="section-name selfRef">Post-Quantum Considerations</a>
         </h3>
-<p id="section-8.4-1">The Initiator and the Responder must make sure that unprotected data and metadata do not reveal any sensitive information. This also applies for encrypted data sent to an unauthenticated party. In particular, it applies to EAD_1, ID_CRED_R, EAD_2, and error messages. Using the same EAD_1 in several EDHOC sessions allows passive eavesdroppers to correlate the different sessions. Another consideration is that the list of supported cipher suites may potentially be used to identify the application.<a href="#section-8.4-1" class="pilcrow">¶</a></p>
-<p id="section-8.4-2">The Initiator and the Responder must also make sure that unauthenticated data does not trigger any harmful actions. In particular, this applies to EAD_1 and error messages.<a href="#section-8.4-2" class="pilcrow">¶</a></p>
+<p id="section-8.4-1">As of the publication of this specification, it is unclear when or even if a quantum computer of sufficient size and power to exploit public key cryptography will exist. Deployments that need to consider risks decades into the future should transition to Post-Quantum Cryptography (PQC) in the not-too-distant future. Many other systems should take a slower wait-and-see approach where PQC is phased in when the quantum threat is more imminent. Current PQC algorithms have limitations compared to Elliptic Curve Cryptography (ECC) and the data sizes would be problematic in many constrained IoT systems.<a href="#section-8.4-1" class="pilcrow">¶</a></p>
+<p id="section-8.4-2">Symmetric algorithms used in EDHOC such as SHA-256 and AES-CCM-16-64-128 are practically secure against even large quantum computers. EDHOC supports all signature algorithms defined by COSE, including PQC signature algorithms such as HSS-LMS. EDHOC is currently only specified for use with key exchange algorithms of type ECDH curves, but any Key Encapsulation Method (KEM), including PQC KEMs, can be used in method 0. While the key exchange in method 0 is specified with terms of the Diffie-Hellman protocol, the key exchange adheres to a KEM interface: G_X is then the public key of the Initiator, G_Y is the encapsulation, and G_XY is the shared secret. Use of PQC KEMs to replace static DH authentication would likely require a specification updating EDHOC with new methods.<a href="#section-8.4-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="unprot-data">
+<section id="section-8.5">
+        <h3 id="name-unprotected-data">
+<a href="#section-8.5" class="section-number selfRef">8.5. </a><a href="#name-unprotected-data" class="section-name selfRef">Unprotected Data</a>
+        </h3>
+<p id="section-8.5-1">The Initiator and the Responder must make sure that unprotected data and metadata do not reveal any sensitive information. This also applies for encrypted data sent to an unauthenticated party. In particular, it applies to EAD_1, ID_CRED_R, EAD_2, and error messages. Using the same EAD_1 in several EDHOC sessions allows passive eavesdroppers to correlate the different sessions. Another consideration is that the list of supported cipher suites may potentially be used to identify the application.<a href="#section-8.5-1" class="pilcrow">¶</a></p>
+<p id="section-8.5-2">The Initiator and the Responder must also make sure that unauthenticated data does not trigger any harmful actions. In particular, this applies to EAD_1 and error messages.<a href="#section-8.5-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="dos">
-<section id="section-8.5">
+<section id="section-8.6">
         <h3 id="name-denial-of-service">
-<a href="#section-8.5" class="section-number selfRef">8.5. </a><a href="#name-denial-of-service" class="section-name selfRef">Denial-of-Service</a>
+<a href="#section-8.6" class="section-number selfRef">8.6. </a><a href="#name-denial-of-service" class="section-name selfRef">Denial-of-Service</a>
         </h3>
-<p id="section-8.5-1">EDHOC itself does not provide countermeasures against Denial-of-Service attacks. By sending a number of new or replayed message_1 an attacker may cause the Responder to allocate state, perform cryptographic operations, and amplify messages. To mitigate such attacks, an implementation SHOULD rely on lower layer mechanisms such as the Echo option in CoAP <span>[<a href="#I-D.ietf-core-echo-request-tag" class="xref">I-D.ietf-core-echo-request-tag</a>]</span> that forces the initiator to demonstrate reachability at its apparent network address.<a href="#section-8.5-1" class="pilcrow">¶</a></p>
-<p id="section-8.5-2">An attacker can also send faked message_2, message_3, message_4, or error in an attempt to trick the receiving party to send an error message and discontinue the session. EDHOC implementations MAY evaluate if a received message is likely to have been forged by an attacker and ignore it without sending an error message or discontinuing the session.<a href="#section-8.5-2" class="pilcrow">¶</a></p>
+<p id="section-8.6-1">EDHOC itself does not provide countermeasures against Denial-of-Service attacks. By sending a number of new or replayed message_1 an attacker may cause the Responder to allocate state, perform cryptographic operations, and amplify messages. To mitigate such attacks, an implementation SHOULD rely on lower layer mechanisms such as the Echo option in CoAP <span>[<a href="#I-D.ietf-core-echo-request-tag" class="xref">I-D.ietf-core-echo-request-tag</a>]</span> that forces the initiator to demonstrate reachability at its apparent network address.<a href="#section-8.6-1" class="pilcrow">¶</a></p>
+<p id="section-8.6-2">An attacker can also send faked message_2, message_3, message_4, or error in an attempt to trick the receiving party to send an error message and discontinue the session. EDHOC implementations MAY evaluate if a received message is likely to have been forged by an attacker and ignore it without sending an error message or discontinuing the session.<a href="#section-8.6-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="implementation-considerations">
-<section id="section-8.6">
+<section id="section-8.7">
         <h3 id="name-implementation-consideratio">
-<a href="#section-8.6" class="section-number selfRef">8.6. </a><a href="#name-implementation-consideratio" class="section-name selfRef">Implementation Considerations</a>
+<a href="#section-8.7" class="section-number selfRef">8.7. </a><a href="#name-implementation-consideratio" class="section-name selfRef">Implementation Considerations</a>
         </h3>
-<p id="section-8.6-1">The availability of a secure random number generator is essential for the security of EDHOC. If no true random number generator is available, a truly random seed MUST be provided from an external source and used with a cryptographically secure pseudorandom number generator. As each pseudorandom number must only be used once, an implementation needs to get a new truly random seed after reboot, or continuously store state in nonvolatile memory, see (<span>[<a href="#RFC8613" class="xref">RFC8613</a>]</span>, Appendix B.1.1) for issues and solution approaches for writing to nonvolatile memory. Intentionally or unintentionally weak or predictable pseudorandom number generators can be abused or exploited for malicious purposes. <span>[<a href="#RFC8937" class="xref">RFC8937</a>]</span> describes a way for security protocol implementations to augment their (pseudo)random number generators using a long-term private key and a deterministic signature function. This improves randomness from broken or otherwise subverted random number generators. The same idea can be used with other secrets and functions such as a Diffie-Hellman function or a symmetric secret and a PRF like HMAC or KMAC. It is RECOMMENDED to not trust a single source of randomness and to not put unaugmented random numbers on the wire.<a href="#section-8.6-1" class="pilcrow">¶</a></p>
-<p id="section-8.6-2">If ECDSA is supported, "deterministic ECDSA" as specified in <span>[<a href="#RFC6979" class="xref">RFC6979</a>]</span> MAY be used. Pure deterministic elliptic-curve signatures such as deterministic ECDSA and EdDSA have gained popularity over randomized ECDSA as their security do not depend on a source of high-quality randomness. Recent research has however found that implementations of these signature algorithms may be vulnerable to certain side-channel and
-fault injection attacks due to their determinism. See e.g., Section 1 of <span>[<a href="#I-D.mattsson-cfrg-det-sigs-with-noise" class="xref">I-D.mattsson-cfrg-det-sigs-with-noise</a>]</span> for a list of attack papers. As suggested in Section 6.1.2 of <span>[<a href="#I-D.ietf-cose-rfc8152bis-algs" class="xref">I-D.ietf-cose-rfc8152bis-algs</a>]</span> this can be addressed by combining randomness and determinism.<a href="#section-8.6-2" class="pilcrow">¶</a></p>
-<p id="section-8.6-3">All private keys, symmetric keys, and IVs MUST be secret. Implementations should provide countermeasures to side-channel attacks such as timing attacks. Intermediate computed values such as ephemeral ECDH keys and ECDH shared secrets MUST be deleted after key derivation is completed.<a href="#section-8.6-3" class="pilcrow">¶</a></p>
-<p id="section-8.6-4">The Initiator and the Responder are responsible for verifying the integrity of certificates. The selection of trusted CAs should be done very carefully and certificate revocation should be supported. The private authentication keys MUST be kept secret, only the Responder SHALL have access to the Responder's private authentication key and only the Initiator SHALL have access to the Initiator's private authentication key.<a href="#section-8.6-4" class="pilcrow">¶</a></p>
-<p id="section-8.6-5">The Initiator and the Responder are allowed to select the connection identifiers C_I and C_R, respectively, for the other party to use in the ongoing EDHOC protocol as well as in a subsequent application protocol (e.g., OSCORE <span>[<a href="#RFC8613" class="xref">RFC8613</a>]</span>). The choice of connection identifier is not security critical in EDHOC but intended to simplify the retrieval of the right security context in combination with using short identifiers. If the wrong connection identifier of the other party is used in a protocol message it will result in the receiving party not being able to retrieve a security context (which will terminate the protocol) or retrieve the wrong security context (which also terminates the protocol as the message cannot be verified).<a href="#section-8.6-5" class="pilcrow">¶</a></p>
-<p id="section-8.6-6">If two nodes unintentionally initiate two simultaneous EDHOC message exchanges with each other even if they only want to complete a single EDHOC message exchange, they MAY terminate the exchange with the lexicographically smallest G_X. If the two G_X values are equal, the received message_1 MUST be discarded to mitigate reflection attacks. Note that in the case of two simultaneous EDHOC exchanges where the nodes only complete one and where the nodes have different preferred cipher suites, an attacker can affect which of the two nodes' preferred cipher suites will be used by blocking the other exchange.<a href="#section-8.6-6" class="pilcrow">¶</a></p>
-<p id="section-8.6-7">If supported by the device, it is RECOMMENDED that at least the long-term private keys are stored in a Trusted Execution Environment (TEE) and that sensitive operations using these keys are performed inside the TEE.  To achieve even higher security it is RECOMMENDED that additional operations such as ephemeral key generation, all computations of shared secrets, and storage of the PRK keys can be done inside the TEE. The use of a TEE enforces that code within that environment cannot be tampered with, and that any data used by such code cannot be read or tampered with by code outside that environment.<a href="#section-8.6-7" class="pilcrow">¶</a></p>
+<p id="section-8.7-1">The availability of a secure random number generator is essential for the security of EDHOC. If no true random number generator is available, a truly random seed MUST be provided from an external source and used with a cryptographically secure pseudorandom number generator. As each pseudorandom number must only be used once, an implementation needs to get a new truly random seed after reboot, or continuously store state in nonvolatile memory, see (<span>[<a href="#RFC8613" class="xref">RFC8613</a>]</span>, Appendix B.1.1) for issues and solution approaches for writing to nonvolatile memory. Intentionally or unintentionally weak or predictable pseudorandom number generators can be abused or exploited for malicious purposes. <span>[<a href="#RFC8937" class="xref">RFC8937</a>]</span> describes a way for security protocol implementations to augment their (pseudo)random number generators using a long-term private key and a deterministic signature function. This improves randomness from broken or otherwise subverted random number generators. The same idea can be used with other secrets and functions such as a Diffie-Hellman function or a symmetric secret and a PRF like HMAC or KMAC. It is RECOMMENDED to not trust a single source of randomness and to not put unaugmented random numbers on the wire.<a href="#section-8.7-1" class="pilcrow">¶</a></p>
+<p id="section-8.7-2">If ECDSA is supported, "deterministic ECDSA" as specified in <span>[<a href="#RFC6979" class="xref">RFC6979</a>]</span> MAY be used. Pure deterministic elliptic-curve signatures such as deterministic ECDSA and EdDSA have gained popularity over randomized ECDSA as their security do not depend on a source of high-quality randomness. Recent research has however found that implementations of these signature algorithms may be vulnerable to certain side-channel and
+fault injection attacks due to their determinism. See e.g., Section 1 of <span>[<a href="#I-D.mattsson-cfrg-det-sigs-with-noise" class="xref">I-D.mattsson-cfrg-det-sigs-with-noise</a>]</span> for a list of attack papers. As suggested in Section 6.1.2 of <span>[<a href="#I-D.ietf-cose-rfc8152bis-algs" class="xref">I-D.ietf-cose-rfc8152bis-algs</a>]</span> this can be addressed by combining randomness and determinism.<a href="#section-8.7-2" class="pilcrow">¶</a></p>
+<p id="section-8.7-3">All private keys, symmetric keys, and IVs MUST be secret. Implementations should provide countermeasures to side-channel attacks such as timing attacks. Intermediate computed values such as ephemeral ECDH keys and ECDH shared secrets MUST be deleted after key derivation is completed.<a href="#section-8.7-3" class="pilcrow">¶</a></p>
+<p id="section-8.7-4">The Initiator and the Responder are responsible for verifying the integrity of certificates. The selection of trusted CAs should be done very carefully and certificate revocation should be supported. The private authentication keys MUST be kept secret, only the Responder SHALL have access to the Responder's private authentication key and only the Initiator SHALL have access to the Initiator's private authentication key.<a href="#section-8.7-4" class="pilcrow">¶</a></p>
+<p id="section-8.7-5">The Initiator and the Responder are allowed to select the connection identifiers C_I and C_R, respectively, for the other party to use in the ongoing EDHOC protocol as well as in a subsequent application protocol (e.g., OSCORE <span>[<a href="#RFC8613" class="xref">RFC8613</a>]</span>). The choice of connection identifier is not security critical in EDHOC but intended to simplify the retrieval of the right security context in combination with using short identifiers. If the wrong connection identifier of the other party is used in a protocol message it will result in the receiving party not being able to retrieve a security context (which will terminate the protocol) or retrieve the wrong security context (which also terminates the protocol as the message cannot be verified).<a href="#section-8.7-5" class="pilcrow">¶</a></p>
+<p id="section-8.7-6">If two nodes unintentionally initiate two simultaneous EDHOC message exchanges with each other even if they only want to complete a single EDHOC message exchange, they MAY terminate the exchange with the lexicographically smallest G_X. If the two G_X values are equal, the received message_1 MUST be discarded to mitigate reflection attacks. Note that in the case of two simultaneous EDHOC exchanges where the nodes only complete one and where the nodes have different preferred cipher suites, an attacker can affect which of the two nodes' preferred cipher suites will be used by blocking the other exchange.<a href="#section-8.7-6" class="pilcrow">¶</a></p>
+<p id="section-8.7-7">If supported by the device, it is RECOMMENDED that at least the long-term private keys are stored in a Trusted Execution Environment (TEE) and that sensitive operations using these keys are performed inside the TEE.  To achieve even higher security it is RECOMMENDED that additional operations such as ephemeral key generation, all computations of shared secrets, and storage of the PRK keys can be done inside the TEE. The use of a TEE enforces that code within that environment cannot be tampered with, and that any data used by such code cannot be read or tampered with by code outside that environment.<a href="#section-8.7-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
