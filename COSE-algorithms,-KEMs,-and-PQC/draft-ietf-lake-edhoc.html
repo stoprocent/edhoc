@@ -1764,26 +1764,27 @@ Initiator                                                   Responder
         </h3>
 <p id="section-3.6-1">An EDHOC cipher suite consists of an ordered set of algorithms from the "COSE Algorithms" and "COSE Elliptic Curves" registries as well as the EDHOC MAC length. Algorithms need to be specified with enough parameters to make them completely determined. EDHOC is currently only specified for use with key exchange algorithms of type ECDH curves, but any Key Encapsulation Method (KEM), including Post-Quantum Cryptography (PQC) KEMs, can be used in method 0, see <a href="#pqc" class="xref">Section 8.4</a>. Use of other types of key exchange algorithms to replace static DH authentication (method 1,2,3) would likely require a specification updating EDHOC with new methods.<a href="#section-3.6-1" class="pilcrow">¶</a></p>
 <p id="section-3.6-2">EDHOC supports all signature algorithms defined by COSE, including PQC signature algorithms such as HSS-LMS. Just like in TLS 1.3 <span>[<a href="#RFC8446" class="xref">RFC8446</a>]</span> and IKEv2 <span>[<a href="#RFC7296" class="xref">RFC7296</a>]</span>, a signature in COSE is determined by the signature algorithm and the authentication key algorithm together, see <a href="#auth-keys" class="xref">Section 3.5.2</a>. The exact details of the authentication key algorithm depend on the type of authentication credential. COSE supports different formats for storing the public authentication keys including COSE_Key and X.509, which have different names and ways to represent the authentication key and the authentication key algorithm. The authentication key algorithm needs to be compatible with the EDHOC key exchange algorithm when static Diffie-Hellman authentication is used, and compatible with the EDHOC signature algorithm when signature authentication is used.<a href="#section-3.6-2" class="pilcrow">¶</a></p>
+<p id="section-3.6-3">An EDHOC cipher suite consists of the following parameters:<a href="#section-3.6-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.6-3.1">EDHOC AEAD algorithm<a href="#section-3.6-3.1" class="pilcrow">¶</a>
+<li class="normal" id="section-3.6-4.1">EDHOC AEAD algorithm<a href="#section-3.6-4.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-3.6-3.2">EDHOC hash algorithm<a href="#section-3.6-3.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.6-4.2">EDHOC hash algorithm<a href="#section-3.6-4.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-3.6-3.3">EDHOC MAC length in bytes (Static DH)<a href="#section-3.6-3.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.6-4.3">EDHOC MAC length in bytes (Static DH)<a href="#section-3.6-4.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-3.6-3.4">EDHOC key exchange algorithm (ECDH curve)<a href="#section-3.6-3.4" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.6-4.4">EDHOC key exchange algorithm (ECDH curve)<a href="#section-3.6-4.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-3.6-3.5">EDHOC signature algorithm<a href="#section-3.6-3.5" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.6-4.5">EDHOC signature algorithm<a href="#section-3.6-4.5" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-3.6-3.6">Application AEAD algorithm<a href="#section-3.6-3.6" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.6-4.6">Application AEAD algorithm<a href="#section-3.6-4.6" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-3.6-3.7">Application hash algorithm<a href="#section-3.6-3.7" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.6-4.7">Application hash algorithm<a href="#section-3.6-4.7" class="pilcrow">¶</a>
 </li>
         </ul>
-<p id="section-3.6-4">Each cipher suite is identified with a pre-defined int label.<a href="#section-3.6-4" class="pilcrow">¶</a></p>
-<p id="section-3.6-5">EDHOC can be used with all algorithms and curves defined for COSE. Implementation can either use one of the pre-defined cipher suites (<a href="#suites-registry" class="xref">Section 9.2</a>) or use any combination of COSE algorithms and parameters to define their own private cipher suite. Private cipher suites can be identified with any of the four values -24, -23, -22, -21.<a href="#section-3.6-5" class="pilcrow">¶</a></p>
-<p id="section-3.6-6">The following CCM cipher suites are for constrained IoT where message overhead is a very important factor. Note that AES-CCM-16-64-128 and AES-CCM-16-64-128 are compatible with the IEEE CCM* mode. Cipher suites 1 and 3 use a larger tag length (128-bit) in EDHOC than in the Application AEAD algorithm (64-bit):<a href="#section-3.6-6" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.6-7">
+<p id="section-3.6-5">Each cipher suite is identified with a pre-defined int label.<a href="#section-3.6-5" class="pilcrow">¶</a></p>
+<p id="section-3.6-6">EDHOC can be used with all algorithms and curves defined for COSE. Implementation can either use one of the pre-defined cipher suites (<a href="#suites-registry" class="xref">Section 9.2</a>) or use any combination of COSE algorithms and parameters to define their own private cipher suite. Private cipher suites can be identified with any of the four values -24, -23, -22, -21.<a href="#section-3.6-6" class="pilcrow">¶</a></p>
+<p id="section-3.6-7">The following CCM cipher suites are for constrained IoT where message overhead is a very important factor. Note that AES-CCM-16-64-128 and AES-CCM-16-64-128 are compatible with the IEEE CCM* mode. Cipher suites 1 and 3 use a larger tag length (128-bit) in EDHOC than in the Application AEAD algorithm (64-bit):<a href="#section-3.6-7" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.6-8">
 <pre>
    0. ( 10, -16, 8, 4, -8, 10, -16 )
       (AES-CCM-16-64-128, SHA-256, 8, X25519, EdDSA,
@@ -1800,10 +1801,10 @@ Initiator                                                   Responder
    3. ( 30, -16, 16, 1, -7, 10, -16 )
       (AES-CCM-16-128-128, SHA-256, 16, P-256, ES256,
        AES-CCM-16-64-128, SHA-256)
-</pre><a href="#section-3.6-7" class="pilcrow">¶</a>
+</pre><a href="#section-3.6-8" class="pilcrow">¶</a>
 </div>
-<p id="section-3.6-8">The following ChaCha20 cipher suites are for less constrained applications and only use 128-bit tag lengths.<a href="#section-3.6-8" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.6-9">
+<p id="section-3.6-9">The following ChaCha20 cipher suites are for less constrained applications and only use 128-bit tag lengths.<a href="#section-3.6-9" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.6-10">
 <pre>
    4. ( 24, -16, 16, 4, -8, 24, -16 )
       (ChaCha20/Poly1305, SHA-256, 16, X25519, EdDSA,
@@ -1812,18 +1813,18 @@ Initiator                                                   Responder
    5. ( 24, -16, 16, 1, -7, 24, -16 )
       (ChaCha20/Poly1305, SHA-256, 16, P-256, ES256,
        ChaCha20/Poly1305, SHA-256)
-</pre><a href="#section-3.6-9" class="pilcrow">¶</a>
+</pre><a href="#section-3.6-10" class="pilcrow">¶</a>
 </div>
-<p id="section-3.6-10">The following GCM cipher suite is for general non-constrained applications. It uses high performance algorithms that are widely supported:<a href="#section-3.6-10" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.6-11">
+<p id="section-3.6-11">The following GCM cipher suite is for general non-constrained applications. It uses high performance algorithms that are widely supported:<a href="#section-3.6-11" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.6-12">
 <pre>
    6. ( 1, -16, 16, 4, -7, 1, -16 )
       (A128GCM, SHA-256, 16, X25519, ES256,
        A128GCM, SHA-256)
-</pre><a href="#section-3.6-11" class="pilcrow">¶</a>
+</pre><a href="#section-3.6-12" class="pilcrow">¶</a>
 </div>
-<p id="section-3.6-12">The following two cipher suites are for high security application such as government use and financial applications. The two cipher suites do not share any algorithms. The first of the two cipher suites is compatible with the CNSA suite <span>[<a href="#CNSA" class="xref">CNSA</a>]</span>.<a href="#section-3.6-12" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.6-13">
+<p id="section-3.6-13">The following two cipher suites are for high security application such as government use and financial applications. The two cipher suites do not share any algorithms. The first of the two cipher suites is compatible with the CNSA suite <span>[<a href="#CNSA" class="xref">CNSA</a>]</span>.<a href="#section-3.6-13" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.6-14">
 <pre>
   24. ( 3, -43, 16, 2, -35, 3, -43 )
       (A256GCM, SHA-384, 16, P-384, ES384,
@@ -1832,10 +1833,10 @@ Initiator                                                   Responder
   25. ( 24, -45, 16, 5, -8, 24, -45 )
       (ChaCha20/Poly1305, SHAKE256, 16, X448, EdDSA,
        ChaCha20/Poly1305, SHAKE256)
-</pre><a href="#section-3.6-13" class="pilcrow">¶</a>
+</pre><a href="#section-3.6-14" class="pilcrow">¶</a>
 </div>
-<p id="section-3.6-14">The different methods use the same cipher suites, but some algorithms are not used in some methods. The EDHOC signature algorithm is not used in methods without signature authentication.<a href="#section-3.6-14" class="pilcrow">¶</a></p>
-<p id="section-3.6-15">The Initiator needs to have a list of cipher suites it supports in order of preference. The Responder needs to have a list of cipher suites it supports. SUITES_I contains cipher suites supported by the Initiator, formatted and processed as detailed in <a href="#asym-msg1-form" class="xref">Section 5.2.1</a> to secure the cipher suite negotiation. Examples of cipher suite negotiation are given in <a href="#ex-neg" class="xref">Section 6.3.2</a>.<a href="#section-3.6-15" class="pilcrow">¶</a></p>
+<p id="section-3.6-15">The different methods use the same cipher suites, but some algorithms are not used in some methods. The EDHOC signature algorithm is not used in methods without signature authentication.<a href="#section-3.6-15" class="pilcrow">¶</a></p>
+<p id="section-3.6-16">The Initiator needs to have a list of cipher suites it supports in order of preference. The Responder needs to have a list of cipher suites it supports. SUITES_I contains cipher suites supported by the Initiator, formatted and processed as detailed in <a href="#asym-msg1-form" class="xref">Section 5.2.1</a> to secure the cipher suite negotiation. Examples of cipher suite negotiation are given in <a href="#ex-neg" class="xref">Section 6.3.2</a>.<a href="#section-3.6-16" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="cose_key">

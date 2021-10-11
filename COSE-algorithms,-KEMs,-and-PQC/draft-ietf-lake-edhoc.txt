@@ -819,6 +819,8 @@ Table of Contents
    authentication is used, and compatible with the EDHOC signature
    algorithm when signature authentication is used.
 
+   An EDHOC cipher suite consists of the following parameters:
+
    *  EDHOC AEAD algorithm
 
    *  EDHOC hash algorithm
