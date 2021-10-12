@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-10-10T01:06:05.172612+00:00",
+  "timestamp": "2021-10-12T01:08:16.731336+00:00",
   "repo": "lake-wg/edhoc",
   "labels": [
     {
@@ -661,11 +661,11 @@
         "emanjon"
       ],
       "labels": [
-        "v-12"
+        "Close?"
       ],
       "body": "All new PQC algorithms from NIST is expected to be specified as Key Encapsulation Methods (KEM). Might be a good idea to specify the key exchange in EDHOC so that is is prepared to be used with future KEMs\r\n\r\nInitiator: Generate ephemeral public key PK and send to R\r\nResponder: Use PK use it to encapsulate. Send ciphertext to I\r\nInitiator: Decapsulate\r\n\r\nECDHE can quite easily be specified as a KEM. CFRG HPKE does exactly this.",
       "createdAt": "2020-11-02T16:32:16Z",
-      "updatedAt": "2021-10-07T08:38:19Z",
+      "updatedAt": "2021-10-11T09:08:26Z",
       "closedAt": null,
       "comments": [
         {
@@ -716,6 +716,13 @@
           "body": "This issue was brought up again in #180. Method 0 uses ECC in traditional KEM and Signature interfaces and will work with KEM and Signatures specified including PQC. I think this should be made clear in the text even if COSE has not specified any other KEMs right now. This would not be a technical change. G_X and G_Y are already confirming to a KEM interface.\r\n\r\nMethod 1,2,3 does not use ECC as a KEM and cannot do so without additional overhead. ",
           "createdAt": "2021-10-07T07:26:06Z",
           "updatedAt": "2021-10-07T07:26:06Z"
+        },
+        {
+          "author": "gselander",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Can we close this again?",
+          "createdAt": "2021-10-11T09:07:10Z",
+          "updatedAt": "2021-10-11T09:07:10Z"
         }
       ]
     },
@@ -2963,7 +2970,7 @@
       "id": "MDU6SXNzdWU4MTI3OTE1Mjc=",
       "title": "Unclear which parts of the spec that are MTI",
       "url": "https://github.com/lake-wg/edhoc/issues/73",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
@@ -2972,8 +2979,8 @@
       ],
       "body": "The things that are Mandatory or optional to support or now spread out in various places.",
       "createdAt": "2021-02-21T07:07:26Z",
-      "updatedAt": "2021-10-07T08:40:07Z",
-      "closedAt": null,
+      "updatedAt": "2021-10-11T09:09:59Z",
+      "closedAt": "2021-10-11T09:09:58Z",
       "comments": [
         {
           "author": "emanjon",
@@ -2988,6 +2995,13 @@
           "body": "I started making an MTI section inspired by RFC 8446. I think this makes things clearer.\r\n\r\nI added some editorial notes in the section that needs to be discussed.",
           "createdAt": "2021-09-10T09:44:33Z",
           "updatedAt": "2021-09-10T09:44:33Z"
+        },
+        {
+          "author": "gselander",
+          "authorAssociation": "COLLABORATOR",
+          "body": "MTI section now in place and no editor's notes left.",
+          "createdAt": "2021-10-11T09:09:58Z",
+          "updatedAt": "2021-10-11T09:09:58Z"
         }
       ]
     },
@@ -6013,10 +6027,12 @@
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "Close?"
+      ],
       "body": "The IANA section currectly specified that CWT can be sent tagged or untagged while UCCS can only be sent untagged. That is probably not how it should be.",
       "createdAt": "2021-09-08T06:04:04Z",
-      "updatedAt": "2021-10-08T13:06:48Z",
+      "updatedAt": "2021-10-11T09:10:50Z",
       "closedAt": null,
       "comments": [
         {
@@ -6265,7 +6281,7 @@
       "id": "MDU6SXNzdWU5OTMyMDkxODM=",
       "title": "Registration procedures for the new EDHOC registries",
       "url": "https://github.com/lake-wg/edhoc/issues/167",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -6276,8 +6292,8 @@
       ],
       "body": "Currently a mixture of:\r\nThe registration procedure is \"Expert Review\".\r\nThe registration procedure is \"Specification Required\". \r\n",
       "createdAt": "2021-09-10T12:55:40Z",
-      "updatedAt": "2021-10-07T08:31:54Z",
-      "closedAt": null,
+      "updatedAt": "2021-10-11T11:08:55Z",
+      "closedAt": "2021-10-11T11:08:55Z",
       "comments": [
         {
           "author": "emanjon",
@@ -6285,6 +6301,13 @@
           "body": "I changed EDHOC Error Code Registry to \"Expert Review\" to align with the others. It makes no sense that the Error registry has harder requirements than the methods or cipher suite registry,\r\n\r\nWe should maybe discuss Registration procedures for the new EDHOC registries at IETF 112. Right now they are all expert review without any differentiation between small and big numbers. We should discuss what is the right approach.\r\n",
           "createdAt": "2021-09-11T06:49:44Z",
           "updatedAt": "2021-09-11T07:49:38Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The registries was aligned in -12 and the topic was discussed at the Oct 21 interim without any suggestions for change. The expert instructions seem to cover all the aspects discussed during the interim",
+          "createdAt": "2021-10-11T11:08:55Z",
+          "updatedAt": "2021-10-11T11:08:55Z"
         }
       ]
     },
@@ -6510,7 +6533,7 @@
       "id": "I_kwDOEItXAM47-PcX",
       "title": "Explanation of COSE processing",
       "url": "https://github.com/lake-wg/edhoc/issues/177",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "gselander",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -6521,8 +6544,8 @@
       ],
       "body": "@emanjon In #176 you added \"Explanation:\" to COSE processing description of Section 5. I removed that as out context for that PR and instead opened this issue as placeholder.",
       "createdAt": "2021-09-24T07:34:03Z",
-      "updatedAt": "2021-10-07T19:45:52Z",
-      "closedAt": null,
+      "updatedAt": "2021-10-11T09:04:40Z",
+      "closedAt": "2021-10-11T09:04:40Z",
       "comments": [
         {
           "author": "emanjon",
@@ -6607,6 +6630,13 @@
           "body": "in PR #179 the \"COSE constructs\" explanations for COSE_Sign1 and COSE_Encrypt0 are now back in C.3, with reference to it from the message processing sections 5.3-5.5.",
           "createdAt": "2021-10-07T19:45:52Z",
           "updatedAt": "2021-10-07T19:45:52Z"
+        },
+        {
+          "author": "gselander",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Fixed in #179",
+          "createdAt": "2021-10-11T09:04:37Z",
+          "updatedAt": "2021-10-11T09:04:37Z"
         }
       ]
     },
@@ -6638,11 +6668,11 @@
         "emanjon"
       ],
       "labels": [
-        "v-12"
+        "Close?"
       ],
       "body": "Is it relevant to have post-quantum cipher suites see https://csrc.nist.gov/Projects/post-quantum-cryptography/round-3-submissions",
       "createdAt": "2021-09-30T09:19:12Z",
-      "updatedAt": "2021-10-07T23:19:37Z",
+      "updatedAt": "2021-10-11T09:29:07Z",
       "closedAt": null,
       "comments": [
         {
@@ -6714,6 +6744,27 @@
           "body": ">Regarding increased size, it does not meet the charter objective/fragmentation limit of 6TiSCH, but it still fits the MTU 6lowpan and may be a price to pay to reach PQC.\r\n\r\nCOSE/EDHOC will definitly have PQC algorithms in a few years. A big US company asked for a CNSA compliant suite which was added. CNSA will be updated to PQC is just a few months, but I think EDHOC should wait for COSE when it comes to PQC.\r\n\r\n>Can the OSCORE re-keying proposals also meet PQC requirements? If so, and a \"relatively expensive\" key-exchange can be done very infrequently - the overhead is less of an issue.\r\n\r\nBasically any symmetric construction will be PQC. The current It is unclear if CRQC breaking RSA will ever be built. If such CRQC are ever built, it would take millions of such CRQC hundreds of years to break AES-128. SHA-256 is more quantum resistant then AES-128 and HMAC-SHA-256 is more resistant than SHA-256. NIST currently draft documents label AES-128 and SHA-256 as quantum resistant which make a lot of sense to me. The EDHOC Key-Update use HMAC-SHA-256 and the OSOCRE key update use HKDF-SHA-256. They would both be highly resistant to quantum computers. \r\n",
           "createdAt": "2021-10-07T23:19:37Z",
           "updatedAt": "2021-10-07T23:19:37Z"
+        },
+        {
+          "author": "gselander",
+          "authorAssociation": "COLLABORATOR",
+          "body": "#182 is now merged into master. Any further comments?",
+          "createdAt": "2021-10-11T09:06:21Z",
+          "updatedAt": "2021-10-11T09:06:21Z"
+        },
+        {
+          "author": "pbtgit",
+          "authorAssociation": "NONE",
+          "body": "> #182 is now merged into master. Any further comments?\r\nIt looks good to me, and i appreciate the progress moving forward.",
+          "createdAt": "2021-10-11T09:16:24Z",
+          "updatedAt": "2021-10-11T09:16:24Z"
+        },
+        {
+          "author": "StefanHri",
+          "authorAssociation": "NONE",
+          "body": "All good from my side too. Thanks!",
+          "createdAt": "2021-10-11T09:29:07Z",
+          "updatedAt": "2021-10-11T09:29:07Z"
         }
       ]
     }
@@ -8536,24 +8587,26 @@
       "id": "PR_kwDOEItXAM4sUrN3",
       "title": "Clarifying processing",
       "url": "https://github.com/lake-wg/edhoc/pull/179",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "gselander",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2021-09-27T16:11:24Z",
-      "updatedAt": "2021-10-07T19:34:54Z",
+      "updatedAt": "2021-10-11T08:56:13Z",
       "baseRepository": "lake-wg/edhoc",
       "baseRefName": "master",
       "baseRefOid": "5dd0a227778a776b0dff9d16bb5d7d406c8b774c",
       "headRepository": "lake-wg/edhoc",
       "headRefName": "clarifying-processing",
-      "headRefOid": "c239e2ee2be512ae53813608ae7a490f9f6f38cc",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "9e39e34d8179430d4c2926b188a7aa90ba20d138",
+      "closedAt": "2021-10-11T08:56:12Z",
+      "mergedAt": "2021-10-11T08:56:12Z",
+      "mergedBy": "gselander",
+      "mergeCommit": {
+        "oid": "82d8aa41dd635f4fb40bc45908ee6e8b35f23bdd"
+      },
       "comments": [
         {
           "author": "emanjon",
@@ -8561,6 +8614,20 @@
           "body": "As discussed, the \"COSE construct\" parts should be moved to the appendix instead of subsection as discussed in the issues.\r\n\r\nMight be good to write that the text is an explanation of how COSE calls the AEAD/Signature interface. This description was used to generate the current test vectors.",
           "createdAt": "2021-10-07T10:58:56Z",
           "updatedAt": "2021-10-07T10:58:56Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Look good. One minor questions:\r\n\r\n\"prepended C_I, see {{ci-oscore}\"\r\n\r\nThe OSCORE ref is ok, but is that the best ref for the general C_I prepending?\r\n\r\n\r\n\r\n\r\n",
+          "createdAt": "2021-10-10T15:10:06Z",
+          "updatedAt": "2021-10-10T15:10:06Z"
+        },
+        {
+          "author": "gselander",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Ready to merge now?",
+          "createdAt": "2021-10-11T06:49:22Z",
+          "updatedAt": "2021-10-11T06:49:22Z"
         }
       ],
       "reviews": []
@@ -8598,24 +8665,26 @@
       "id": "PR_kwDOEItXAM4s4-F0",
       "title": "COSE algorithms, KEMs, and PQC",
       "url": "https://github.com/lake-wg/edhoc/pull/182",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "emanjon",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2021-10-07T12:24:18Z",
-      "updatedAt": "2021-10-08T06:49:39Z",
+      "updatedAt": "2021-10-11T09:03:19Z",
       "baseRepository": "lake-wg/edhoc",
       "baseRefName": "master",
       "baseRefOid": "a9a9807e1b92f9e0b7efe4d6b3b3bb48404a710a",
       "headRepository": "lake-wg/edhoc",
       "headRefName": "COSE-algorithms,-KEMs,-and-PQC",
-      "headRefOid": "e37871cd656594ce2ef3eb9f624140fa1f611119",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "aefb33d746562a947b49017ebfb1a390e4043146",
+      "closedAt": "2021-10-11T09:03:19Z",
+      "mergedAt": "2021-10-11T09:03:19Z",
+      "mergedBy": "gselander",
+      "mergeCommit": {
+        "oid": "eb8f3273b9aee3dff4b7ecfbf04ee8edaf9049aa"
+      },
       "comments": [
         {
           "author": "emanjon",
@@ -8623,6 +8692,20 @@
           "body": "This PR addresses #17 and #180 as well as parts of  #171 and #177. \r\n\r\n- I also thought is was good to point out that AES-CCM-16-64-128 and AES-CCM-16-64-128 are compatible with the IEEE CCM* mode.\r\n\r\n- I also corrected the sentence \"wrapped in a bstr\" that Carsten pointed out during the interim. #162",
           "createdAt": "2021-10-07T12:28:49Z",
           "updatedAt": "2021-10-07T12:28:49Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Looks ready to merge",
+          "createdAt": "2021-10-10T14:54:07Z",
+          "updatedAt": "2021-10-10T14:54:07Z"
+        },
+        {
+          "author": "gselander",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Duplicated text in 3.5.2. and 3.6: \r\n\"The authentication key algorithm needs to be compatible with the EDHOC key exchange algorithm when static Diffie-Hellman authentication is used, and compatible with the EDHOC signature algorithm when signature authentication is used.\" \r\n\r\n",
+          "createdAt": "2021-10-11T07:24:06Z",
+          "updatedAt": "2021-10-11T07:24:06Z"
         }
       ],
       "reviews": []
