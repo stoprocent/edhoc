@@ -5,7 +5,7 @@
 Network Working Group                                        G. Selander
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                                Ericsson
-Expires: 14 April 2022                                   11 October 2021
+Expires: 16 April 2022                                   13 October 2021
 
 
                             Traces of EDHOC
@@ -43,7 +43,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 April 2022.
+   This Internet-Draft will expire on 16 April 2022.
 
 Copyright Notice
 
@@ -91,10 +91,10 @@ Table of Contents
    input, output and intermediate processing results to simplify testing
    of implementations.
 
-   The traces in this draft are based on draft-ietf-lake-edhoc-11.  A
-   more extensive test vector suite and related code that was used to
-   generate them can be found at: https://github.com/lake-
-   wg/edhoc/tree/master/test-vectors-11.
+   The traces in this draft are valid for versions -11 and -12 of
+   [I-D.ietf-lake-edhoc].  A more extensive test vector suite and
+   related code that was used to generate them can be found at:
+   https://github.com/lake-wg/edhoc/tree/master/test-vectors-11.
 
 2.  Setup
 

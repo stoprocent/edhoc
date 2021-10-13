@@ -237,22 +237,22 @@ body {
 }
 
 /* headings */
-#title, h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6 {
   font-family: "Cabin Condensed", sans-serif;
   font-weight: 600;
   margin: 0.8em 0 0.3em;
   font-size-adjust: 0.5;
   color: var(--title-color);
 }
-#title {
+h1#title {
   font-size: 32px;
   line-height: 40px;
   clear: both;
 }
-#title, #rfcnum {
+h1#title, h1#rfcnum {
   margin: 1.5em 0 0.2em;
 }
-#rfcnum + #title {
+h1#rfcnum + h1#title {
   margin: 0.2em 0;
 }
 
@@ -1021,7 +1021,7 @@ address div.right {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Selander &amp; Preuß Mattsson</td>
-<td class="center">Expires 14 April 2022</td>
+<td class="center">Expires 16 April 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1034,12 +1034,12 @@ address div.right {
 <dd class="internet-draft">draft-selander-lake-traces</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-10-11" class="published">11 October 2021</time>
+<time datetime="2021-10-13" class="published">13 October 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-04-14">14 April 2022</time></dd>
+<dd class="expires"><time datetime="2022-04-16">16 April 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1088,7 +1088,7 @@ address div.right {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 14 April 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 16 April 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1194,7 +1194,7 @@ address div.right {
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
 <p id="section-1-1">EDHOC <span>[<a href="#I-D.ietf-lake-edhoc" class="xref">I-D.ietf-lake-edhoc</a>]</span> is a lightweight authenticated key exchange protocol designed for highly constrained settings. This document contains annotated traces of EDHOC protocol runs, with input, output and intermediate processing results to simplify testing of implementations.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">The traces in this draft are based on draft-ietf-lake-edhoc-11. A more extensive test vector suite and related code that was used to generate them can be found at: https://github.com/lake-wg/edhoc/tree/master/test-vectors-11.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-2">The traces in this draft are valid for versions -11 and -12 of <span>[<a href="#I-D.ietf-lake-edhoc" class="xref">I-D.ietf-lake-edhoc</a>]</span>. A more extensive test vector suite and related code that was used to generate them can be found at: https://github.com/lake-wg/edhoc/tree/master/test-vectors-11.<a href="#section-1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="setup">
