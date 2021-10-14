@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-10-12T01:08:16.731336+00:00",
+  "timestamp": "2021-10-14T01:04:19.815143+00:00",
   "repo": "lake-wg/edhoc",
   "labels": [
     {
@@ -6323,7 +6323,7 @@
       "labels": [],
       "body": "We should discuss how many test vectors draft-selander-lake-traces should contain and what the content should be.\r\n\r\nThis applied to the old appendix as well, but is now even more obvious that we need to use a real X509 certificate. E.g. the example one from https://datatracker.ietf.org/doc/draft-ietf-cose-cbor-encoded-cert/ The cipher suite should probably be one with ECDSA, e.g. cipher suite 2.\r\n\r\n   CRED_R (CBOR Data Item) (113 bytes)\r\n   58 6f 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13 14\r\n   15 16 17 18 19 1a 1b 1c 1d 1e 1f 20 21 22 23 24 25 26 27 28 29 2a 2b\r\n   2c 2d 2e 2f 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f 40 41 42\r\n   43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f 50 51 52 53 54 55 56 57 58 59\r\n   5a 5b 5c 5d 5e 5f 60 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e\r\n\r\n",
       "createdAt": "2021-09-13T07:54:02Z",
-      "updatedAt": "2021-10-07T07:29:11Z",
+      "updatedAt": "2021-10-12T11:54:07Z",
       "closedAt": null,
       "comments": [
         {
@@ -6339,6 +6339,20 @@
           "body": "Mention which version early",
           "createdAt": "2021-09-19T04:23:22Z",
           "updatedAt": "2021-09-19T04:23:22Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Next version should mention all versions it apply to. Will likely apply to both -12 and -13",
+          "createdAt": "2021-10-12T11:53:12Z",
+          "updatedAt": "2021-10-12T11:53:12Z"
+        },
+        {
+          "author": "emanjon",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The document should probably write out the raw values for C_I and C_R\r\n\r\n```\r\nC_I (CBOR Data Item) (Connection identifier chosen by I) (1 bytes)\r\n0c\r\n \r\nC_R (CBOR Data Item) (Connection identifier chosen by R) (1 bytes)\r\n40\r\n \r\nC_I (CBOR Data Item) (Connection identifier chosen by I) (1 bytes)\r\n0e\r\n \r\nC_R (CBOR Data Item) (Connection identifier chosen by R) (1 bytes)\r\n32\r\n\r\n``` \r\nThe exact API for an implementation to use is out-of-scope. But the test vectors could show the raw values.\r\n \r\n```\r\n12\r\n \r\n\"\"\r\n \r\n14\r\n \r\n-19\r\n```",
+          "createdAt": "2021-10-12T11:54:07Z",
+          "updatedAt": "2021-10-12T11:54:07Z"
         }
       ]
     },
