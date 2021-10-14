@@ -5,7 +5,7 @@
 Network Working Group                                        G. Selander
 Internet-Draft                                         J. Preuß Mattsson
 Intended status: Standards Track                                Ericsson
-Expires: 16 April 2022                                   13 October 2021
+Expires: 17 April 2022                                   14 October 2021
 
 
                             Traces of EDHOC
@@ -43,7 +43,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 April 2022.
+   This Internet-Draft will expire on 17 April 2022.
 
 Copyright Notice
 
@@ -178,6 +178,9 @@ Table of Contents
 
    I selects its connection identifier C_I to be the int 12:
 
+   C_I (Raw Value) (Connection identifier chosen by I) (int)
+   12
+
    C_I (CBOR Data Item) (Connection identifier chosen by I) (1 bytes)
    0c
 
@@ -272,6 +275,8 @@ Table of Contents
    7f 94 1e 67 09 10 31 17 a1
 
    R selects its connection identifier C_R to be the empty bstr h'':
+
+   C_R (raw value) (Connection identifier chosen by R) (0 bytes)
 
    C_R (CBOR Data Item) (Connection identifier chosen by R) (1 bytes)
    40
@@ -947,6 +952,9 @@ Table of Contents
 
    I selects its connection identifier C_I to be the int 14:
 
+   C_I (Raw Value) (Connection identifier chosen by I) (int)
+   14
+
    C_I (CBOR Data Item) (Connection identifier chosen by I) (1 bytes)
    0e
 
@@ -1029,6 +1037,9 @@ Table of Contents
    fc 70 a8 c0 02 20 a5 ba 1a
 
    R selects its connection identifier C_R to be the int -19
+
+   C_R (Raw Value) (Connection identifier chosen by R) (int)
+   -19
 
    C_R (CBOR Data Item) (Connection identifier chosen by R) (1 bytes)
    32

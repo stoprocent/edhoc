@@ -1021,7 +1021,7 @@ address div.right {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Selander &amp; Preuß Mattsson</td>
-<td class="center">Expires 16 April 2022</td>
+<td class="center">Expires 17 April 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1034,12 +1034,12 @@ address div.right {
 <dd class="internet-draft">draft-selander-lake-traces</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-10-13" class="published">13 October 2021</time>
+<time datetime="2021-10-14" class="published">14 October 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-04-16">16 April 2022</time></dd>
+<dd class="expires"><time datetime="2022-04-17">17 April 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1088,7 +1088,7 @@ address div.right {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 16 April 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 17 April 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1277,18 +1277,24 @@ G_X (CBOR Data Item) (Initiator's ephemeral public key) (34 bytes)
 <p id="section-3.1-9">I selects its connection identifier C_I to be the int 12:<a href="#section-3.1-9" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.1-10">
 <pre>
-C_I (CBOR Data Item) (Connection identifier chosen by I) (1 bytes)
-0c
+C_I (Raw Value) (Connection identifier chosen by I) (int)
+12
 </pre><a href="#section-3.1-10" class="pilcrow">¶</a>
 </div>
-<p id="section-3.1-11">No external authorization data:<a href="#section-3.1-11" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.1-12">
+<div class="alignLeft art-text artwork" id="section-3.1-11">
+<pre>
+C_I (CBOR Data Item) (Connection identifier chosen by I) (1 bytes)
+0c
+</pre><a href="#section-3.1-11" class="pilcrow">¶</a>
+</div>
+<p id="section-3.1-12">No external authorization data:<a href="#section-3.1-12" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.1-13">
 <pre>
 EAD_1 (CBOR Sequence) (0 bytes)
-</pre><a href="#section-3.1-12" class="pilcrow">¶</a>
+</pre><a href="#section-3.1-13" class="pilcrow">¶</a>
 </div>
-<p id="section-3.1-13">I constructs message_1:<a href="#section-3.1-13" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.1-14">
+<p id="section-3.1-14">I constructs message_1:<a href="#section-3.1-14" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.1-15">
 <pre>
 message_1 =
 (
@@ -1297,14 +1303,14 @@ message_1 =
  h'3AA9EB3201B3367B8C8BE38D91E57A2B433E67888C86D2AC006A520842ED5037',
  12
 )
-</pre><a href="#section-3.1-14" class="pilcrow">¶</a>
+</pre><a href="#section-3.1-15" class="pilcrow">¶</a>
 </div>
-<div class="alignLeft art-text artwork" id="section-3.1-15">
+<div class="alignLeft art-text artwork" id="section-3.1-16">
 <pre>
 message_1 (CBOR Sequence) (37 bytes)
 03 00 58 20 3a a9 eb 32 01 b3 36 7b 8c 8b e3 8d 91 e5 7a 2b 43 3e 67
 88 8c 86 d2 ac 00 6a 52 08 42 ed 50 37 0c
-</pre><a href="#section-3.1-15" class="pilcrow">¶</a>
+</pre><a href="#section-3.1-16" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -1408,70 +1414,76 @@ PRK_3e2m (Raw Value) (32 bytes)
 <p id="section-3.2-23">R selects its connection identifier C_R to be the empty bstr h'':<a href="#section-3.2-23" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.2-24">
 <pre>
-C_R (CBOR Data Item) (Connection identifier chosen by R) (1 bytes)
-40
+C_R (raw value) (Connection identifier chosen by R) (0 bytes)
+
 </pre><a href="#section-3.2-24" class="pilcrow">¶</a>
 </div>
-<p id="section-3.2-25">The transcript hash TH_2 is calculated using the EDHOC hash algorithm:<a href="#section-3.2-25" class="pilcrow">¶</a></p>
-<p id="section-3.2-26">TH_2 = H(H(message_1), G_Y, C_R)<a href="#section-3.2-26" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.2-27">
+<div class="alignLeft art-text artwork" id="section-3.2-25">
+<pre>
+C_R (CBOR Data Item) (Connection identifier chosen by R) (1 bytes)
+40
+</pre><a href="#section-3.2-25" class="pilcrow">¶</a>
+</div>
+<p id="section-3.2-26">The transcript hash TH_2 is calculated using the EDHOC hash algorithm:<a href="#section-3.2-26" class="pilcrow">¶</a></p>
+<p id="section-3.2-27">TH_2 = H(H(message_1), G_Y, C_R)<a href="#section-3.2-27" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.2-28">
 <pre>
 H(message_1) (Raw Value) (32 bytes)
 9b dd b0 cd 55 48 7f 82 a8 6f b7 2a 8b b3 58 52 68 91 a0 a6 c9 08 61
 24 12 f5 af 29 9d af 01 96
-</pre><a href="#section-3.2-27" class="pilcrow">¶</a>
+</pre><a href="#section-3.2-28" class="pilcrow">¶</a>
 </div>
-<div class="alignLeft art-text artwork" id="section-3.2-28">
+<div class="alignLeft art-text artwork" id="section-3.2-29">
 <pre>
 H(message_1) (CBOR Data Item) (34 bytes)
 58 20 9b dd b0 cd 55 48 7f 82 a8 6f b7 2a 8b b3 58 52 68 91 a0 a6 c9
 08 61 24 12 f5 af 29 9d af 01 96
-</pre><a href="#section-3.2-28" class="pilcrow">¶</a>
+</pre><a href="#section-3.2-29" class="pilcrow">¶</a>
 </div>
-<p id="section-3.2-29">The input to calculate TH_2 is the CBOR sequence:<a href="#section-3.2-29" class="pilcrow">¶</a></p>
-<p id="section-3.2-30">H(message_1), G_Y, C_R<a href="#section-3.2-30" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.2-31">
+<p id="section-3.2-30">The input to calculate TH_2 is the CBOR sequence:<a href="#section-3.2-30" class="pilcrow">¶</a></p>
+<p id="section-3.2-31">H(message_1), G_Y, C_R<a href="#section-3.2-31" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.2-32">
 <pre>
 Input to calculate TH_2 (CBOR Sequence) (69 bytes)
 58 20 9b dd b0 cd 55 48 7f 82 a8 6f b7 2a 8b b3 58 52 68 91 a0 a6 c9
 08 61 24 12 f5 af 29 9d af 01 96 58 20 25 54 91 b0 5a 39 89 ff 2d 3f
 fe a6 20 98 aa b5 7c 16 0f 29 4e d9 48 01 8b 41 90 f7 d1 61 82 4e 40
-</pre><a href="#section-3.2-31" class="pilcrow">¶</a>
-</div>
-<div class="alignLeft art-text artwork" id="section-3.2-32">
-<pre>
-TH_2 (Raw Value) (32 bytes)
-71 a6 c7 c5 ba 9a d4 7f e7 2d a4 dc 35 9b f6 b2 76 d3 51 59 68 71 1b
-9a 91 1c 71 fc 09 6a ee 0e
 </pre><a href="#section-3.2-32" class="pilcrow">¶</a>
 </div>
 <div class="alignLeft art-text artwork" id="section-3.2-33">
 <pre>
+TH_2 (Raw Value) (32 bytes)
+71 a6 c7 c5 ba 9a d4 7f e7 2d a4 dc 35 9b f6 b2 76 d3 51 59 68 71 1b
+9a 91 1c 71 fc 09 6a ee 0e
+</pre><a href="#section-3.2-33" class="pilcrow">¶</a>
+</div>
+<div class="alignLeft art-text artwork" id="section-3.2-34">
+<pre>
 TH_2 (CBOR Data Item) (34 bytes)
 58 20 71 a6 c7 c5 ba 9a d4 7f e7 2d a4 dc 35 9b f6 b2 76 d3 51 59 68
 71 1b 9a 91 1c 71 fc 09 6a ee 0e
-</pre><a href="#section-3.2-33" class="pilcrow">¶</a>
+</pre><a href="#section-3.2-34" class="pilcrow">¶</a>
 </div>
-<p id="section-3.2-34">R constructs the remaining input needed to calculate MAC_2:<a href="#section-3.2-34" class="pilcrow">¶</a></p>
-<p id="section-3.2-35">MAC_2 = EDHOC-KDF(PRK_3e2m, TH_2, "MAC_2",
-            &lt;&lt; ID_CRED_R, CRED_R, ? EAD_2 &gt;&gt;, mac_length_2)<a href="#section-3.2-35" class="pilcrow">¶</a></p>
-<p id="section-3.2-36">CRED_R is identified by a 'kid' with integer value 5:<a href="#section-3.2-36" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.2-37">
+<p id="section-3.2-35">R constructs the remaining input needed to calculate MAC_2:<a href="#section-3.2-35" class="pilcrow">¶</a></p>
+<p id="section-3.2-36">MAC_2 = EDHOC-KDF(PRK_3e2m, TH_2, "MAC_2",
+            &lt;&lt; ID_CRED_R, CRED_R, ? EAD_2 &gt;&gt;, mac_length_2)<a href="#section-3.2-36" class="pilcrow">¶</a></p>
+<p id="section-3.2-37">CRED_R is identified by a 'kid' with integer value 5:<a href="#section-3.2-37" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.2-38">
 <pre>
 ID_CRED_R =
 {
  4 : 5
 }
-</pre><a href="#section-3.2-37" class="pilcrow">¶</a>
+</pre><a href="#section-3.2-38" class="pilcrow">¶</a>
 </div>
-<div class="alignLeft art-text artwork" id="section-3.2-38">
+<div class="alignLeft art-text artwork" id="section-3.2-39">
 <pre>
 ID_CRED_R (CBOR Data Item) (3 bytes)
 a1 04 05
-</pre><a href="#section-3.2-38" class="pilcrow">¶</a>
+</pre><a href="#section-3.2-39" class="pilcrow">¶</a>
 </div>
-<p id="section-3.2-39">CRED_R is an RPK encoded as a CCS:<a href="#section-3.2-39" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.2-40">
+<p id="section-3.2-40">CRED_R is an RPK encoded as a CCS:<a href="#section-3.2-40" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.2-41">
 <pre>
 {                                              /CCS/
   2 : "example.edu",                           /sub/
@@ -1485,28 +1497,28 @@ a1 04 05
     }
   }
 }
-</pre><a href="#section-3.2-40" class="pilcrow">¶</a>
+</pre><a href="#section-3.2-41" class="pilcrow">¶</a>
 </div>
-<div class="alignLeft art-text artwork" id="section-3.2-41">
+<div class="alignLeft art-text artwork" id="section-3.2-42">
 <pre>
 CRED_R (CBOR Data Item) (59 bytes)
 a2 02 6b 65 78 61 6d 70 6c 65 2e 65 64 75 08 a1 01 a4 01 01 02 05 20
 04 21 58 20 e6 6f 35 59 90 22 3c 3f 6c af f8 62 e4 07 ed d1 17 4d 07
 01 a0 9e cd 6a 15 ce e2 c6 ce 21 aa 50
-</pre><a href="#section-3.2-41" class="pilcrow">¶</a>
+</pre><a href="#section-3.2-42" class="pilcrow">¶</a>
 </div>
-<p id="section-3.2-42">No external authorization data:<a href="#section-3.2-42" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.2-43">
+<p id="section-3.2-43">No external authorization data:<a href="#section-3.2-43" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.2-44">
 <pre>
 EAD_2 (CBOR Sequence) (0 bytes)
-</pre><a href="#section-3.2-43" class="pilcrow">¶</a>
+</pre><a href="#section-3.2-44" class="pilcrow">¶</a>
 </div>
-<p id="section-3.2-44">MAC_2 is computed through Expand() using the
-EDHOC hash algorithm, see Section 4.2 of <span>[<a href="#I-D.ietf-lake-edhoc" class="xref">I-D.ietf-lake-edhoc</a>]</span>:<a href="#section-3.2-44" class="pilcrow">¶</a></p>
-<p id="section-3.2-45">MAC_2 = HKDF-Expand(PRK_3e2m, info, mac_length_2)<a href="#section-3.2-45" class="pilcrow">¶</a></p>
-<p id="section-3.2-46">Since METHOD = 3, mac_length_2 is given by the EDHOC MAC length.<a href="#section-3.2-46" class="pilcrow">¶</a></p>
-<p id="section-3.2-47">info for MAC_2 is:<a href="#section-3.2-47" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.2-48">
+<p id="section-3.2-45">MAC_2 is computed through Expand() using the
+EDHOC hash algorithm, see Section 4.2 of <span>[<a href="#I-D.ietf-lake-edhoc" class="xref">I-D.ietf-lake-edhoc</a>]</span>:<a href="#section-3.2-45" class="pilcrow">¶</a></p>
+<p id="section-3.2-46">MAC_2 = HKDF-Expand(PRK_3e2m, info, mac_length_2)<a href="#section-3.2-46" class="pilcrow">¶</a></p>
+<p id="section-3.2-47">Since METHOD = 3, mac_length_2 is given by the EDHOC MAC length.<a href="#section-3.2-47" class="pilcrow">¶</a></p>
+<p id="section-3.2-48">info for MAC_2 is:<a href="#section-3.2-48" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.2-49">
 <pre>
 info =
 (
@@ -1516,10 +1528,10 @@ info =
    6F355990223C3F6CAFF862E407EDD1174D0701A09ECD6A15CEE2C6CE21AA50',
  8
 )
-</pre><a href="#section-3.2-48" class="pilcrow">¶</a>
+</pre><a href="#section-3.2-49" class="pilcrow">¶</a>
 </div>
-<p id="section-3.2-49">where the last value is the EDHOC MAC length.<a href="#section-3.2-49" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.2-50">
+<p id="section-3.2-50">where the last value is the EDHOC MAC length.<a href="#section-3.2-50" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.2-51">
 <pre>
 info for MAC_2 (CBOR Sequence) (105 bytes)
 58 20 71 a6 c7 c5 ba 9a d4 7f e7 2d a4 dc 35 9b f6 b2 76 d3 51 59 68
@@ -1527,35 +1539,35 @@ info for MAC_2 (CBOR Sequence) (105 bytes)
 02 6b 65 78 61 6d 70 6c 65 2e 65 64 75 08 a1 01 a4 01 01 02 05 20 04
 21 58 20 e6 6f 35 59 90 22 3c 3f 6c af f8 62 e4 07 ed d1 17 4d 07 01
 a0 9e cd 6a 15 ce e2 c6 ce 21 aa 50 08
-</pre><a href="#section-3.2-50" class="pilcrow">¶</a>
-</div>
-<div class="alignLeft art-text artwork" id="section-3.2-51">
-<pre>
-MAC_2 (Raw Value) (8 bytes)
-8e 27 cb d4 94 f7 52 83
 </pre><a href="#section-3.2-51" class="pilcrow">¶</a>
 </div>
 <div class="alignLeft art-text artwork" id="section-3.2-52">
 <pre>
-MAC_2 (CBOR Data Item) (9 bytes)
-48 8e 27 cb d4 94 f7 52 83
+MAC_2 (Raw Value) (8 bytes)
+8e 27 cb d4 94 f7 52 83
 </pre><a href="#section-3.2-52" class="pilcrow">¶</a>
 </div>
-<p id="section-3.2-53">Since METHOD = 3, Signature_or_MAC_2 is MAC_2:<a href="#section-3.2-53" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.2-54">
+<div class="alignLeft art-text artwork" id="section-3.2-53">
+<pre>
+MAC_2 (CBOR Data Item) (9 bytes)
+48 8e 27 cb d4 94 f7 52 83
+</pre><a href="#section-3.2-53" class="pilcrow">¶</a>
+</div>
+<p id="section-3.2-54">Since METHOD = 3, Signature_or_MAC_2 is MAC_2:<a href="#section-3.2-54" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.2-55">
 <pre>
 Signature_or_MAC_2 (Raw Value) (8 bytes)
 8e 27 cb d4 94 f7 52 83
-</pre><a href="#section-3.2-54" class="pilcrow">¶</a>
+</pre><a href="#section-3.2-55" class="pilcrow">¶</a>
 </div>
-<div class="alignLeft art-text artwork" id="section-3.2-55">
+<div class="alignLeft art-text artwork" id="section-3.2-56">
 <pre>
 Signature_or_MAC_2 (CBOR Data Item) (9 bytes)
 48 8e 27 cb d4 94 f7 52 83
-</pre><a href="#section-3.2-55" class="pilcrow">¶</a>
+</pre><a href="#section-3.2-56" class="pilcrow">¶</a>
 </div>
-<p id="section-3.2-56">R constructs the plaintext:<a href="#section-3.2-56" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.2-57">
+<p id="section-3.2-57">R constructs the plaintext:<a href="#section-3.2-57" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.2-58">
 <pre>
 PLAINTEXT_2 =
 (
@@ -1563,25 +1575,25 @@ PLAINTEXT_2 =
  Signature_or_MAC_2,
  ? EAD_2
 )
-</pre><a href="#section-3.2-57" class="pilcrow">¶</a>
+</pre><a href="#section-3.2-58" class="pilcrow">¶</a>
 </div>
-<p id="section-3.2-58">Since ID_CRED_R contains a single 'kid' parameter, only the int 5 is included in the plaintext.<a href="#section-3.2-58" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.2-59">
+<p id="section-3.2-59">Since ID_CRED_R contains a single 'kid' parameter, only the int 5 is included in the plaintext.<a href="#section-3.2-59" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.2-60">
 <pre>
 PLAINTEXT_2 (CBOR Sequence) (10 bytes)
 05 48 8e 27 cb d4 94 f7 52 83
-</pre><a href="#section-3.2-59" class="pilcrow">¶</a>
+</pre><a href="#section-3.2-60" class="pilcrow">¶</a>
 </div>
-<p id="section-3.2-60">The input needed to calculate KEYSTREAM_2 is defined in Section 4.2 of
-<span>[<a href="#I-D.ietf-lake-edhoc" class="xref">I-D.ietf-lake-edhoc</a>]</span>, using Expand() with the EDHOC hash algorithm:<a href="#section-3.2-60" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.2-61">
+<p id="section-3.2-61">The input needed to calculate KEYSTREAM_2 is defined in Section 4.2 of
+<span>[<a href="#I-D.ietf-lake-edhoc" class="xref">I-D.ietf-lake-edhoc</a>]</span>, using Expand() with the EDHOC hash algorithm:<a href="#section-3.2-61" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.2-62">
 <pre>
 KEYSTREAM_2 = EDHOC-KDF(PRK_2e, TH_2, "KEYSTREAM_2", h'', length) =
             = HKDF-Expand(PRK_2e, info, length),
-</pre><a href="#section-3.2-61" class="pilcrow">¶</a>
+</pre><a href="#section-3.2-62" class="pilcrow">¶</a>
 </div>
-<p id="section-3.2-62">where length is the length of PLAINTEXT_2, and info for KEYSTREAM_2 is:<a href="#section-3.2-62" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.2-63">
+<p id="section-3.2-63">where length is the length of PLAINTEXT_2, and info for KEYSTREAM_2 is:<a href="#section-3.2-63" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.2-64">
 <pre>
 info =
 (
@@ -1590,48 +1602,48 @@ info =
  h'',
  10
 )
-</pre><a href="#section-3.2-63" class="pilcrow">¶</a>
+</pre><a href="#section-3.2-64" class="pilcrow">¶</a>
 </div>
-<p id="section-3.2-64">where last value is the length of PLAINTEXT_2.<a href="#section-3.2-64" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.2-65">
+<p id="section-3.2-65">where last value is the length of PLAINTEXT_2.<a href="#section-3.2-65" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.2-66">
 <pre>
 info for KEYSTREAM_2 (CBOR Sequence) (48 bytes)
 58 20 71 a6 c7 c5 ba 9a d4 7f e7 2d a4 dc 35 9b f6 b2 76 d3 51 59 68
 71 1b 9a 91 1c 71 fc 09 6a ee 0e 6b 4b 45 59 53 54 52 45 41 4d 5f 32
 40 0a
-</pre><a href="#section-3.2-65" class="pilcrow">¶</a>
+</pre><a href="#section-3.2-66" class="pilcrow">¶</a>
 </div>
-<div class="alignLeft art-text artwork" id="section-3.2-66">
+<div class="alignLeft art-text artwork" id="section-3.2-67">
 <pre>
 KEYSTREAM_2 (Raw Value) (10 bytes)
 0a b8 c2 0e 84 9e 52 f5 9d fb
-</pre><a href="#section-3.2-66" class="pilcrow">¶</a>
+</pre><a href="#section-3.2-67" class="pilcrow">¶</a>
 </div>
-<p id="section-3.2-67">R calculates CIPHERTEXT_2 as XOR between PLAINTEXT_2 and KEYSTREAM_2:<a href="#section-3.2-67" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.2-68">
+<p id="section-3.2-68">R calculates CIPHERTEXT_2 as XOR between PLAINTEXT_2 and KEYSTREAM_2:<a href="#section-3.2-68" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.2-69">
 <pre>
 CIPHERTEXT_2 (Raw Value) (10 bytes)
 0f f0 4c 29 4f 4a c6 02 cf 78
-</pre><a href="#section-3.2-68" class="pilcrow">¶</a>
+</pre><a href="#section-3.2-69" class="pilcrow">¶</a>
 </div>
-<p id="section-3.2-69">R constructs message_2:<a href="#section-3.2-69" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.2-70">
+<p id="section-3.2-70">R constructs message_2:<a href="#section-3.2-70" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.2-71">
 <pre>
 message_2 =
 (
  G_Y_CIPHERTEXT_2,
  C_R
 )
-</pre><a href="#section-3.2-70" class="pilcrow">¶</a>
+</pre><a href="#section-3.2-71" class="pilcrow">¶</a>
 </div>
-<p id="section-3.2-71">where G_Y_CIPHERTEXT_2 is the bstr encoding of the concatenation of
-the raw values of G_Y and CIPHERTEXT_2.<a href="#section-3.2-71" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.2-72">
+<p id="section-3.2-72">where G_Y_CIPHERTEXT_2 is the bstr encoding of the concatenation of
+the raw values of G_Y and CIPHERTEXT_2.<a href="#section-3.2-72" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.2-73">
 <pre>
 message_2 (CBOR Sequence) (45 bytes)
 58 2a 25 54 91 b0 5a 39 89 ff 2d 3f fe a6 20 98 aa b5 7c 16 0f 29 4e
 d9 48 01 8b 41 90 f7 d1 61 82 4e 0f f0 4c 29 4f 4a c6 02 cf 78 40
-</pre><a href="#section-3.2-72" class="pilcrow">¶</a>
+</pre><a href="#section-3.2-73" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -2290,14 +2302,20 @@ c5 82 80 19 ef 0a 63 88 c1 25 52
 <p id="section-4.1-9">I selects its connection identifier C_I to be the int 14:<a href="#section-4.1-9" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-4.1-10">
 <pre>
-C_I (CBOR Data Item) (Connection identifier chosen by I) (1 bytes)
-0e
+C_I (Raw Value) (Connection identifier chosen by I) (int)
+14
 </pre><a href="#section-4.1-10" class="pilcrow">¶</a>
 </div>
-<p id="section-4.1-11">No external authorization data:<a href="#section-4.1-11" class="pilcrow">¶</a></p>
-<p id="section-4.1-12">EAD_1 (CBOR Sequence) (0 bytes)<a href="#section-4.1-12" class="pilcrow">¶</a></p>
-<p id="section-4.1-13">I constructs message_1:<a href="#section-4.1-13" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-4.1-14">
+<div class="alignLeft art-text artwork" id="section-4.1-11">
+<pre>
+C_I (CBOR Data Item) (Connection identifier chosen by I) (1 bytes)
+0e
+</pre><a href="#section-4.1-11" class="pilcrow">¶</a>
+</div>
+<p id="section-4.1-12">No external authorization data:<a href="#section-4.1-12" class="pilcrow">¶</a></p>
+<p id="section-4.1-13">EAD_1 (CBOR Sequence) (0 bytes)<a href="#section-4.1-13" class="pilcrow">¶</a></p>
+<p id="section-4.1-14">I constructs message_1:<a href="#section-4.1-14" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.1-15">
 <pre>
 message_1 =
 (
@@ -2306,14 +2324,14 @@ message_1 =
  h'E31EC15EE8039427DFC4727EF17E2E0E69C54437F3C5828019EF0A6388C12552',
  14
 )
-</pre><a href="#section-4.1-14" class="pilcrow">¶</a>
+</pre><a href="#section-4.1-15" class="pilcrow">¶</a>
 </div>
-<div class="alignLeft art-text artwork" id="section-4.1-15">
+<div class="alignLeft art-text artwork" id="section-4.1-16">
 <pre>
 message_1 (CBOR Sequence) (37 bytes)
 00 00 58 20 e3 1e c1 5e e8 03 94 27 df c4 72 7e f1 7e 2e 0e 69 c5 44
 37 f3 c5 82 80 19 ef 0a 63 88 c1 25 52 0e
-</pre><a href="#section-4.1-15" class="pilcrow">¶</a>
+</pre><a href="#section-4.1-16" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -2397,68 +2415,74 @@ fc 70 a8 c0 02 20 a5 ba 1a
 <p id="section-4.2-19">R selects its connection identifier C_R to be the int -19<a href="#section-4.2-19" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-4.2-20">
 <pre>
-C_R (CBOR Data Item) (Connection identifier chosen by R) (1 bytes)
-32
+C_R (Raw Value) (Connection identifier chosen by R) (int)
+-19
 </pre><a href="#section-4.2-20" class="pilcrow">¶</a>
 </div>
-<p id="section-4.2-21">The transcript hash TH_2 is calculated using the EDHOC hash algorithm:<a href="#section-4.2-21" class="pilcrow">¶</a></p>
-<p id="section-4.2-22">TH_2 = H(H(message_1), G_Y, C_R)<a href="#section-4.2-22" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-4.2-23">
+<div class="alignLeft art-text artwork" id="section-4.2-21">
+<pre>
+C_R (CBOR Data Item) (Connection identifier chosen by R) (1 bytes)
+32
+</pre><a href="#section-4.2-21" class="pilcrow">¶</a>
+</div>
+<p id="section-4.2-22">The transcript hash TH_2 is calculated using the EDHOC hash algorithm:<a href="#section-4.2-22" class="pilcrow">¶</a></p>
+<p id="section-4.2-23">TH_2 = H(H(message_1), G_Y, C_R)<a href="#section-4.2-23" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.2-24">
 <pre>
 H(message_1) (Raw Value) (32 bytes)
 ce ba 8d 4d a2 80 b1 61 c8 5a 19 47 81 a9 31 88 35 41 50 b4 9c 4f 93
 2e 4a a0 8f f3 ed 11 04 65
-</pre><a href="#section-4.2-23" class="pilcrow">¶</a>
+</pre><a href="#section-4.2-24" class="pilcrow">¶</a>
 </div>
-<div class="alignLeft art-text artwork" id="section-4.2-24">
+<div class="alignLeft art-text artwork" id="section-4.2-25">
 <pre>
 H(message_1) (CBOR Data Item) (34 bytes)
 58 20 ce ba 8d 4d a2 80 b1 61 c8 5a 19 47 81 a9 31 88 35 41 50 b4 9c
 4f 93 2e 4a a0 8f f3 ed 11 04 65
-</pre><a href="#section-4.2-24" class="pilcrow">¶</a>
+</pre><a href="#section-4.2-25" class="pilcrow">¶</a>
 </div>
-<p id="section-4.2-25">The input to calculate TH_2 is the CBOR sequence:<a href="#section-4.2-25" class="pilcrow">¶</a></p>
-<p id="section-4.2-26">H(message_1), G_Y, C_R<a href="#section-4.2-26" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-4.2-27">
+<p id="section-4.2-26">The input to calculate TH_2 is the CBOR sequence:<a href="#section-4.2-26" class="pilcrow">¶</a></p>
+<p id="section-4.2-27">H(message_1), G_Y, C_R<a href="#section-4.2-27" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.2-28">
 <pre>
 Input to calculate TH_2 (CBOR Sequence) (69 bytes)
 58 20 ce ba 8d 4d a2 80 b1 61 c8 5a 19 47 81 a9 31 88 35 41 50 b4 9c
 4f 93 2e 4a a0 8f f3 ed 11 04 65 58 20 e1 73 90 96 c5 c9 58 2c 12 98
 91 81 66 d6 95 48 c7 8f 74 97 b2 58 c0 85 6a a2 01 98 93 a3 94 25 32
-</pre><a href="#section-4.2-27" class="pilcrow">¶</a>
-</div>
-<div class="alignLeft art-text artwork" id="section-4.2-28">
-<pre>
-TH_2 (Raw Value) (32 bytes)
-07 82 db b6 87 c3 02 88 a3 0b 70 6b 07 4b ed 78 95 74 57 3f 24 44 3e
-91 83 3d 68 cd dd 7f 9b 39
 </pre><a href="#section-4.2-28" class="pilcrow">¶</a>
 </div>
 <div class="alignLeft art-text artwork" id="section-4.2-29">
 <pre>
+TH_2 (Raw Value) (32 bytes)
+07 82 db b6 87 c3 02 88 a3 0b 70 6b 07 4b ed 78 95 74 57 3f 24 44 3e
+91 83 3d 68 cd dd 7f 9b 39
+</pre><a href="#section-4.2-29" class="pilcrow">¶</a>
+</div>
+<div class="alignLeft art-text artwork" id="section-4.2-30">
+<pre>
 TH_2 (CBOR Data Item) (34 bytes)
 58 20 07 82 db b6 87 c3 02 88 a3 0b 70 6b 07 4b ed 78 95 74 57 3f 24
 44 3e 91 83 3d 68 cd dd 7f 9b 39
-</pre><a href="#section-4.2-29" class="pilcrow">¶</a>
+</pre><a href="#section-4.2-30" class="pilcrow">¶</a>
 </div>
-<p id="section-4.2-30">R constructs the remaining input needed to calculate MAC_2:<a href="#section-4.2-30" class="pilcrow">¶</a></p>
-<p id="section-4.2-31">MAC_2 = EDHOC-KDF(PRK_3e2m, TH_2, "MAC_2",
-            &lt;&lt; ID_CRED_R, CRED_R, ? EAD_2 &gt;&gt;, mac_length_2)<a href="#section-4.2-31" class="pilcrow">¶</a></p>
-<p id="section-4.2-32">CRED_R is identified by a 64-bit hash:<a href="#section-4.2-32" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-4.2-33">
+<p id="section-4.2-31">R constructs the remaining input needed to calculate MAC_2:<a href="#section-4.2-31" class="pilcrow">¶</a></p>
+<p id="section-4.2-32">MAC_2 = EDHOC-KDF(PRK_3e2m, TH_2, "MAC_2",
+            &lt;&lt; ID_CRED_R, CRED_R, ? EAD_2 &gt;&gt;, mac_length_2)<a href="#section-4.2-32" class="pilcrow">¶</a></p>
+<p id="section-4.2-33">CRED_R is identified by a 64-bit hash:<a href="#section-4.2-33" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.2-34">
 <pre>
 ID_CRED_R =
 {
   34 : [-15, h'60780E9451BDC43C']
 }
-</pre><a href="#section-4.2-33" class="pilcrow">¶</a>
+</pre><a href="#section-4.2-34" class="pilcrow">¶</a>
 </div>
-<p id="section-4.2-34">where the COSE header value 34 ('x5t') indicates a hash of an X.509 certficate,
-and the COSE algorithm -15 indicates the hash algorithm SHA-256 truncated to 64 bits.<a href="#section-4.2-34" class="pilcrow">¶</a></p>
-<p id="section-4.2-35">ID_CRED_R (CBOR Data Item) (14 bytes)
-a1 18 22 82 2e 48 60 78 0e 94 51 bd c4 3c<a href="#section-4.2-35" class="pilcrow">¶</a></p>
-<p id="section-4.2-36">CRED_R is a byte string acting as a dummy X.509 certificate:<a href="#section-4.2-36" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-4.2-37">
+<p id="section-4.2-35">where the COSE header value 34 ('x5t') indicates a hash of an X.509 certficate,
+and the COSE algorithm -15 indicates the hash algorithm SHA-256 truncated to 64 bits.<a href="#section-4.2-35" class="pilcrow">¶</a></p>
+<p id="section-4.2-36">ID_CRED_R (CBOR Data Item) (14 bytes)
+a1 18 22 82 2e 48 60 78 0e 94 51 bd c4 3c<a href="#section-4.2-36" class="pilcrow">¶</a></p>
+<p id="section-4.2-37">CRED_R is a byte string acting as a dummy X.509 certificate:<a href="#section-4.2-37" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.2-38">
 <pre>
 CRED_R (CBOR Data Item) (113 bytes)
 58 6f 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13 14
@@ -2466,19 +2490,19 @@ CRED_R (CBOR Data Item) (113 bytes)
 2c 2d 2e 2f 30 31 32 33 34 35 36 37 38 39 3a 3b 3c 3d 3e 3f 40 41 42
 43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f 50 51 52 53 54 55 56 57 58 59
 5a 5b 5c 5d 5e 5f 60 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e
-</pre><a href="#section-4.2-37" class="pilcrow">¶</a>
+</pre><a href="#section-4.2-38" class="pilcrow">¶</a>
 </div>
-<p id="section-4.2-38">No external authorization data:<a href="#section-4.2-38" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-4.2-39">
+<p id="section-4.2-39">No external authorization data:<a href="#section-4.2-39" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.2-40">
 <pre>
 EAD_2 (CBOR Sequence) (0 bytes)
-</pre><a href="#section-4.2-39" class="pilcrow">¶</a>
+</pre><a href="#section-4.2-40" class="pilcrow">¶</a>
 </div>
-<p id="section-4.2-40">MAC_2 is computed through Expand() using the EDHOC hash algorithm, Section 4.2 of <span>[<a href="#I-D.ietf-lake-edhoc" class="xref">I-D.ietf-lake-edhoc</a>]</span>:<a href="#section-4.2-40" class="pilcrow">¶</a></p>
-<p id="section-4.2-41">MAC_2 = HKDF-Expand(PRK_3e2m, info, mac_length_2)<a href="#section-4.2-41" class="pilcrow">¶</a></p>
-<p id="section-4.2-42">Since METHOD = 0, mac_length_2 is given by the EDHOC hash algorithm.<a href="#section-4.2-42" class="pilcrow">¶</a></p>
-<p id="section-4.2-43">info for MAC_2 is:<a href="#section-4.2-43" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-4.2-44">
+<p id="section-4.2-41">MAC_2 is computed through Expand() using the EDHOC hash algorithm, Section 4.2 of <span>[<a href="#I-D.ietf-lake-edhoc" class="xref">I-D.ietf-lake-edhoc</a>]</span>:<a href="#section-4.2-41" class="pilcrow">¶</a></p>
+<p id="section-4.2-42">MAC_2 = HKDF-Expand(PRK_3e2m, info, mac_length_2)<a href="#section-4.2-42" class="pilcrow">¶</a></p>
+<p id="section-4.2-43">Since METHOD = 0, mac_length_2 is given by the EDHOC hash algorithm.<a href="#section-4.2-43" class="pilcrow">¶</a></p>
+<p id="section-4.2-44">info for MAC_2 is:<a href="#section-4.2-44" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.2-45">
 <pre>
 info =
 (
@@ -2490,10 +2514,10 @@ info =
    535455565758595A5B5C5D5E5F606162636465666768696A6B6C6D6E',
  32
 )
-</pre><a href="#section-4.2-44" class="pilcrow">¶</a>
+</pre><a href="#section-4.2-45" class="pilcrow">¶</a>
 </div>
-<p id="section-4.2-45">where the last value is the output size of the EDHOC hash algorithm.<a href="#section-4.2-45" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-4.2-46">
+<p id="section-4.2-46">where the last value is the output size of the EDHOC hash algorithm.<a href="#section-4.2-46" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.2-47">
 <pre>
 info for MAC_2 (CBOR Sequence) (171 bytes)
 58 20 07 82 db b6 87 c3 02 88 a3 0b 70 6b 07 4b ed 78 95 74 57 3f 24
@@ -2504,25 +2528,25 @@ info for MAC_2 (CBOR Sequence) (171 bytes)
 39 3a 3b 3c 3d 3e 3f 40 41 42 43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f
 50 51 52 53 54 55 56 57 58 59 5a 5b 5c 5d 5e 5f 60 61 62 63 64 65 66
 67 68 69 6a 6b 6c 6d 6e 18 20
-</pre><a href="#section-4.2-46" class="pilcrow">¶</a>
-</div>
-<div class="alignLeft art-text artwork" id="section-4.2-47">
-<pre>
-MAC_2 (Raw Value) (32 bytes)
-27 c8 f1 e4 a7 af f2 a0 f0 bc 0f 91 83 93 ee f1 8b 69 0c 4d 4c 3d 81
-bd fe 22 95 42 40 bc c4 cc
 </pre><a href="#section-4.2-47" class="pilcrow">¶</a>
 </div>
 <div class="alignLeft art-text artwork" id="section-4.2-48">
 <pre>
+MAC_2 (Raw Value) (32 bytes)
+27 c8 f1 e4 a7 af f2 a0 f0 bc 0f 91 83 93 ee f1 8b 69 0c 4d 4c 3d 81
+bd fe 22 95 42 40 bc c4 cc
+</pre><a href="#section-4.2-48" class="pilcrow">¶</a>
+</div>
+<div class="alignLeft art-text artwork" id="section-4.2-49">
+<pre>
 MAC_2 (CBOR Data Item) (34 bytes)
 58 20 27 c8 f1 e4 a7 af f2 a0 f0 bc 0f 91 83 93 ee f1 8b 69 0c 4d 4c
 3d 81 bd fe 22 95 42 40 bc c4 cc
-</pre><a href="#section-4.2-48" class="pilcrow">¶</a>
+</pre><a href="#section-4.2-49" class="pilcrow">¶</a>
 </div>
-<p id="section-4.2-49">Since METHOD = 0, Signature_or_MAC_2 is the 'signature' of the COSE_Sign1 object.<a href="#section-4.2-49" class="pilcrow">¶</a></p>
-<p id="section-4.2-50">R constructs the message to be signed:<a href="#section-4.2-50" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-4.2-51">
+<p id="section-4.2-50">Since METHOD = 0, Signature_or_MAC_2 is the 'signature' of the COSE_Sign1 object.<a href="#section-4.2-50" class="pilcrow">¶</a></p>
+<p id="section-4.2-51">R constructs the message to be signed:<a href="#section-4.2-51" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.2-52">
 <pre>
 [ "Signature1", &lt;&lt; ID_CRED_R &gt;&gt;,
  &lt;&lt; TH_2, CRED_R, ? EAD_2 &gt;&gt;, MAC_2 ] =
@@ -2537,9 +2561,9 @@ MAC_2 (CBOR Data Item) (34 bytes)
    5C5D5E5F606162636465666768696A6B6C6D6E',
  h'27C8F1E4A7AFF2A0F0BC0F918393EEF18B690C4D4C3D81BDFE22954240BCC4CC'
 ]
-</pre><a href="#section-4.2-51" class="pilcrow">¶</a>
+</pre><a href="#section-4.2-52" class="pilcrow">¶</a>
 </div>
-<div class="alignLeft art-text artwork" id="section-4.2-52">
+<div class="alignLeft art-text artwork" id="section-4.2-53">
 <pre>
 Message to be signed 2 (CBOR Data Item) (210 bytes)
 84 6a 53 69 67 6e 61 74 75 72 65 31 4e a1 18 22 82 2e 48 60 78 0e 94
@@ -2552,27 +2576,27 @@ Message to be signed 2 (CBOR Data Item) (210 bytes)
 60 61 62 63 64 65 66 67 68 69 6a 6b 6c 6d 6e 58 20 27 c8 f1 e4 a7 af
 f2 a0 f0 bc 0f 91 83 93 ee f1 8b 69 0c 4d 4c 3d 81 bd fe 22 95 42 40
 bc c4 cc
-</pre><a href="#section-4.2-52" class="pilcrow">¶</a>
+</pre><a href="#section-4.2-53" class="pilcrow">¶</a>
 </div>
-<p id="section-4.2-53">R signs using the private authentication key SK_R<a href="#section-4.2-53" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-4.2-54">
+<p id="section-4.2-54">R signs using the private authentication key SK_R<a href="#section-4.2-54" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.2-55">
 <pre>
 Signature_or_MAC_2 (Raw Value) (64 bytes)
 3c e5 20 75 db 55 89 2d f1 25 8f a6 9e 86 ab 5b 59 33 ea dc 07 ea 82
 41 1f 17 9a 5f de f1 c9 43 23 63 f6 58 f9 a2 04 fa 81 54 d1 4f fd 87
 b5 01 0c 4f d0 a0 c7 7e 2a ca 77 5f 67 cb 5e 8b be 08
-</pre><a href="#section-4.2-54" class="pilcrow">¶</a>
+</pre><a href="#section-4.2-55" class="pilcrow">¶</a>
 </div>
-<div class="alignLeft art-text artwork" id="section-4.2-55">
+<div class="alignLeft art-text artwork" id="section-4.2-56">
 <pre>
 Signature_or_MAC_2 (CBOR Data Item) (66 bytes)
 58 40 3c e5 20 75 db 55 89 2d f1 25 8f a6 9e 86 ab 5b 59 33 ea dc 07
 ea 82 41 1f 17 9a 5f de f1 c9 43 23 63 f6 58 f9 a2 04 fa 81 54 d1 4f
 fd 87 b5 01 0c 4f d0 a0 c7 7e 2a ca 77 5f 67 cb 5e 8b be 08
-</pre><a href="#section-4.2-55" class="pilcrow">¶</a>
+</pre><a href="#section-4.2-56" class="pilcrow">¶</a>
 </div>
-<p id="section-4.2-56">R constructs the plaintext:<a href="#section-4.2-56" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-4.2-57">
+<p id="section-4.2-57">R constructs the plaintext:<a href="#section-4.2-57" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.2-58">
 <pre>
 PLAINTEXT_2 =
 (
@@ -2580,27 +2604,27 @@ PLAINTEXT_2 =
  Signature_or_MAC_2,
  ? EAD_2
 )
-</pre><a href="#section-4.2-57" class="pilcrow">¶</a>
+</pre><a href="#section-4.2-58" class="pilcrow">¶</a>
 </div>
-<div class="alignLeft art-text artwork" id="section-4.2-58">
+<div class="alignLeft art-text artwork" id="section-4.2-59">
 <pre>
 PLAINTEXT_2 (CBOR Sequence) (80 bytes)
 a1 18 22 82 2e 48 60 78 0e 94 51 bd c4 3c 58 40 3c e5 20 75 db 55 89
 2d f1 25 8f a6 9e 86 ab 5b 59 33 ea dc 07 ea 82 41 1f 17 9a 5f de f1
 c9 43 23 63 f6 58 f9 a2 04 fa 81 54 d1 4f fd 87 b5 01 0c 4f d0 a0 c7
 7e 2a ca 77 5f 67 cb 5e 8b be 08
-</pre><a href="#section-4.2-58" class="pilcrow">¶</a>
+</pre><a href="#section-4.2-59" class="pilcrow">¶</a>
 </div>
-<p id="section-4.2-59">The input needed to calculate KEYSTREAM_2 is defined in Section 4.2 of
-<span>[<a href="#I-D.ietf-lake-edhoc" class="xref">I-D.ietf-lake-edhoc</a>]</span>, using Expand() with the EDHOC hash algorithm:<a href="#section-4.2-59" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-4.2-60">
+<p id="section-4.2-60">The input needed to calculate KEYSTREAM_2 is defined in Section 4.2 of
+<span>[<a href="#I-D.ietf-lake-edhoc" class="xref">I-D.ietf-lake-edhoc</a>]</span>, using Expand() with the EDHOC hash algorithm:<a href="#section-4.2-60" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.2-61">
 <pre>
 KEYSTREAM_2 = EDHOC-KDF(PRK_2e, TH_2, "KEYSTREAM_2", h'', length) =
             = HKDF-Expand(PRK_2e, info, length)
-</pre><a href="#section-4.2-60" class="pilcrow">¶</a>
+</pre><a href="#section-4.2-61" class="pilcrow">¶</a>
 </div>
-<p id="section-4.2-61">where length is the length of PLAINTEXT_2, and info for KEYSTREAM_2 is:<a href="#section-4.2-61" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-4.2-62">
+<p id="section-4.2-62">where length is the length of PLAINTEXT_2, and info for KEYSTREAM_2 is:<a href="#section-4.2-62" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.2-63">
 <pre>
 info =
 (
@@ -2609,49 +2633,49 @@ info =
  h'',
  80
 )
-</pre><a href="#section-4.2-62" class="pilcrow">¶</a>
+</pre><a href="#section-4.2-63" class="pilcrow">¶</a>
 </div>
-<p id="section-4.2-63">where the last value is the length of PLAINTEXT_2.<a href="#section-4.2-63" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-4.2-64">
+<p id="section-4.2-64">where the last value is the length of PLAINTEXT_2.<a href="#section-4.2-64" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.2-65">
 <pre>
 info for KEYSTREAM_2 (CBOR Sequence) (49 bytes)
 58 20 07 82 db b6 87 c3 02 88 a3 0b 70 6b 07 4b ed 78 95 74 57 3f 24
 44 3e 91 83 3d 68 cd dd 7f 9b 39 6b 4b 45 59 53 54 52 45 41 4d 5f 32
 40 18 50
-</pre><a href="#section-4.2-64" class="pilcrow">¶</a>
+</pre><a href="#section-4.2-65" class="pilcrow">¶</a>
 </div>
-<div class="alignLeft art-text artwork" id="section-4.2-65">
+<div class="alignLeft art-text artwork" id="section-4.2-66">
 <pre>
 KEYSTREAM_2 (Raw Value) (80 bytes)
 c8 13 ff 19 3b c0 31 40 47 99 6a 37 03 09 ba ed 45 f7 f5 f8 d5 6c 1c
 df 44 6b 01 c5 77 8d 68 9f 7f 13 da 50 17 ba 0f 4e 5f df 6e d0 59 55
 cd 8c e4 ec 43 7a 22 fa 8e e8 72 8c 36 2b cb 7b 93 a9 11 e1 67 95 04
 31 c1 d5 05 0b da 69 e9 5b aa fb
-</pre><a href="#section-4.2-65" class="pilcrow">¶</a>
+</pre><a href="#section-4.2-66" class="pilcrow">¶</a>
 </div>
-<p id="section-4.2-66">R calculates CIPHERTEXT_2 as XOR between PLAINTEXT_2 and KEYSTREAM_2:<a href="#section-4.2-66" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-4.2-67">
+<p id="section-4.2-67">R calculates CIPHERTEXT_2 as XOR between PLAINTEXT_2 and KEYSTREAM_2:<a href="#section-4.2-67" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.2-68">
 <pre>
 CIPHERTEXT_2 (Raw Value) (80 bytes)
 69 0b dd 9b 15 88 51 38 49 0d 3b 8a c7 35 e2 ad 79 12 d5 8d 0e 39 95
 f2 b5 4e 8e 63 e9 0b c3 c4 26 20 30 8c 10 50 8d 0f 40 c8 f4 8f 87 a4
 04 cf c7 8f b5 22 db 58 8a 12 f3 d8 e7 64 36 fc 26 a8 1d ae b7 35 c3
 4f eb 1f 72 54 bd a2 b7 d0 14 f3
-</pre><a href="#section-4.2-67" class="pilcrow">¶</a>
+</pre><a href="#section-4.2-68" class="pilcrow">¶</a>
 </div>
-<p id="section-4.2-68">R constructs message_2:<a href="#section-4.2-68" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-4.2-69">
+<p id="section-4.2-69">R constructs message_2:<a href="#section-4.2-69" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.2-70">
 <pre>
 message_2 =
 (
  G_Y_CIPHERTEXT_2,
  C_R
 )
-</pre><a href="#section-4.2-69" class="pilcrow">¶</a>
+</pre><a href="#section-4.2-70" class="pilcrow">¶</a>
 </div>
-<p id="section-4.2-70">where G_Y_CIPHERTEXT_2 is the bstr encoding of the concatenation of
-  the raw values of G_Y and CIPHERTEXT_2.<a href="#section-4.2-70" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-4.2-71">
+<p id="section-4.2-71">where G_Y_CIPHERTEXT_2 is the bstr encoding of the concatenation of
+  the raw values of G_Y and CIPHERTEXT_2.<a href="#section-4.2-71" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.2-72">
 <pre>
 message_2 (CBOR Sequence) (115 bytes)
 58 70 e1 73 90 96 c5 c9 58 2c 12 98 91 81 66 d6 95 48 c7 8f 74 97 b2
@@ -2659,7 +2683,7 @@ message_2 (CBOR Sequence) (115 bytes)
 c7 35 e2 ad 79 12 d5 8d 0e 39 95 f2 b5 4e 8e 63 e9 0b c3 c4 26 20 30
 8c 10 50 8d 0f 40 c8 f4 8f 87 a4 04 cf c7 8f b5 22 db 58 8a 12 f3 d8
 e7 64 36 fc 26 a8 1d ae b7 35 c3 4f eb 1f 72 54 bd a2 b7 d0 14 f3 32
-</pre><a href="#section-4.2-71" class="pilcrow">¶</a>
+</pre><a href="#section-4.2-72" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
