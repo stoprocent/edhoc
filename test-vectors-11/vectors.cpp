@@ -10,8 +10,7 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
-#include <sodium.h>
-#include "aes.h"
+#include <psa/crypto.h>
 
 using namespace std;
 using vec = vector<uint8_t>;
@@ -19,15 +18,15 @@ using vec = vector<uint8_t>;
 enum EDHOCKeyType { sig, sdh }; 
 enum COSECred { cred_uccs, cred_cwt, cred_x509, cred_c509 };
 enum COSEHeader { kid = 4, x5bag = 32, x5chain = 33, x5t = 34, x5u = 35, cwt = 42, uccs = 43 }; // cwt / uccs is TDB, 42 and 43 are just examples
-enum COSEAlgorithm { SHA_256 = -16, SHA_256_64 = -15, EdDSA = -8, AES_CCM_16_64_128 = 10, AES_CCM_16_128_128 = 30 }; 
-enum COSECurve { X25519 = 4, Ed25519 = 6 }; 
+enum COSEAlgorithm { SHA_256 = -16, SHA_256_64 = -15, EdDSA = -8, ES256 = -7, AES_CCM_16_64_128 = 10, AES_CCM_16_128_128 = 30 }; 
+enum COSECurve { P_256 = 1, X25519 = 4, Ed25519 = 6 }; 
 enum COSECommon { kty = 1 };
 enum COSEKCP { kcp_kid = 2 }; 
 enum COSEKTP { x = -2, crv = -1, OKP = 1 }; 
 enum CWTClaims { sub = 2, cnf = 8 };
 enum ConfMethod { COSE_Key = 1 };
 
-const bool isjson = false;
+const bool isjson = true;
 int vector_nr = 1;
 
 // Concatenates two vectors
@@ -148,21 +147,45 @@ vec OSCORE_id( vec v ) {
 vec HASH( int alg, vec m ) {
     if ( alg != SHA_256 && alg != SHA_256_64 )
         syntax_error( "hash()" );
-    vec digest( crypto_hash_sha256_BYTES );
-    crypto_hash_sha256( digest.data(), m.data(), m.size() );
+
+    vec digest( PSA_HASH_LENGTH(PSA_ALG_SHA_256) );
+    
+    size_t length = 0;
+    psa_status_t status = psa_hash_compute(PSA_ALG_SHA_256, m.data(), m.size(), digest.data() + 0, digest.size(), &length);
+
+    if (status != PSA_SUCCESS)
+        syntax_error( "hash()" );
+
     if ( alg == SHA_256_64 )
         digest.resize( 8 );
+    
     return digest;
 }
 
 vec hmac( int alg, vec k, vec m ) {
     if ( alg != SHA_256 )
         syntax_error( "hmac()" );
-    vec out( crypto_auth_hmacsha256_BYTES ); 
-    crypto_auth_hmacsha256_state state;
-    crypto_auth_hmacsha256_init( &state, k.data(), k.size() );
-    crypto_auth_hmacsha256_update( &state, m.data(), m.size() );
-    crypto_auth_hmacsha256_final( &state, out.data() );
+    
+    psa_algorithm_t algorithm = PSA_ALG_SHA_256;
+    
+    vec out( PSA_HASH_LENGTH(algorithm) );
+
+    psa_key_id_t key = MBEDTLS_SVC_KEY_ID_INIT;
+    psa_key_attributes_t attributes = PSA_KEY_ATTRIBUTES_INIT;
+
+    psa_set_key_usage_flags( &attributes, PSA_KEY_USAGE_SIGN_HASH );
+    psa_set_key_algorithm( &attributes, PSA_ALG_HMAC(algorithm) );
+    psa_set_key_type(&attributes, PSA_KEY_TYPE_HMAC);
+    psa_import_key( &attributes, k.data(), k.size(), &key);
+    
+    size_t length = 0;
+    psa_status_t status = psa_mac_compute(key, PSA_ALG_HMAC(algorithm), m.data(), m.size(), out.data() + 0, out.size(), &length);
+    
+    psa_destroy_key(key);
+    
+    if (status != PSA_SUCCESS)
+        syntax_error( "hmac()" );
+
     return out;
 }
 
@@ -223,7 +246,10 @@ vec random_ead() {
 void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
                    EDHOCKeyType type_R, COSECred credtype_R, COSEHeader attr_R,
                    int selected_suite, int seed, bool complex = false, bool comma = true ) {
-
+    
+    if ( psa_crypto_init() != PSA_SUCCESS )
+        syntax_error( "psa_crypto_init()" );
+    
     // METHOD and seed random number generation
     int method = 2 * type_I + type_R;
     vec METHOD = cbor( method );
@@ -239,6 +265,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
 
     int edhoc_aead_alg, edhoc_mac_length_2 = 32, edhoc_mac_length_3 = 32;
     vec SUITES_I;
+    
     // supported suites = 0, 2, 1, 3, 4, 5
     if ( selected_suite == 0 ) {
         SUITES_I = cbor( 0 );
@@ -258,47 +285,78 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     }
 
     // Calculate Ephemeral keys
-    auto ecdh_key_pair = [=] () {
-        vec G_Z( crypto_kx_PUBLICKEYBYTES );
-        vec Z( crypto_kx_SECRETKEYBYTES );
-        vec seed = random_vector( crypto_kx_SEEDBYTES );
-        crypto_kx_seed_keypair( G_Z.data(), Z.data(), seed.data() );
-        return make_tuple( Z, G_Z );
+    auto key_pair = [=] (psa_key_id_t key_id, psa_algorithm_t alg, psa_ecc_family_t ecc_family, size_t key_bits) {
+        
+        psa_destroy_key(key_id);
+        
+        psa_key_id_t key = MBEDTLS_SVC_KEY_ID_INIT;
+        psa_key_attributes_t attributes = PSA_KEY_ATTRIBUTES_INIT;
+
+        psa_set_key_usage_flags(&attributes, PSA_KEY_USAGE_EXPORT | PSA_KEY_USAGE_DERIVE | PSA_KEY_USAGE_SIGN_MESSAGE | PSA_KEY_USAGE_SIGN_HASH);
+        psa_set_key_algorithm(&attributes, alg);
+        psa_set_key_type(&attributes, PSA_KEY_TYPE_ECC_KEY_PAIR(ecc_family));
+        psa_set_key_bits(&attributes, key_bits);
+        psa_set_key_id(&attributes, key_id);
+                
+        psa_status_t status = psa_generate_key(&attributes, &key);
+        
+        if (status != PSA_SUCCESS)
+            syntax_error("key_pair()");
+        
+        size_t key_len = 0;
+        size_t public_key_len = 0;
+        
+        uint8_t key_data[PSA_EXPORT_KEY_PAIR_MAX_SIZE];
+        uint8_t public_key_data[PSA_EXPORT_KEY_PAIR_MAX_SIZE];
+        
+        psa_export_key(key, key_data, sizeof(key_data), &key_len );
+        psa_export_public_key(key, public_key_data, sizeof(public_key_data), &public_key_len );
+        
+        vec G_Z(&public_key_data[0], &public_key_data[public_key_len]);
+        vec Z(&key_data[0], &key_data[key_len]);
+        
+        return make_tuple( key, Z, G_Z );
     };
 
-    auto shared_secret = [=] ( vec A, vec G_B ) {
-        vec G_AB( crypto_scalarmult_BYTES );
-        if ( crypto_scalarmult( G_AB.data(), A.data(), G_B.data() ) == -1 )
-            syntax_error( "crypto_scalarmult()" );
+    auto shared_secret = [=] ( psa_key_id_t A, vec G_B ) {
+        
+        psa_key_attributes_t attributes = PSA_KEY_ATTRIBUTES_INIT;
+        psa_get_key_attributes(A, &attributes);
+        psa_key_type_t type = psa_get_key_type(&attributes);
+        size_t bits = psa_get_key_bits(&attributes);
+        
+        vec G_AB( PSA_RAW_KEY_AGREEMENT_OUTPUT_SIZE(type, bits) );
+        
+        size_t length = 0;
+        psa_status_t status = psa_raw_key_agreement(PSA_ALG_ECDH, A, G_B.data(), G_B.size(), G_AB.data() + 0, G_AB.size(), &length);
+        
+        if (status != PSA_SUCCESS)
+            syntax_error("shared_secret()");
+            
         return G_AB;
     };
     
-    auto [ X, G_X ] = ecdh_key_pair();
-    auto [ Y, G_Y ] = ecdh_key_pair();
-    vec G_XY = shared_secret( X, G_Y );
+    int family = PSA_ECC_FAMILY_SECP_R1;
+    size_t bits = 256;
+    
+    auto [ key_x, X, G_X ] = key_pair(1, PSA_ALG_ECDH, family, bits);
+    auto [ key_y, Y, G_Y ] = key_pair(2, PSA_ALG_ECDH, family, bits);
 
-    // Authentication keys, Only some of these keys are used depending on type_I and type_R
-    auto sign_key_pair = [=] () {
-        // EDHOC uses RFC 8032 notation, libsodium uses the notation from the Ed25519 paper by Bernstein
-        // Libsodium seed = RFC 8032 sk, Libsodium sk = pruned SHA-512(sk) in RFC 8032
-        vec PK( crypto_sign_PUBLICKEYBYTES );
-        vec SK_libsodium( crypto_sign_SECRETKEYBYTES );
-        vec SK = random_vector( crypto_sign_SEEDBYTES );
-        crypto_sign_seed_keypair( PK.data(), SK_libsodium.data(), SK.data() );
-        return make_tuple( SK, PK );
-    };
+    vec G_XY = shared_secret( key_x, G_Y );
 
-    auto [ R, G_R ] = ecdh_key_pair();
-    auto [ I, G_I ] = ecdh_key_pair();
-    vec G_RX = shared_secret( R, G_X );
-    vec G_IY = shared_secret( I, G_Y );
-    auto [ SK_R, PK_R ] = sign_key_pair();
-    auto [ SK_I, PK_I ] = sign_key_pair();
+    auto [ key_r, R, G_R ] = key_pair(3, PSA_ALG_ECDH, family, bits);
+    auto [ key_i, I, G_I ] = key_pair(4, PSA_ALG_ECDH, family, bits);
+    
+    vec G_RX = shared_secret( key_r, G_X );
+    vec G_IY = shared_secret( key_i, G_Y );
+    
+    auto [ sing_key_r, SK_R, PK_R ] = key_pair(5, PSA_ALG_ECDSA(PSA_ALG_SHA_256), family, bits);
+    auto [ sing_key_i, SK_I, PK_I ] = key_pair(6, PSA_ALG_ECDSA(PSA_ALG_SHA_256), family, bits);
 
     // PRKs
     auto hkdf_extract = [=] ( vec salt, vec IKM ) { return hmac( edhoc_hash_alg, salt, IKM ); };
 
-    vec salt, PRK_2e;
+    vec salt(10), PRK_2e;
     PRK_2e = hkdf_extract( salt, G_XY );
 
     vec PRK_3e2m = PRK_2e;
@@ -315,7 +373,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
             if ( rand() % 2 == 0 ) {
                 return cbor( random_vector( 2 + rand() % 2 ) );
             } else {
-                return cbor( rand() % 16777216 );
+                return cbor( (uint16_t)(rand() % 16777216) );
             }           
         else {
             int i = rand() % 49;
@@ -409,16 +467,25 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
             syntax_error( "AEAD()" );
         int tag_length = ( edhoc_aead_alg == AES_CCM_16_64_128 ) ? 8 : 16;
         vec C( P.size() + tag_length );
-        int r = aes_ccm_ae( K.data(), 16, N.data(), tag_length, P.data(), P.size(), A.data(), A.size(), C.data(), C.data() + P.size() );
+        //int r = aes_ccm_ae( K.data(), 16, N.data(), tag_length, P.data(), P.size(), A.data(), A.size(), C.data(), C.data() + P.size() );
         return C;
     };
 
-    auto sign = [=] ( vec SK, vec M ) {
-        vec signature( crypto_sign_BYTES );
-        vec PK( crypto_sign_PUBLICKEYBYTES );
-        vec SK_libsodium( crypto_sign_SECRETKEYBYTES );
-        crypto_sign_seed_keypair( PK.data(), SK_libsodium.data(), SK.data() );
-        crypto_sign_detached( signature.data(), nullptr, M.data(), M.size(), SK_libsodium.data() );
+    auto sign = [=] ( psa_key_id_t key, vec M ) {
+        
+        psa_key_attributes_t attributes = PSA_KEY_ATTRIBUTES_INIT;
+        psa_get_key_attributes(key, &attributes);
+        psa_algorithm_t algorithm = psa_get_key_algorithm(&attributes);
+            
+        uint8_t signature_data[PSA_SIGNATURE_MAX_SIZE];
+        size_t length = 0;
+        psa_status_t status = psa_sign_message(key, algorithm, M.data(), M.size(), signature_data, sizeof(signature_data), &length);
+                
+        if (status != PSA_SUCCESS)
+            syntax_error("sign()");
+        
+        vec signature(&signature_data[0], &signature_data[length]);
+        
         return signature;
     };
 
@@ -439,7 +506,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     vec M_2 = M( protected_2, external_aad_2, cbor( MAC_2 ) );
     vec signature_or_MAC_2 = MAC_2;
     if ( type_R == sig )
-        signature_or_MAC_2 = sign( SK_R, M_2 );
+        signature_or_MAC_2 = sign( sing_key_r, M_2 );
 
     // Calculate CIPHERTEXT_2
     vec PLAINTEXT_2 = compress_id_cred( ID_CRED_R ) + cbor( signature_or_MAC_2 ) + EAD_2;
@@ -466,7 +533,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     vec M_3 = M( protected_3, external_aad_3, cbor( MAC_3 ) );
     vec signature_or_MAC_3 = MAC_3;
     if ( type_I == sig )
-        signature_or_MAC_3 = sign( SK_I, M_3 );
+        signature_or_MAC_3 = sign( sing_key_i, M_3 );
 
     // Calculate CIPHERTEXT_3
     vec P_3 = compress_id_cred( ID_CRED_I ) + cbor( signature_or_MAC_3 ) + EAD_3;
@@ -755,12 +822,13 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print( "OSCORE Master Salt after KeyUpdate (Raw Value)", OSCORE_saltFS ); 
         cout << endl  << endl << endl  << endl;
     }
+    
+    // Cleanup
+    mbedtls_psa_crypto_free();
 }
 
 int main( void ) {
-    if ( sodium_init() == -1 )
-        syntax_error( "sodium_init()" );
-
+    
     if ( isjson == true ) {
         cout << "{";
     } else {
