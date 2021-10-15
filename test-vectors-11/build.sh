@@ -1,1 +1,1 @@
-g++ aes.c aes-ccm.c aes-enc.c vectors.cpp -lmbedtls -lmbedx509 -lmbedcrypto -o vectors.exe -Imbedtls/include -Lmbedtls/library -std=c++17
+g++ vectors.cpp -lmbedtls -lmbedx509 -lmbedcrypto -o vectors.exe -Imbedtls/include -Lmbedtls/library -std=c++17
