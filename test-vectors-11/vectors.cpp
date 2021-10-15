@@ -11,6 +11,7 @@
 #include <iomanip>
 #include <vector>
 #include <psa/crypto.h>
+#include <mbedtls/ccm.h>
 
 using namespace std;
 using vec = vector<uint8_t>;
@@ -34,6 +35,7 @@ vec operator+( vec a, vec b ) {
     a.insert( a.end(), b.begin(), b.end() );
     return a;
 }
+
 
 // Fatal error
 void syntax_error( string s ) {
@@ -170,7 +172,7 @@ vec hmac( int alg, vec k, vec m ) {
     
     vec out( PSA_HASH_LENGTH(algorithm) );
 
-    psa_key_id_t key = MBEDTLS_SVC_KEY_ID_INIT;
+    psa_key_id_t key = PSA_KEY_HANDLE_INIT;
     psa_key_attributes_t attributes = PSA_KEY_ATTRIBUTES_INIT;
 
     psa_set_key_usage_flags( &attributes, PSA_KEY_USAGE_SIGN_HASH );
@@ -257,9 +259,9 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
 
     // EDHOC and OSCORE algorithms
     int edhoc_hash_alg = SHA_256;
-    int edhoc_ecdh_curve = X25519;
-    int edhoc_sign_alg = EdDSA;
-    int edhoc_sign_curve = Ed25519;
+    int edhoc_ecdh_curve = P_256;
+    int edhoc_sign_alg = ES256;
+    int edhoc_sign_curve = P_256;
     int oscore_aead_alg = AES_CCM_16_64_128;
     int oscore_hash_alg = SHA_256;
 
@@ -285,18 +287,15 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     }
 
     // Calculate Ephemeral keys
-    auto key_pair = [=] (psa_key_id_t key_id, psa_algorithm_t alg, psa_ecc_family_t ecc_family, size_t key_bits) {
-        
-        psa_destroy_key(key_id);
-        
-        psa_key_id_t key = MBEDTLS_SVC_KEY_ID_INIT;
+    auto key_pair = [=] (psa_algorithm_t alg, psa_ecc_family_t ecc_family, size_t key_bits) {
+                
+        psa_key_id_t key = PSA_KEY_HANDLE_INIT;
         psa_key_attributes_t attributes = PSA_KEY_ATTRIBUTES_INIT;
 
         psa_set_key_usage_flags(&attributes, PSA_KEY_USAGE_EXPORT | PSA_KEY_USAGE_DERIVE | PSA_KEY_USAGE_SIGN_MESSAGE | PSA_KEY_USAGE_SIGN_HASH);
         psa_set_key_algorithm(&attributes, alg);
         psa_set_key_type(&attributes, PSA_KEY_TYPE_ECC_KEY_PAIR(ecc_family));
         psa_set_key_bits(&attributes, key_bits);
-        psa_set_key_id(&attributes, key_id);
                 
         psa_status_t status = psa_generate_key(&attributes, &key);
         
@@ -339,24 +338,36 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     int family = PSA_ECC_FAMILY_SECP_R1;
     size_t bits = 256;
     
-    auto [ key_x, X, G_X ] = key_pair(1, PSA_ALG_ECDH, family, bits);
-    auto [ key_y, Y, G_Y ] = key_pair(2, PSA_ALG_ECDH, family, bits);
+    auto [ key_x, X, G_X ] = key_pair(PSA_ALG_ECDH, family, bits);
+    auto [ key_y, Y, G_Y ] = key_pair(PSA_ALG_ECDH, family, bits);
 
     vec G_XY = shared_secret( key_x, G_Y );
 
-    auto [ key_r, R, G_R ] = key_pair(3, PSA_ALG_ECDH, family, bits);
-    auto [ key_i, I, G_I ] = key_pair(4, PSA_ALG_ECDH, family, bits);
+    auto [ key_r, R, G_R ] = key_pair(PSA_ALG_ECDH, family, bits);
+    auto [ key_i, I, G_I ] = key_pair(PSA_ALG_ECDH, family, bits);
     
     vec G_RX = shared_secret( key_r, G_X );
     vec G_IY = shared_secret( key_i, G_Y );
     
-    auto [ sing_key_r, SK_R, PK_R ] = key_pair(5, PSA_ALG_ECDSA(PSA_ALG_SHA_256), family, bits);
-    auto [ sing_key_i, SK_I, PK_I ] = key_pair(6, PSA_ALG_ECDSA(PSA_ALG_SHA_256), family, bits);
+    auto [ sing_key_r, SK_R, PK_R ] = key_pair(PSA_ALG_ECDSA(PSA_ALG_SHA_256), family, bits);
+    auto [ sing_key_i, SK_I, PK_I ] = key_pair(PSA_ALG_ECDSA(PSA_ALG_SHA_256), family, bits);
 
     // PRKs
     auto hkdf_extract = [=] ( vec salt, vec IKM ) { return hmac( edhoc_hash_alg, salt, IKM ); };
-
-    vec salt(10), PRK_2e;
+    
+    // According to draft-ietf-lake-edhoc/11/
+    // *  The salt SHALL be a zero-length byte string.  Note that [RFC5869]
+    //    specifies that if the salt is not provided, it is set to a string
+    //    of zeros (see Section 2.2 of [RFC5869]).  For implementation
+    //    purposes, not providing the salt is the same as setting the salt
+    //    to the zero-length byte string (0x).
+    //
+    // PSA does not work with 0 length salt but According to rfc5869
+    //
+    // salt     optional salt value (a non-secret random value);
+    //          if not provided, it is set to a string of HashLen zeros.
+    
+    vec salt(PSA_HASH_LENGTH(PSA_ALG_SHA_256)), PRK_2e;
     PRK_2e = hkdf_extract( salt, G_XY );
 
     vec PRK_3e2m = PRK_2e;
@@ -465,9 +476,20 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     auto AEAD = [=] ( vec K, vec N, vec P, vec A ) {
         if( A.size() > (42 * 16 - 2) )
             syntax_error( "AEAD()" );
+        
         int tag_length = ( edhoc_aead_alg == AES_CCM_16_64_128 ) ? 8 : 16;
         vec C( P.size() + tag_length );
-        //int r = aes_ccm_ae( K.data(), 16, N.data(), tag_length, P.data(), P.size(), A.data(), A.size(), C.data(), C.data() + P.size() );
+        
+        // Had to use MbedTLS here because PSA API on master MbedTLS doesnt allow to set tag lentgh witg CCM
+        mbedtls_ccm_context aes;
+        mbedtls_ccm_init(&aes);
+        mbedtls_ccm_setkey(&aes, MBEDTLS_CIPHER_ID_AES, K.data(), 128);
+        int status = mbedtls_ccm_encrypt_and_tag(&aes, P.size(), N.data(), N.size(), A.data(), A.size(), P.data(), C.data() + 0, C.data() + P.size(), tag_length);
+        mbedtls_ccm_free(&aes);
+        
+        if (status != 0)
+            syntax_error("shared_secret()");
+        
         return C;
     };
 
