@@ -387,7 +387,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
                 vec v = random_vector( 2 + rand() % 2 );
                 return make_tuple( cbor( v ), (intVec)v );
             } else {
-                int j = rand() % 16777216;
+                int j = (uint16_t)rand() % 16777216;
                 return make_tuple( cbor( j ), (intVec)j );
             }           
         else {
