@@ -488,15 +488,24 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         
         int tag_length = ( edhoc_aead_alg == AES_CCM_16_64_128 ) ? 8 : 16;
         vec C( P.size() + tag_length );
+        vec C2( P.size() + tag_length );
         
-        // Had to use MbedTLS here because PSA API on master MbedTLS doesnt allow to set tag lentgh witg CCM
-        mbedtls_ccm_context aes;
-        mbedtls_ccm_init(&aes);
-        mbedtls_ccm_setkey(&aes, MBEDTLS_CIPHER_ID_AES, K.data(), 128);
-        int status = mbedtls_ccm_encrypt_and_tag(&aes, P.size(), N.data(), N.size(), A.data(), A.size(), P.data(), C.data() + 0, C.data() + P.size(), tag_length);
-        mbedtls_ccm_free(&aes);
+        psa_algorithm_t alg = PSA_ALG_AEAD_WITH_SHORTENED_TAG(PSA_ALG_CCM, tag_length);
         
-        if (status != 0)
+        psa_key_id_t key = PSA_KEY_HANDLE_INIT;
+        psa_key_attributes_t attributes = PSA_KEY_ATTRIBUTES_INIT;
+
+        psa_set_key_usage_flags(&attributes, PSA_KEY_USAGE_ENCRYPT | PSA_KEY_USAGE_DECRYPT);
+        psa_set_key_algorithm(&attributes, alg);
+        psa_set_key_type(&attributes, PSA_KEY_TYPE_AES);
+        psa_set_key_bits(&attributes, 128);
+                
+        psa_status_t status = psa_import_key(&attributes, K.data(), K.size(), &key);
+        
+        size_t length = 0;
+        status = psa_aead_encrypt(key, alg, N.data(), N.size(), A.data(), A.size(), P.data(), P.size(), C.data() + 0, C.size(), &length);
+        
+        if (status != PSA_SUCCESS)
             syntax_error("shared_secret()");
         
         return C;
