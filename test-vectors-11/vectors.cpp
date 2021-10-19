@@ -309,9 +309,9 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         
         edhoc_aead_alg = AES_CCM_16_64_128;
         if ( type_R == sdh )
-            edhoc_mac_length_2 = 16;
+            edhoc_mac_length_2 = 8;
         if ( type_I == sdh )
-            edhoc_mac_length_3 = 16;
+            edhoc_mac_length_3 = 8;
     } else
     if ( selected_suite == 3 ) {
         SUITES_I = cbor_arr( 4 ) + cbor( 0 ) + cbor( 1 ) + cbor( 2 ) + cbor( 3 );
