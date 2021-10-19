@@ -1,1 +1,1 @@
-g++ aes.c aes-ccm.c aes-enc.c vectors.cpp -lsodium -o vectors.exe -Ilibsodium-win64\include -Llibsodium-win64\lib -std=c++17
+g++ vectors.cpp -lmbedtls -lmbedx509 -lmbedcrypto -o vectors -Imbedtls/include -Lmbedtls/library -std=c++17
