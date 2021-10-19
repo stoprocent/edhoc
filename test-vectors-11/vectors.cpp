@@ -260,10 +260,10 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     srand( seed );
 
     // EDHOC and OSCORE algorithms
-    int edhoc_hash_alg = SHA_256;
-    int edhoc_ecdh_curve = P_256;
-    int edhoc_sign_alg = ES256;
-    int edhoc_sign_curve = P_256;
+    int edhoc_hash_alg;
+    int edhoc_ecdh_curve;
+    int edhoc_sign_alg;
+    int edhoc_sign_curve;
     int oscore_aead_alg = AES_CCM_16_64_128;
     int oscore_hash_alg = SHA_256;
 
@@ -272,21 +272,62 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     
     // supported suites = 0, 2, 1, 3, 4, 5
     if ( selected_suite == 0 ) {
-        SUITES_I = cbor( 0 );
+        SUITES_I = cbor_arr( 2 ) + cbor( 0 ) + cbor( 1 );
+        
+        edhoc_hash_alg = SHA_256;
+        edhoc_ecdh_curve = X25519;
+        edhoc_sign_alg = EdDSA;
+        edhoc_sign_curve = Ed25519;
+        
         edhoc_aead_alg = AES_CCM_16_64_128;
         if ( type_R == sdh )
             edhoc_mac_length_2 = 8;
         if ( type_I == sdh )
             edhoc_mac_length_3 = 8;
-    }
+    } else
     if ( selected_suite == 1 ) {
-        SUITES_I = cbor_arr( 3 ) + cbor( 0 ) + cbor( 2 ) + cbor( 1 );
+        SUITES_I = cbor_arr( 2 ) + cbor( 0 ) + cbor( 1 );
+        
+        edhoc_hash_alg = SHA_256;
+        edhoc_ecdh_curve = X25519;
+        edhoc_sign_alg = EdDSA;
+        edhoc_sign_curve = Ed25519;
+       
+        edhoc_aead_alg = AES_CCM_16_128_128;
+        if ( type_R == sdh )
+            edhoc_mac_length_2 = 16;
+        if ( type_I == sdh )
+            edhoc_mac_length_3 = 16;
+    } else
+    if ( selected_suite == 2 ) {
+        SUITES_I = cbor_arr( 4 ) + cbor( 0 ) + cbor( 1 ) + cbor( 2 ) + cbor( 3 );
+        
+        edhoc_hash_alg = SHA_256;
+        edhoc_ecdh_curve = P_256;
+        edhoc_sign_alg = ES256;
+        edhoc_sign_curve = P_256;
+        
+        edhoc_aead_alg = AES_CCM_16_64_128;
+        if ( type_R == sdh )
+            edhoc_mac_length_2 = 16;
+        if ( type_I == sdh )
+            edhoc_mac_length_3 = 16;
+    } else
+    if ( selected_suite == 3 ) {
+        SUITES_I = cbor_arr( 4 ) + cbor( 0 ) + cbor( 1 ) + cbor( 2 ) + cbor( 3 );
+        
+        edhoc_hash_alg = SHA_256;
+        edhoc_ecdh_curve = P_256;
+        edhoc_sign_alg = ES256;
+        edhoc_sign_curve = P_256;
+        
         edhoc_aead_alg = AES_CCM_16_128_128;
         if ( type_R == sdh )
             edhoc_mac_length_2 = 16;
         if ( type_I == sdh )
             edhoc_mac_length_3 = 16;
     }
+    
 
     // Calculate Ephemeral keys
     auto key_pair = [=] (psa_algorithm_t alg, psa_ecc_family_t ecc_family, size_t key_bits) {
@@ -337,9 +378,25 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         return G_AB;
     };
     
-    int family = PSA_ECC_FAMILY_SECP_R1;
-    size_t bits = 256;
     
+    int family;
+    size_t bits;
+    
+    switch (edhoc_ecdh_curve) {
+        case X25519:
+            family = PSA_ECC_FAMILY_TWISTED_EDWARDS;
+            bits = 255;
+            break;
+        case P_256:
+            family = PSA_ECC_FAMILY_SECP_R1;
+            bits = 256;
+            break;
+        default:
+            family = -1;
+            size_t bits = -1;
+            break;
+    }
+        
     auto [ key_x, X, G_X ] = key_pair(PSA_ALG_ECDH, family, bits);
     auto [ key_y, Y, G_Y ] = key_pair(PSA_ALG_ECDH, family, bits);
 
@@ -620,7 +677,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         cout << endl << "   test_vector_" << dec << vector_nr++ << ": {";
         // message_1
         print_json( "method", METHOD );
-        print_json( "suites_i", SUITES_I );
+        print_json( "SUITES_I", SUITES_I );
         print_json( "x_raw", X );
         print_json( "g_x_raw", G_X );
         print_json( "g_x", cbor( G_X ) );
@@ -919,27 +976,28 @@ int main( void ) {
     }
 
     // The four methods with COSE header parameters kid and x5t
-    test_vectors( sdh, cred_uccs, kid, sdh, cred_uccs, kid, 0, 34400 ); // Table 1, column 1
-    test_vectors( sdh, cred_uccs, kid, sig, cred_x509, x5t, 0, 27400 );
-    test_vectors( sig, cred_x509, x5t, sdh, cred_uccs, kid, 0, 44400 );
-    test_vectors( sig, cred_x509, x5t, sig, cred_x509, x5t, 0, 37400 ); // Table 1, column 4
-
-    // Other COSE header parameters
-    test_vectors( sdh, cred_x509, x5u, sdh, cred_x509, x5u, 0, 68500 );
-    test_vectors( sdh, cred_x509, x5chain, sig, cred_x509, x5bag, 0, 56200 );
-    test_vectors( sdh, cred_uccs, uccs, sig, cred_cwt, cwt, 0, 67200 ); // cwt not implemented
-
-    // Cipher suite 1
-    test_vectors( sdh, cred_uccs, kid, sdh, cred_uccs, kid, 1, 34410 );
-    test_vectors( sig, cred_x509, x5t, sig, cred_x509, x5t, 1, 37410 );
-
-    // More complex, long ids, EAD
-    test_vectors( sdh, cred_uccs, kid, sdh, cred_uccs, kid, 0, 34401, true );
-    test_vectors( sig, cred_x509, x5t, sig, cred_x509, x5t, 0, 37401, true );
-
-    // signature keys in UCCS and static DH keys in X.509, // Table 1, columns 2 and 3
-    test_vectors( sdh, cred_x509, x5t, sdh, cred_x509, x5t, 0, 2716057 );
-    test_vectors( sig, cred_uccs, kid, sig, cred_uccs, kid, 0, 3370318, false, false ); // No comma in JSON
+    test_vectors( sdh, cred_uccs, kid, sdh, cred_uccs, kid, 2, 34400 ); // Table 1, column 1
+    test_vectors( sdh, cred_uccs, kid, sig, cred_x509, x5t, 2, 27400 );
+    test_vectors( sig, cred_x509, x5t, sdh, cred_uccs, kid, 2, 44400 );
+    test_vectors( sig, cred_x509, x5t, sig, cred_x509, x5t, 2, 37400 ); // Table 1, column 4
+    
+//    TODO: Review these calls
+//    // Other COSE header parameters
+//    test_vectors( sdh, cred_x509, x5u, sdh, cred_x509, x5u, 0, 68500 );
+//    test_vectors( sdh, cred_x509, x5chain, sig, cred_x509, x5bag, 0, 56200 );
+//    test_vectors( sdh, cred_uccs, uccs, sig, cred_cwt, cwt, 0, 67200 ); // cwt not implemented
+//
+//    // Cipher suite 1
+//    test_vectors( sdh, cred_uccs, kid, sdh, cred_uccs, kid, 1, 34410 );
+//    test_vectors( sig, cred_x509, x5t, sig, cred_x509, x5t, 1, 37410 );
+//
+//    // More complex, long ids, EAD
+//    test_vectors( sdh, cred_uccs, kid, sdh, cred_uccs, kid, 0, 34401, true );
+//    test_vectors( sig, cred_x509, x5t, sig, cred_x509, x5t, 0, 37401, true );
+//
+//    // signature keys in UCCS and static DH keys in X.509, // Table 1, columns 2 and 3
+//    test_vectors( sdh, cred_x509, x5t, sdh, cred_x509, x5t, 0, 2716057 );
+//    test_vectors( sig, cred_uccs, kid, sig, cred_uccs, kid, 0, 3370318, false, false ); // No comma in JSON
 
     if ( isjson == true ) {
         cout << endl << "}";
