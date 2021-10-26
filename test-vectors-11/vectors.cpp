@@ -12,7 +12,6 @@
 #include <vector>
 #include <variant>
 #include <psa/crypto.h>
-#include <mbedtls/ccm.h>
 
 using namespace std;
 using vec = vector<uint8_t>;
@@ -272,7 +271,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     
     // supported suites = 0, 2, 1, 3, 4, 5
     if ( selected_suite == 0 ) {
-        SUITES_I = cbor_arr( 2 ) + cbor( 0 ) + cbor( 1 );
+        SUITES_I = cbor( 0 );
         
         edhoc_hash_alg = SHA_256;
         edhoc_ecdh_curve = X25519;
@@ -286,7 +285,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
             edhoc_mac_length_3 = 8;
     } else
     if ( selected_suite == 1 ) {
-        SUITES_I = cbor_arr( 2 ) + cbor( 0 ) + cbor( 1 );
+        SUITES_I = cbor_arr( 3 ) + cbor( 0 ) + cbor( 2 ) + cbor( 1 );
         
         edhoc_hash_alg = SHA_256;
         edhoc_ecdh_curve = X25519;
@@ -300,7 +299,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
             edhoc_mac_length_3 = 16;
     } else
     if ( selected_suite == 2 ) {
-        SUITES_I = cbor_arr( 4 ) + cbor( 0 ) + cbor( 1 ) + cbor( 2 ) + cbor( 3 );
+        SUITES_I = cbor( 2 );
         
         edhoc_hash_alg = SHA_256;
         edhoc_ecdh_curve = P_256;
@@ -314,7 +313,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
             edhoc_mac_length_3 = 8;
     } else
     if ( selected_suite == 3 ) {
-        SUITES_I = cbor_arr( 4 ) + cbor( 0 ) + cbor( 1 ) + cbor( 2 ) + cbor( 3 );
+        SUITES_I = cbor_arr( 2 ) + cbor( 2 ) + cbor( 3 );
         
         edhoc_hash_alg = SHA_256;
         edhoc_ecdh_curve = P_256;
@@ -401,7 +400,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     auto [ key_y, Y, G_Y ] = key_pair(PSA_ALG_ECDH, family, bits);
 
     vec G_XY = shared_secret( key_x, G_Y );
-
+    
     auto [ key_r, R, G_R ] = key_pair(PSA_ALG_ECDH, family, bits);
     auto [ key_i, I, G_I ] = key_pair(PSA_ALG_ECDH, family, bits);
     
@@ -981,23 +980,22 @@ int main( void ) {
     test_vectors( sig, cred_x509, x5t, sdh, cred_uccs, kid, 2, 44400 );
     test_vectors( sig, cred_x509, x5t, sig, cred_x509, x5t, 2, 37400 ); // Table 1, column 4
     
-//    TODO: Review these calls
-//    // Other COSE header parameters
-//    test_vectors( sdh, cred_x509, x5u, sdh, cred_x509, x5u, 0, 68500 );
-//    test_vectors( sdh, cred_x509, x5chain, sig, cred_x509, x5bag, 0, 56200 );
-//    test_vectors( sdh, cred_uccs, uccs, sig, cred_cwt, cwt, 0, 67200 ); // cwt not implemented
-//
-//    // Cipher suite 1
-//    test_vectors( sdh, cred_uccs, kid, sdh, cred_uccs, kid, 1, 34410 );
-//    test_vectors( sig, cred_x509, x5t, sig, cred_x509, x5t, 1, 37410 );
-//
-//    // More complex, long ids, EAD
-//    test_vectors( sdh, cred_uccs, kid, sdh, cred_uccs, kid, 0, 34401, true );
-//    test_vectors( sig, cred_x509, x5t, sig, cred_x509, x5t, 0, 37401, true );
-//
-//    // signature keys in UCCS and static DH keys in X.509, // Table 1, columns 2 and 3
-//    test_vectors( sdh, cred_x509, x5t, sdh, cred_x509, x5t, 0, 2716057 );
-//    test_vectors( sig, cred_uccs, kid, sig, cred_uccs, kid, 0, 3370318, false, false ); // No comma in JSON
+    // Other COSE header parameters
+    test_vectors( sdh, cred_x509, x5u, sdh, cred_x509, x5u, 0, 68500 );
+    test_vectors( sdh, cred_x509, x5chain, sig, cred_x509, x5bag, 0, 56200 );
+    test_vectors( sdh, cred_uccs, uccs, sig, cred_cwt, cwt, 0, 67200 ); // cwt not implemented
+
+    // Cipher suite 1
+    test_vectors( sdh, cred_uccs, kid, sdh, cred_uccs, kid, 1, 34410 );
+    test_vectors( sig, cred_x509, x5t, sig, cred_x509, x5t, 1, 37410 );
+
+    // More complex, long ids, EAD
+    test_vectors( sdh, cred_uccs, kid, sdh, cred_uccs, kid, 0, 34401, true );
+    test_vectors( sig, cred_x509, x5t, sig, cred_x509, x5t, 0, 37401, true );
+
+    // signature keys in UCCS and static DH keys in X.509, // Table 1, columns 2 and 3
+    test_vectors( sdh, cred_x509, x5t, sdh, cred_x509, x5t, 0, 2716057 );
+    test_vectors( sig, cred_uccs, kid, sig, cred_uccs, kid, 0, 3370318, false, false ); // No comma in JSON
 
     if ( isjson == true ) {
         cout << endl << "}";
