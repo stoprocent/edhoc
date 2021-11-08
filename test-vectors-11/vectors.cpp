@@ -377,6 +377,16 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         return G_AB;
     };
     
+    auto compress_PK = [=] ( vec PK_X, int curve) {
+        if (curve != P_256)
+            return PK_X;
+        
+        vec PK_X_compressed;
+        PK_X_compressed.insert(PK_X_compressed.begin(), 1, 0x02 );
+        PK_X_compressed.insert(PK_X_compressed.begin() + 1, PK_X.begin() + 1, PK_X.begin() + 33);
+            
+        return PK_X_compressed;
+    };
     
     int family;
     size_t bits;
@@ -400,12 +410,15 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     auto [ key_y, Y, G_Y ] = key_pair(PSA_ALG_ECDH, family, bits);
 
     vec G_XY = shared_secret( key_x, G_Y );
-    
+        
     auto [ key_r, R, G_R ] = key_pair(PSA_ALG_ECDH, family, bits);
     auto [ key_i, I, G_I ] = key_pair(PSA_ALG_ECDH, family, bits);
     
     vec G_RX = shared_secret( key_r, G_X );
     vec G_IY = shared_secret( key_i, G_Y );
+    
+    G_X = compress_PK(G_X, edhoc_sign_curve);
+    G_Y = compress_PK(G_Y, edhoc_sign_curve);
     
     auto [ sing_key_r, SK_R, PK_R ] = key_pair(PSA_ALG_ECDSA(PSA_ALG_SHA_256), family, bits);
     auto [ sing_key_i, SK_I, PK_I ] = key_pair(PSA_ALG_ECDSA(PSA_ALG_SHA_256), family, bits);
@@ -510,7 +523,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         }
         return make_tuple( ID_CRED, CRED );
     };
-
+        
     auto [ ID_CRED_I, CRED_I ] = gen_CRED( type_I, credtype_I, attr_I, PK_I, G_I, "42-50-31-FF-EF-37-32-39", "https://example.edu/2716057" );
     auto [ ID_CRED_R, CRED_R ] = gen_CRED( type_R, credtype_R, attr_R, PK_R, G_R, "example.edu", "https://example.edu/3370318" );
 
@@ -975,27 +988,27 @@ int main( void ) {
     }
 
     // The four methods with COSE header parameters kid and x5t
-    test_vectors( sdh, cred_uccs, kid, sdh, cred_uccs, kid, 2, 34400 ); // Table 1, column 1
-    test_vectors( sdh, cred_uccs, kid, sig, cred_x509, x5t, 2, 27400 );
-    test_vectors( sig, cred_x509, x5t, sdh, cred_uccs, kid, 2, 44400 );
-    test_vectors( sig, cred_x509, x5t, sig, cred_x509, x5t, 2, 37400 ); // Table 1, column 4
-    
-    // Other COSE header parameters
-    test_vectors( sdh, cred_x509, x5u, sdh, cred_x509, x5u, 0, 68500 );
-    test_vectors( sdh, cred_x509, x5chain, sig, cred_x509, x5bag, 0, 56200 );
-    test_vectors( sdh, cred_uccs, uccs, sig, cred_cwt, cwt, 0, 67200 ); // cwt not implemented
-
-    // Cipher suite 1
-    test_vectors( sdh, cred_uccs, kid, sdh, cred_uccs, kid, 1, 34410 );
-    test_vectors( sig, cred_x509, x5t, sig, cred_x509, x5t, 1, 37410 );
-
-    // More complex, long ids, EAD
-    test_vectors( sdh, cred_uccs, kid, sdh, cred_uccs, kid, 0, 34401, true );
-    test_vectors( sig, cred_x509, x5t, sig, cred_x509, x5t, 0, 37401, true );
-
-    // signature keys in UCCS and static DH keys in X.509, // Table 1, columns 2 and 3
-    test_vectors( sdh, cred_x509, x5t, sdh, cred_x509, x5t, 0, 2716057 );
-    test_vectors( sig, cred_uccs, kid, sig, cred_uccs, kid, 0, 3370318, false, false ); // No comma in JSON
+    test_vectors( sig, cred_uccs, kid, sig, cred_uccs, kid, 2, 34400 ); // Table 1, column 1
+//    test_vectors( sdh, cred_uccs, kid, sig, cred_x509, x5t, 2, 27400 );
+//    test_vectors( sig, cred_x509, x5t, sdh, cred_uccs, kid, 2, 44400 );
+//    test_vectors( sig, cred_x509, x5t, sig, cred_x509, x5t, 2, 37400 ); // Table 1, column 4
+//
+//    // Other COSE header parameters
+//    test_vectors( sdh, cred_x509, x5u, sdh, cred_x509, x5u, 0, 68500 );
+//    test_vectors( sdh, cred_x509, x5chain, sig, cred_x509, x5bag, 0, 56200 );
+//    test_vectors( sdh, cred_uccs, uccs, sig, cred_cwt, cwt, 0, 67200 ); // cwt not implemented
+//
+//    // Cipher suite 1
+//    test_vectors( sdh, cred_uccs, kid, sdh, cred_uccs, kid, 1, 34410 );
+//    test_vectors( sig, cred_x509, x5t, sig, cred_x509, x5t, 1, 37410 );
+//
+//    // More complex, long ids, EAD
+//    test_vectors( sdh, cred_uccs, kid, sdh, cred_uccs, kid, 0, 34401, true );
+//    test_vectors( sig, cred_x509, x5t, sig, cred_x509, x5t, 0, 37401, true );
+//
+//    // signature keys in UCCS and static DH keys in X.509, // Table 1, columns 2 and 3
+//    test_vectors( sdh, cred_x509, x5t, sdh, cred_x509, x5t, 0, 2716057 );
+//    test_vectors( sig, cred_uccs, kid, sig, cred_uccs, kid, 0, 3370318, false, false ); // No comma in JSON
 
     if ( isjson == true ) {
         cout << endl << "}";
