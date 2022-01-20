@@ -12,19 +12,20 @@
 #include <vector>
 #include <variant>
 #include <psa/crypto.h>
+#include <mbedtls/ccm.h>
 
 using namespace std;
 using vec = vector<uint8_t>;
 using intVec = std::variant<int, vec>;
 
-enum EDHOCKeyType { sig, sdh }; 
+enum EDHOCKeyType { sig, sdh };
 enum COSECred { cred_uccs, cred_cwt, cred_x509, cred_c509 };
 enum COSEHeader { kid = 4, x5bag = 32, x5chain = 33, x5t = 34, x5u = 35, cwt = 42, uccs = 43 }; // cwt / uccs is TDB, 42 and 43 are just examples
-enum COSEAlgorithm { SHA_256 = -16, SHA_256_64 = -15, EdDSA = -8, ES256 = -7, AES_CCM_16_64_128 = 10, AES_CCM_16_128_128 = 30 }; 
-enum COSECurve { P_256 = 1, X25519 = 4, Ed25519 = 6 }; 
+enum COSEAlgorithm { SHA_256 = -16, SHA_256_64 = -15, EdDSA = -8, ES256 = -7, AES_CCM_16_64_128 = 10, AES_CCM_16_128_128 = 30 };
+enum COSECurve { P_256 = 1, X25519 = 4, Ed25519 = 6 };
 enum COSECommon { kty = 1 };
-enum COSEKCP { kcp_kid = 2 }; 
-enum COSEKTP { x = -2, crv = -1, OKP = 1 }; 
+enum COSEKCP { kcp_kid = 2 };
+enum COSEKTP { x = -2, crv = -1, OKP = 1 };
 enum CWTClaims { sub = 2, cnf = 8 };
 enum ConfMethod { COSE_Key = 1 };
 
@@ -46,7 +47,7 @@ void syntax_error( string s ) {
 
 // Print an int to cout
 void print( string s, int i ) {
-    cout << endl << dec << s << " (int)" << endl << i << endl;    
+    cout << endl << dec << s << " (int)" << endl << i << endl;
 }
 
 // Print a vec to cout
@@ -55,7 +56,7 @@ void print( string s, vec v ) {
     if  ( v.size() )
         cout << endl;
     for ( int i = 1; i <= v.size(); i++ ) {
-        cout << hex << setfill('0') << setw( 2 ) << (int)v[i-1];        
+        cout << hex << setfill('0') << setw( 2 ) << (int)v[i-1];
         if ( i < v.size() ) {
             if ( i % 23 == 0 ) {
                 cout << endl;
@@ -78,7 +79,7 @@ void print_json( string s, int i, bool comma = true ) {
 void print_json( string s, vec v, bool comma = true  ) {
     cout << endl << dec << "      \"" << s << "\": \"";
     for ( int i = 1; i <= v.size(); i++ ) {
-        cout << hex << setfill('0') << setw( 2 ) << (int)v[i-1];        
+        cout << hex << setfill('0') << setw( 2 ) << (int)v[i-1];
     }
     cout << "\"";
     if ( comma == true )
@@ -101,9 +102,9 @@ vec cbor_unsigned_with_type( uint8_t type, int i ) {
 // CBOR encodes an int
 vec cbor( int i ) {
     if ( i < 0 )
-        return cbor_unsigned_with_type( 1, -(i + 1) ); 
+        return cbor_unsigned_with_type( 1, -(i + 1) );
     else
-	    return cbor_unsigned_with_type( 0, i ); 
+        return cbor_unsigned_with_type( 0, i );
 }
 
 // CBOR encodes a bstr
@@ -240,7 +241,7 @@ vec random_ead() {
             out = out + cbor( rand() % 100 ) + cbor_arr(2) + cbor( sequence_vector( 5 + rand() % 5 ) ) + cbor( sequence_vector( 5 + rand() % 5 ) );
         } else if ( ead_type == 5 ) {
             out = out + cbor( rand() % 100 ) + cbor_map(1) + vec{ 0xf6 } + cbor( sequence_vector( 5 + rand() % 5 ) );
-        }           
+        }
     }
     return out;
 }
@@ -330,7 +331,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
 
     // Calculate Ephemeral keys
     auto key_pair = [=] (psa_algorithm_t alg, psa_ecc_family_t ecc_family, size_t key_bits) {
-                
+
         psa_key_id_t key = PSA_KEY_HANDLE_INIT;
         psa_key_attributes_t attributes = PSA_KEY_ATTRIBUTES_INIT;
 
@@ -338,9 +339,39 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         psa_set_key_algorithm(&attributes, alg);
         psa_set_key_type(&attributes, PSA_KEY_TYPE_ECC_KEY_PAIR(ecc_family));
         psa_set_key_bits(&attributes, key_bits);
-                
+
         psa_status_t status = psa_generate_key(&attributes, &key);
-        
+
+        if (status != PSA_SUCCESS)
+            syntax_error("key_pair()");
+
+        size_t key_len = 0;
+        size_t public_key_len = 0;
+
+        uint8_t key_data[PSA_EXPORT_KEY_PAIR_MAX_SIZE];
+        uint8_t public_key_data[PSA_EXPORT_KEY_PAIR_MAX_SIZE];
+
+        psa_export_key(key, key_data, sizeof(key_data), &key_len );
+        psa_export_public_key(key, public_key_data, sizeof(public_key_data), &public_key_len );
+
+        vec G_Z(&public_key_data[0], &public_key_data[public_key_len]);
+        vec Z(&key_data[0], &key_data[key_len]);
+
+        return make_tuple( key, Z, G_Z );
+    };
+
+    auto key_pair2 = [=] (psa_algorithm_t alg, psa_ecc_family_t ecc_family, size_t key_bits, vec K) {
+
+        psa_key_id_t key = PSA_KEY_HANDLE_INIT;
+        psa_key_attributes_t attributes = PSA_KEY_ATTRIBUTES_INIT;
+
+        psa_set_key_usage_flags(&attributes, PSA_KEY_USAGE_EXPORT | PSA_KEY_USAGE_DERIVE | PSA_KEY_USAGE_SIGN_MESSAGE | PSA_KEY_USAGE_SIGN_HASH);
+        psa_set_key_algorithm(&attributes, alg);
+        psa_set_key_type(&attributes, PSA_KEY_TYPE_ECC_KEY_PAIR(ecc_family));
+        psa_set_key_bits(&attributes, key_bits);
+
+        psa_status_t status = psa_import_key(&attributes, K.data(), K.size(), &key);
+
         if (status != PSA_SUCCESS)
             syntax_error("key_pair()");
         
@@ -387,7 +418,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
             
         return PK_X_compressed;
     };
-    
+        
     int family;
     size_t bits;
     
@@ -410,7 +441,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     auto [ key_y, Y, G_Y ] = key_pair(PSA_ALG_ECDH, family, bits);
 
     vec G_XY = shared_secret( key_x, G_Y );
-        
+
     auto [ key_r, R, G_R ] = key_pair(PSA_ALG_ECDH, family, bits);
     auto [ key_i, I, G_I ] = key_pair(PSA_ALG_ECDH, family, bits);
     
@@ -419,11 +450,20 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     
     G_X = compress_PK(G_X, edhoc_sign_curve);
     G_Y = compress_PK(G_Y, edhoc_sign_curve);
-    
-    auto [ sing_key_r, SK_R, PK_R ] = key_pair(PSA_ALG_ECDSA(PSA_ALG_SHA_256), family, bits);
-    auto [ sing_key_i, SK_I, PK_I ] = key_pair(PSA_ALG_ECDSA(PSA_ALG_SHA_256), family, bits);
+
+    vec sing_key_r_data = vec{  0x72, 0xCC, 0x47, 0x61, 0xDB, 0xD4, 0xC7, 0x8F, 0x75, 0x89, 0x31, 0xAA, 0x58, 0x9D, 0x34, 0x8D, 0x1E, 0xF8, 0x74, 0xA7, 0xE3, 0x03, 0xED, 0xE2, 0xF1, 0x40, 0xDC, 0xF3, 0xE6, 0xAA, 0x4A, 0xAC };
+    vec sing_key_i_data = vec{  0x8E, 0xA3, 0xAC, 0x17, 0x0F, 0xB9, 0x00, 0xAE, 0x50, 0x5B, 0x18, 0x74, 0x7F, 0xB5, 0x04, 0xDB, 0xDA, 0x74, 0x8C, 0x6D, 0x0C, 0x17, 0x60, 0x1D, 0x7B, 0xA3, 0x14, 0x30, 0xD7, 0x45, 0x17, 0x8A };
+
 
     // PRKs
+    auto [ sing_key_r, SK_R_gen, PK_R_gen ] = key_pair2(PSA_ALG_ECDSA(PSA_ALG_SHA_256), family, bits, sing_key_r_data);
+    auto [ sing_key_i, SK_I_gen, PK_I_gen ] = key_pair2(PSA_ALG_ECDSA(PSA_ALG_SHA_256), family, bits, sing_key_i_data);
+
+    vec SK_R = vec{ 0x72, 0xCC, 0x47, 0x61, 0xDB, 0xD4, 0xC7, 0x8F, 0x75, 0x89, 0x31, 0xAA, 0x58, 0x9D, 0x34, 0x8D, 0x1E, 0xF8, 0x74, 0xA7, 0xE3, 0x03, 0xED, 0xE2, 0xF1, 0x40, 0xDC, 0xF3, 0xE6, 0xAA, 0x4A, 0xAC };
+    vec PK_R = vec{ 0x04, 0x27, 0xEC, 0xF4, 0xB4, 0x66, 0xD3, 0xCD, 0x61, 0x14, 0x4C, 0x94, 0x40, 0x21, 0x83, 0x8D, 0x57, 0xBF, 0x67, 0x01, 0x97, 0x33, 0x78, 0xA1, 0x5B, 0x3F, 0x5D, 0x27, 0x57, 0x5D, 0x34, 0xC4, 0xA9, 0x7B, 0x79, 0xE0, 0xF2, 0x4B, 0x44, 0x6B, 0xCA, 0x67, 0xE1, 0x3D, 0x75, 0xD0, 0x95, 0x73, 0x12, 0x4B, 0x49, 0xB8, 0x38, 0xB1, 0x09, 0x73, 0xF0, 0xFB, 0x67, 0xE1, 0x26, 0x05, 0x1C, 0x95, 0x95};
+    
+    vec SK_I = vec{  0x8E, 0xA3, 0xAC, 0x17, 0x0F, 0xB9, 0x00, 0xAE, 0x50, 0x5B, 0x18, 0x74, 0x7F, 0xB5, 0x04, 0xDB, 0xDA, 0x74, 0x8C, 0x6D, 0x0C, 0x17, 0x60, 0x1D, 0x7B, 0xA3, 0x14, 0x30, 0xD7, 0x45, 0x17, 0x8A };
+    vec PK_I = vec{ 0x04, 0x8A, 0x93, 0xCA, 0x7E, 0x1B, 0xC8, 0x46, 0x47, 0xD7, 0xE7, 0xEB, 0x4C, 0x61, 0x07, 0xC4, 0xDC, 0x4E, 0x53, 0xDF, 0x81, 0xDF, 0xD1, 0x98, 0x1C, 0x7F, 0x82, 0x4A, 0x7C, 0x1B, 0x61, 0xA6, 0xFC, 0x91, 0x36, 0x28, 0x13, 0xC2, 0x5D, 0xB6, 0xAF, 0x93, 0xBE, 0x22, 0xC3, 0x50, 0xCE, 0xB2, 0x51, 0x89, 0x5B, 0x9F, 0x3A, 0x8D, 0x85, 0xA3, 0x58, 0x23, 0xA2, 0x22, 0x2B, 0x9D, 0xE2, 0xC8, 0xC8};
     auto hkdf_extract = [=] ( vec salt, vec IKM ) { return hmac( edhoc_hash_alg, salt, IKM ); };
     
     // According to draft-ietf-lake-edhoc/11/
@@ -450,7 +490,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         PRK_4x3m = hkdf_extract( PRK_3e2m, G_IY );
 
     // Functions for kid and connection IDs.
-    auto identifier = [=] () {
+/*     auto identifier = [=] () {
         if ( complex == true )
             if ( rand() % 2 == 0 ) {
                 vec v = random_vector( 2 + rand() % 2 );
@@ -458,7 +498,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
             } else {
                 int j = (uint16_t)rand() % 16777216;
                 return make_tuple( cbor( j ), (intVec)j );
-            }           
+            }
         else {
             int i = rand() % 49;
             if ( i == 48 ) {
@@ -467,11 +507,38 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
             } else {
                 int j = i - 24;
                 return make_tuple( cbor( j ), (intVec)j );
-            }           
+            }
         }
     };
-
-    // Calculate C_I, C_R 
+ */
+ 
+auto identifier = [=] () {
+        if ( complex == true )
+            if ( rand() % 2 == 0 ) {
+                vec v = random_vector( 2 + rand() % 2 );
+                
+                //return make_tuple( cbor( std::to_string(v) ), (intVec)v );
+                return make_tuple( cbor( v ), (intVec)v );
+            } else {
+                int j = (uint16_t)rand() % 16777216;
+            //    return make_tuple( cbor( std::to_string(j) ), (intVec)j );
+                return make_tuple( cbor( j ), (intVec)j );
+            }
+        else {
+            int i = rand() % 49;
+            if ( i == 48 ) {
+                vec v = vec{};
+                return make_tuple( cbor( v ), (intVec)v );
+            } else {
+                int j = i - 24;
+                vec a = vec { (uint8_t)j };
+                
+                return make_tuple( cbor(a), (intVec)j );
+            }
+        }
+    };
+ 
+    // Calculate C_I, C_R
     auto [ C_I, C_I_raw ] = identifier();
     auto [ C_R, C_R_raw ] = identifier();
     if ( seed == 34400 ) {
@@ -484,10 +551,10 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     }
 
     // Calculate ID_CRED_x and CRED_x
-    auto gen_CRED = [=] ( EDHOCKeyType type, COSECred credtype, COSEHeader attr, vec PK_sig, vec PK_sdh, string name, string uri ) {
+    auto gen_CRED = [=] ( EDHOCKeyType type, COSECred credtype, COSEHeader attr, vec PK_sig, vec PK_sdh, string name, string uri, vec X509 ) {
         auto [ kid_id, kid_id_raw ] = identifier();
         vec uccs_map = cbor_map( 2 )
-        + cbor( sub ) + cbor( name ) 
+        + cbor( sub ) + cbor( name )
         + cbor( cnf ) + cbor_map( 1 )
         + cbor( COSE_Key ) + cbor_map( 4 )
         + cbor( kty ) + cbor( OKP )
@@ -509,13 +576,12 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
             CRED = uccs_map;
             ID_CRED = ID_CRED + uccs_map;
         } else if ( credtype == cred_x509 ) {  // TODO TODO, this is UCCS in -10 test vectors
-            vec X509 = sequence_vector( 100 + rand() % 50 );
             CRED = cbor( X509 );
             ID_CRED = cbor_map( 1 ) + cbor( attr );
             if ( attr == x5bag ||  attr == x5chain )
-                ID_CRED = ID_CRED + cbor( CRED );
+                ID_CRED = ID_CRED + cbor( X509 );
             if ( attr == x5t )
-                ID_CRED = ID_CRED + cbor_arr( 2 ) + cbor( SHA_256_64 ) + cbor( HASH( SHA_256_64, X509 ) );
+                ID_CRED = ID_CRED + cbor_arr( 2 ) + cbor( SHA_256 ) + cbor( HASH( SHA_256, X509 ) );
             if ( attr == x5u )
                 ID_CRED = ID_CRED + cbor_tag( 32 ) + cbor( uri );
         } else {
@@ -523,9 +589,14 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         }
         return make_tuple( ID_CRED, CRED );
     };
-        
-    auto [ ID_CRED_I, CRED_I ] = gen_CRED( type_I, credtype_I, attr_I, PK_I, G_I, "42-50-31-FF-EF-37-32-39", "https://example.edu/2716057" );
-    auto [ ID_CRED_R, CRED_R ] = gen_CRED( type_R, credtype_R, attr_R, PK_R, G_R, "example.edu", "https://example.edu/3370318" );
+
+    vec cred_r = vec{0x30, 0x82, 0x01, 0x1E, 0x30, 0x81, 0xC5, 0xA0, 0x03, 0x02, 0x01, 0x02, 0x02, 0x04, 0x61, 0xE9, 0x98, 0x1E, 0x30, 0x0A, 0x06, 0x08, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x03, 0x02, 0x30, 0x15, 0x31, 0x13, 0x30, 0x11, 0x06, 0x03, 0x55, 0x04, 0x03, 0x0C, 0x0A, 0x45, 0x44, 0x48, 0x4F, 0x43, 0x20, 0x52, 0x6F, 0x6F, 0x74, 0x30, 0x1E, 0x17, 0x0D, 0x32, 0x32, 0x30, 0x31, 0x32, 0x30, 0x31, 0x37, 0x31, 0x33, 0x30, 0x32, 0x5A, 0x17, 0x0D, 0x32, 0x39, 0x31, 0x32, 0x33, 0x31, 0x32, 0x33, 0x30, 0x30, 0x30, 0x30, 0x5A, 0x30, 0x1A, 0x31, 0x18, 0x30, 0x16, 0x06, 0x03, 0x55, 0x04, 0x03, 0x0C, 0x0F, 0x45, 0x44, 0x48, 0x4F, 0x43, 0x20, 0x52, 0x65, 0x73, 0x70, 0x6F, 0x6E, 0x64, 0x65, 0x72, 0x30, 0x59, 0x30, 0x13, 0x06, 0x07, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x02, 0x01, 0x06, 0x08, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x03, 0x01, 0x07, 0x03, 0x42, 0x00, 0x04, 0xBB, 0xC3, 0x49, 0x60, 0x52, 0x6E, 0xA4, 0xD3, 0x2E, 0x94, 0x0C, 0xAD, 0x2A, 0x23, 0x41, 0x48, 0xDD, 0xC2, 0x17, 0x91, 0xA1, 0x2A, 0xFB, 0xCB, 0xAC, 0x93, 0x62, 0x20, 0x46, 0xDD, 0x44, 0xF0, 0x45, 0x19, 0xE2, 0x57, 0x23, 0x6B, 0x2A, 0x0C, 0xE2, 0x02, 0x3F, 0x09, 0x31, 0xF1, 0xF3, 0x86, 0xCA, 0x7A, 0xFD, 0xA6, 0x4F, 0xCD, 0xE0, 0x10, 0x8C, 0x22, 0x4C, 0x51, 0xEA, 0xBF, 0x60, 0x72, 0x30, 0x0A, 0x06, 0x08, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x03, 0x02, 0x03, 0x48, 0x00, 0x30, 0x45, 0x02, 0x20, 0x30, 0x19, 0x4E, 0xF5, 0xFC, 0x65, 0xC8, 0xB7, 0x95, 0xCD, 0xCD, 0x0B, 0xB4, 0x31, 0xBF, 0x83, 0xEE, 0x67, 0x41, 0xC1, 0x37, 0x0C, 0x22, 0xC8, 0xEB, 0x8E, 0xE9, 0xED, 0xD2, 0xA7, 0x05, 0x19, 0x02, 0x21, 0x00, 0xB5, 0x83, 0x0E, 0x9C, 0x89, 0xA6, 0x2A, 0xC7, 0x3C, 0xE1, 0xEB, 0xCE, 0x00, 0x61, 0x70, 0x7D, 0xB8, 0xA8, 0x8E, 0x23, 0x70, 0x9B, 0x4A, 0xCC, 0x58, 0xA1, 0x31, 0x3B, 0x13, 0x3D, 0x05, 0x58};
+    vec cred_i = vec{0x30, 0x82, 0x01, 0x1E, 0x30, 0x81, 0xC5, 0xA0, 0x03, 0x02, 0x01, 0x02, 0x02, 0x04, 0x61, 0xE9, 0x97, 0xF4, 0x30, 0x0A, 0x06, 0x08, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x03, 0x02, 0x30, 0x15, 0x31, 0x13, 0x30, 0x11, 0x06, 0x03, 0x55, 0x04, 0x03, 0x0C, 0x0A, 0x45, 0x44, 0x48, 0x4F, 0x43, 0x20, 0x52, 0x6F, 0x6F, 0x74, 0x30, 0x1E, 0x17, 0x0D, 0x32, 0x32, 0x30, 0x31, 0x32, 0x30, 0x31, 0x37, 0x31, 0x32, 0x32, 0x30, 0x5A, 0x17, 0x0D, 0x32, 0x39, 0x31, 0x32, 0x33, 0x31, 0x32, 0x33, 0x30, 0x30, 0x30, 0x30, 0x5A, 0x30, 0x1A, 0x31, 0x18, 0x30, 0x16, 0x06, 0x03, 0x55, 0x04, 0x03, 0x0C, 0x0F, 0x45, 0x44, 0x48, 0x4F, 0x43, 0x20, 0x49, 0x6E, 0x69, 0x74, 0x69, 0x61, 0x74, 0x6F, 0x72, 0x30, 0x59, 0x30, 0x13, 0x06, 0x07, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x02, 0x01, 0x06, 0x08, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x03, 0x01, 0x07, 0x03, 0x42, 0x00, 0x04, 0x8A, 0x93, 0xCA, 0x7E, 0x1B, 0xC8, 0x46, 0x47, 0xD7, 0xE7, 0xEB, 0x4C, 0x61, 0x07, 0xC4, 0xDC, 0x4E, 0x53, 0xDF, 0x81, 0xDF, 0xD1, 0x98, 0x1C, 0x7F, 0x82, 0x4A, 0x7C, 0x1B, 0x61, 0xA6, 0xFC, 0x91, 0x36, 0x28, 0x13, 0xC2, 0x5D, 0xB6, 0xAF, 0x93, 0xBE, 0x22, 0xC3, 0x50, 0xCE, 0xB2, 0x51, 0x89, 0x5B, 0x9F, 0x3A, 0x8D, 0x85, 0xA3, 0x58, 0x23, 0xA2, 0x22, 0x2B, 0x9D, 0xE2, 0xC8, 0xC8, 0x30, 0x0A, 0x06, 0x08, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x03, 0x02, 0x03, 0x48, 0x00, 0x30, 0x45, 0x02, 0x20, 0x32, 0xFC, 0xFC, 0xA3, 0xE8, 0x04, 0x88, 0x51, 0x5E, 0xC1, 0x1E, 0xF5, 0x70, 0xC6, 0xB8, 0x33, 0xB4, 0x30, 0xDC, 0xBD, 0xD3, 0x27, 0xD9, 0x65, 0xF2, 0x2D, 0x4A, 0xD2, 0xD3, 0x4E, 0x07, 0x09, 0x02, 0x21, 0x00, 0x8B, 0xBF, 0xEC, 0xD2, 0x63, 0xF6, 0x99, 0xE5, 0xE2, 0x3C, 0xBE, 0xC5, 0x84, 0x78, 0x6F, 0xF5, 0xEA, 0x18, 0xE2, 0x32, 0x36, 0xE5, 0x11, 0xD9, 0x56, 0x93, 0x5F, 0xFF, 0x28, 0x17, 0x20, 0xAE };
+
+
+
+    auto [ ID_CRED_I, CRED_I ] = gen_CRED( type_I, credtype_I, attr_I, PK_I, G_I, "42-50-31-FF-EF-37-32-39", "https://example.edu/2716057",cred_i );
+    auto [ ID_CRED_R, CRED_R ] = gen_CRED( type_R, credtype_R, attr_R, PK_R, G_R, "example.edu", "https://example.edu/3370318", cred_r );
 
     // External Authorization Data
     vec EAD_1, EAD_2, EAD_3, EAD_4;
@@ -533,7 +604,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         EAD_1 = random_ead();
         EAD_2 = random_ead();
         EAD_3 = random_ead();
-        EAD_4 = random_ead();        
+        EAD_4 = random_ead();
     }
  
     vec message_1 = METHOD + SUITES_I + cbor( G_X ) + C_I + EAD_1;
@@ -699,7 +770,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
             print_json( "c_i_raw", std::get<1>(C_I_raw) );
         }
         print_json( "c_i", C_I );
-        print_json( "ead_1", EAD_1 );   
+        print_json( "ead_1", EAD_1 );
         print_json( "message_1", message_1 );
 
         // message_2
@@ -708,7 +779,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print_json( "g_y", cbor( G_Y ) );
         print_json( "g_xy_raw", G_XY );
         print_json( "salt_raw", salt );
-        print_json( "prk_2e_raw", PRK_2e );   
+        print_json( "prk_2e_raw", PRK_2e );
         if ( type_R == sig ) {
             print_json( "sk_r_raw", SK_R );
             print_json( "pk_r_raw", PK_R );
@@ -716,9 +787,9 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         if ( type_R == sdh ) {
             print_json( "r_raw", R );
             print_json( "g_r_raw", G_R );
-            print_json( "g_rx_raw", G_RX );    
+            print_json( "g_rx_raw", G_RX );
         }
-        print_json( "prk_3e2m_raw", PRK_3e2m );   
+        print_json( "prk_3e2m_raw", PRK_3e2m );
         if ( C_R_raw.index() == 0 ) {
             print_json( "c_r_raw", std::get<0>(C_R_raw) );
         } else {
@@ -732,19 +803,19 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print_json( "th_2", cbor( TH_2 ) );
         print_json( "id_cred_r", ID_CRED_R );
         print_json( "cred_r", CRED_R );
-        print_json( "ead_2", EAD_2 );   
-        print_json( "info_mac_2", info_MAC_2 ); 
-        print_json( "mac_2_raw", MAC_2 );   
-        print_json( "mac_2", cbor( MAC_2 ) );   
+        print_json( "ead_2", EAD_2 );
+        print_json( "info_mac_2", info_MAC_2 );
+        print_json( "mac_2_raw", MAC_2 );
+        print_json( "mac_2", cbor( MAC_2 ) );
         if ( type_R == sig )
-            print_json( "m_2", M_2 );   
+            print_json( "m_2", M_2 );
         print_json( "sig_or_mac_2_raw", signature_or_MAC_2 );
         print_json( "sig_or_mac_2", cbor( signature_or_MAC_2 ) );
-        print_json( "plaintext_2", PLAINTEXT_2 );   
-        print_json( "info_keystream_2", info_KEYSTREAM_2 );   
+        print_json( "plaintext_2", PLAINTEXT_2 );
+        print_json( "info_keystream_2", info_KEYSTREAM_2 );
         print_json( "keystream_2_raw", KEYSTREAM_2 );
-        print_json( "ciphertext_2_raw", CIPHERTEXT_2 );   
-        print_json( "ciphertext_2", cbor( CIPHERTEXT_2 ) );   
+        print_json( "ciphertext_2_raw", CIPHERTEXT_2 );
+        print_json( "ciphertext_2", cbor( CIPHERTEXT_2 ) );
         print_json( "message_2", message_2 );
 
         // message_3
@@ -757,28 +828,28 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
             print_json( "g_i_raw", G_I );
             print_json( "g_iy_raw", G_IY );
         }
-        print_json( "prk_4x3m_raw", PRK_4x3m );   
+        print_json( "prk_4x3m_raw", PRK_4x3m );
         print_json( "input_TH_3", TH_3_input );
         print_json( "th_3_raw", TH_3);
         print_json( "th_3", cbor( TH_3) );
         print_json( "id_cred_i", ID_CRED_I );
         print_json( "cred_i", CRED_I );
-        print_json( "ead_3", EAD_3 );   
-        print_json( "info_mac_3", info_MAC_3 );   
-        print_json( "mac_3_raw", MAC_3 );   
-        print_json( "mac_3", cbor( MAC_3 ) );   
+        print_json( "ead_3", EAD_3 );
+        print_json( "info_mac_3", info_MAC_3 );
+        print_json( "mac_3_raw", MAC_3 );
+        print_json( "mac_3", cbor( MAC_3 ) );
         if ( type_I == sig )
-            print_json( "m_3", M_3 );   
+            print_json( "m_3", M_3 );
         print_json( "sig_or_mac_3_raw", signature_or_MAC_3 );
         print_json( "sig_or_mac_3", cbor( signature_or_MAC_3 ) );
-        print_json( "p_3", P_3 );   
-        print_json( "a_3", A_3 );   
-        print_json( "info_k_3", info_K_3 );   
-        print_json( "k_3_raw", K_3 );   
-        print_json( "info_iv_3", info_IV_3 );   
-        print_json( "iv_3_raw", IV_3 );   
-        print_json( "ciphertext_3_raw", CIPHERTEXT_3 );   
-        print_json( "ciphertext_3", cbor( CIPHERTEXT_3 ) );   
+        print_json( "p_3", P_3 );
+        print_json( "a_3", A_3 );
+        print_json( "info_k_3", info_K_3 );
+        print_json( "k_3_raw", K_3 );
+        print_json( "info_iv_3", info_IV_3 );
+        print_json( "iv_3_raw", IV_3 );
+        print_json( "ciphertext_3_raw", CIPHERTEXT_3 );
+        print_json( "ciphertext_3", cbor( CIPHERTEXT_3 ) );
         print_json( "message_3", message_3 );
 
         // message_4 and exporter
@@ -787,14 +858,14 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print_json( "th_4", cbor( TH_4 ) );
 
         print_json( "ead_4", EAD_4 );
-        print_json( "p_4", P_4 );   
-        print_json( "a_4", A_4 );   
-        print_json( "info_k_4", info_K_4 );   
-        print_json( "k_4_raw", K_4 );   
-        print_json( "info_iv_4", info_IV_4 );   
-        print_json( "iv_4_raw", IV_4 );   
-        print_json( "ciphertext_4_raw", CIPHERTEXT_4 );   
-        print_json( "ciphertext_4", cbor( CIPHERTEXT_4 ) );   
+        print_json( "p_4", P_4 );
+        print_json( "a_4", A_4 );
+        print_json( "info_k_4", info_K_4 );
+        print_json( "k_4_raw", K_4 );
+        print_json( "info_iv_4", info_IV_4 );
+        print_json( "iv_4_raw", IV_4 );
+        print_json( "ciphertext_4_raw", CIPHERTEXT_4 );
+        print_json( "ciphertext_4", cbor( CIPHERTEXT_4 ) );
         print_json( "message_4", message_4 );
 
         print_json( "oscore_aead_alg", oscore_aead_alg );
@@ -803,11 +874,11 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print_json( "server_sender_id_raw", OSCORE_id( C_I ) );
         print_json( "info_oscore_secret", info_OSCORE_secret );
         print_json( "oscore_secret_raw", OSCORE_secret );
-        print_json( "info_oscore_salt", info_OSCORE_salt );   
+        print_json( "info_oscore_salt", info_OSCORE_salt );
         print_json( "oscore_salt_raw", OSCORE_salt );
 
         print_json( "key_update_nonce_raw", nonce );
-        print_json( "prk_4x3m_key_update_raw", PRK_4x3m_new );   
+        print_json( "prk_4x3m_key_update_raw", PRK_4x3m_new );
         print_json( "oscore_secret_key_update_raw", OSCORE_secretFS );
         print_json( "oscore_salt_key_update_raw", OSCORE_saltFS, false ); // No comma in JSON
 
@@ -832,7 +903,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
             print( "C_I (Raw Value) (Connection identifier chosen by Initiator)", std::get<1>(C_I_raw) );
         }
         print( "C_I (CBOR Data Item) (Connection identifier chosen by Initiator)", C_I );
-        print( "EAD_1 (CBOR Sequence)", EAD_1 );   
+        print( "EAD_1 (CBOR Sequence)", EAD_1 );
         print( "message_1 (CBOR Sequence)", message_1 );
         cout << endl  << endl << endl  << endl;
     
@@ -843,7 +914,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print( "G_Y (CBOR Data Item) (Responder's ephemeral public key)", cbor( G_Y ) );
         print( "G_XY (Raw Value) (ECDH shared secret)", G_XY );
         print( "salt (Raw Value)", salt );
-        print( "PRK_2e (Raw Value)", PRK_2e );   
+        print( "PRK_2e (Raw Value)", PRK_2e );
         if ( type_R == sig ) {
             print( "SK_R (Raw Value) (Responders's private authentication key)", SK_R );
             print( "PK_R (Raw Value) (Responders's public authentication key)", PK_R );
@@ -851,9 +922,9 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         if ( type_R == sdh ) {
             print( "R (Raw Value) (Responder's private authentication key)", R );
             print( "G_R (Raw Value) (Responder's public authentication key)", G_R );
-            print( "G_RX (Raw Value) (ECDH shared secret)", G_RX );    
+            print( "G_RX (Raw Value) (ECDH shared secret)", G_RX );
         }
-        print( "PRK_3e2m (Raw Value)", PRK_3e2m );   
+        print( "PRK_3e2m (Raw Value)", PRK_3e2m );
         if ( C_R_raw.index() == 0 ) {
             print( "C_R (Raw Value) (Connection identifier chosen by Responder)", std::get<0>(C_R_raw) );
         } else {
@@ -867,19 +938,19 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print( "TH_2 (CBOR Data Item)", cbor( TH_2 ) );
         print( "ID_CRED_R (CBOR Data Item)", ID_CRED_R );
         print( "CRED_R (CBOR Data Item)", CRED_R );
-        print( "EAD_2 (CBOR Sequence)", EAD_2 );   
-        print( "info for MAC_2 (CBOR Sequence)", info_MAC_2 );   
-        print( "MAC_2 (Raw Value)", MAC_2 );   
-        print( "MAC_2 (CBOR Data Item)", cbor( MAC_2 ) );   
+        print( "EAD_2 (CBOR Sequence)", EAD_2 );
+        print( "info for MAC_2 (CBOR Sequence)", info_MAC_2 );
+        print( "MAC_2 (Raw Value)", MAC_2 );
+        print( "MAC_2 (CBOR Data Item)", cbor( MAC_2 ) );
         if ( type_R == sig )
-            print( "Message to be signed 2 (CBOR Data Item)", M_2 );   
+            print( "Message to be signed 2 (CBOR Data Item)", M_2 );
         print( "Signature_or_MAC_2 (Raw Value)", signature_or_MAC_2 );
         print( "Signature_or_MAC_2 (CBOR Data Item)", cbor( signature_or_MAC_2 ) );
-        print( "PLAINTEXT_2 (CBOR Sequence)", PLAINTEXT_2 );   
-        print( "info for KEYSTREAM_2 (CBOR Sequence)", info_KEYSTREAM_2 );   
+        print( "PLAINTEXT_2 (CBOR Sequence)", PLAINTEXT_2 );
+        print( "info for KEYSTREAM_2 (CBOR Sequence)", info_KEYSTREAM_2 );
         print( "KEYSTREAM_2 (Raw Value)", KEYSTREAM_2 );
-        print( "CIPHERTEXT_2 (Raw Value)", CIPHERTEXT_2 );   
-        print( "CIPHERTEXT_2 (CBOR Data Item)", cbor( CIPHERTEXT_2 ) );   
+        print( "CIPHERTEXT_2 (Raw Value)", CIPHERTEXT_2 );
+        print( "CIPHERTEXT_2 (CBOR Data Item)", cbor( CIPHERTEXT_2 ) );
         print( "message_2 (CBOR Sequence)", message_2 );
         cout << endl  << endl << endl  << endl;
 
@@ -894,28 +965,28 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
             print( "G_I (Raw Value) (Initiator's public authentication key)", G_I );
             print( "G_IY (Raw Value) (ECDH shared secret)", G_IY );
         }
-        print( "PRK_4x3m (Raw Value)", PRK_4x3m );   
+        print( "PRK_4x3m (Raw Value)", PRK_4x3m );
         print( "Input to calculate TH_3 (CBOR Sequence)", TH_3_input );
         print( "TH_3 (Raw Value)", TH_3);
         print( "TH_3 (CBOR Data Item)", cbor( TH_3) );
         print( "ID_CRED_I (CBOR Data Item)", ID_CRED_I );
         print( "CRED_I (CBOR Data Item)", CRED_I );
-        print( "EAD_3 (CBOR Sequence)", EAD_3 );   
-        print( "info for MAC_3 (CBOR Sequence)", info_MAC_3 );   
-        print( "MAC_3 (Raw Value)", MAC_3 );   
-        print( "MAC_3 (CBOR Data Item)", cbor( MAC_3 ) );   
+        print( "EAD_3 (CBOR Sequence)", EAD_3 );
+        print( "info for MAC_3 (CBOR Sequence)", info_MAC_3 );
+        print( "MAC_3 (Raw Value)", MAC_3 );
+        print( "MAC_3 (CBOR Data Item)", cbor( MAC_3 ) );
         if ( type_I == sig )
-            print( "Message to be signed 3 (CBOR Data Item)", M_3 );   
+            print( "Message to be signed 3 (CBOR Data Item)", M_3 );
         print( "Signature_or_MAC_3 (Raw Value)", signature_or_MAC_3 );
         print( "Signature_or_MAC_3 (CBOR Data Item)", cbor( signature_or_MAC_3 ) );
-        print( "P_3 (CBOR Sequence)", P_3 );   
-        print( "A_3 (CBOR Data Item)", A_3 );   
-        print( "info for K_3 (CBOR Sequence)", info_K_3 );   
-        print( "K_3 (Raw Value)", K_3 );   
-        print( "info for IV_3 (CBOR Sequence)", info_IV_3 );   
-        print( "IV_3 (Raw Value)", IV_3 );   
-        print( "CIPHERTEXT_3 (Raw Value)", CIPHERTEXT_3 );   
-        print( "CIPHERTEXT_3 (CBOR Data Item)", cbor( CIPHERTEXT_3 ) );   
+        print( "P_3 (CBOR Sequence)", P_3 );
+        print( "A_3 (CBOR Data Item)", A_3 );
+        print( "info for K_3 (CBOR Sequence)", info_K_3 );
+        print( "K_3 (Raw Value)", K_3 );
+        print( "info for IV_3 (CBOR Sequence)", info_IV_3 );
+        print( "IV_3 (Raw Value)", IV_3 );
+        print( "CIPHERTEXT_3 (Raw Value)", CIPHERTEXT_3 );
+        print( "CIPHERTEXT_3 (CBOR Data Item)", cbor( CIPHERTEXT_3 ) );
         print( "message_3 (CBOR Sequence)", message_3 );
         cout << endl  << endl << endl  << endl;
 
@@ -925,15 +996,15 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print( "TH_4 (Raw Value)", TH_4 );
         print( "TH_4 (CBOR Data Item)", cbor( TH_4 ) );
 
-        print( "EAD_4 (CBOR Sequence)", EAD_4 );   
-        print( "P_4 (CBOR Sequence)", P_4 );   
-        print( "A_4 (CBOR Data Item)", A_4 );   
-        print( "info for K_4 (CBOR Sequence)", info_K_4 );   
-        print( "K_4 (Raw Value)", K_4 );   
-        print( "info for IV_4 (CBOR Sequence)", info_IV_4 );   
-        print( "IV_4 (Raw Value)", IV_4 );   
-        print( "CIPHERTEXT_4", CIPHERTEXT_4 );   
-        print( "CIPHERTEXT_4 (CBOR Data Item)", cbor( CIPHERTEXT_4 ) );   
+        print( "EAD_4 (CBOR Sequence)", EAD_4 );
+        print( "P_4 (CBOR Sequence)", P_4 );
+        print( "A_4 (CBOR Data Item)", A_4 );
+        print( "info for K_4 (CBOR Sequence)", info_K_4 );
+        print( "K_4 (Raw Value)", K_4 );
+        print( "info for IV_4 (CBOR Sequence)", info_IV_4 );
+        print( "IV_4 (Raw Value)", IV_4 );
+        print( "CIPHERTEXT_4", CIPHERTEXT_4 );
+        print( "CIPHERTEXT_4 (CBOR Data Item)", cbor( CIPHERTEXT_4 ) );
         print( "message_4 (CBOR Sequence)", message_4 );
 
         print( "OSCORE AEAD Algorithm", oscore_aead_alg );
@@ -942,13 +1013,13 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print( "Server's OSCORE Sender ID (Raw Value)", OSCORE_id( C_I ) );
         print( "info for OSCORE Master Secret (CBOR Sequence)", info_OSCORE_secret );
         print( "OSCORE Master Secret (Raw Value)", OSCORE_secret );
-        print( "info for OSCORE Master Salt (CBOR Sequence)", info_OSCORE_salt );   
+        print( "info for OSCORE Master Salt (CBOR Sequence)", info_OSCORE_salt );
         print( "OSCORE Master Salt (Raw Value)", OSCORE_salt );
 
         print( "KeyUpdate Nonce (Raw Value)", nonce );
-        print( "PRK_4x3m  after KeyUpdate (Raw Value)", PRK_4x3m_new );   
+        print( "PRK_4x3m  after KeyUpdate (Raw Value)", PRK_4x3m_new );
         print( "OSCORE Master Secret after KeyUpdate (Raw Value)", OSCORE_secretFS );
-        print( "OSCORE Master Salt after KeyUpdate (Raw Value)", OSCORE_saltFS ); 
+        print( "OSCORE Master Salt after KeyUpdate (Raw Value)", OSCORE_saltFS );
         cout << endl  << endl << endl  << endl;
     }
     
@@ -977,18 +1048,22 @@ int main( void ) {
         vec error21 = cbor( 2 ) + cbor( 3 );
         vec error22 = cbor( 2 ) + cbor_arr( 2 ) + cbor( 25 ) + cbor( 24 );
 
-        print( "Example error message with ERR_CODE = 0 (Success)", error0 ); 
-        print( "Example error message with ERR_CODE = 1 (Unspecified)", error11 ); 
-        print( "Example error message with ERR_CODE = 1 (Unspecified)", error12 ); 
-        print( "Example error message with ERR_CODE = 1 (Unspecified)", error13 ); 
-        print( "Example error message with ERR_CODE = 1 (Unspecified)", error14 ); 
-        print( "Example error message with ERR_CODE = 2 (Wrong selected cipher suite)", error21 ); 
-        print( "Example error message with ERR_CODE = 2 (Wrong selected cipher suite)", error22 ); 
+        print( "Example error message with ERR_CODE = 0 (Success)", error0 );
+        print( "Example error message with ERR_CODE = 1 (Unspecified)", error11 );
+        print( "Example error message with ERR_CODE = 1 (Unspecified)", error12 );
+        print( "Example error message with ERR_CODE = 1 (Unspecified)", error13 );
+        print( "Example error message with ERR_CODE = 1 (Unspecified)", error14 );
+        print( "Example error message with ERR_CODE = 2 (Wrong selected cipher suite)", error21 );
+        print( "Example error message with ERR_CODE = 2 (Wrong selected cipher suite)", error22 );
         cout << endl  << endl << endl  << endl;
     }
 
-    // The four methods with COSE header parameters kid and x5t
-    test_vectors( sig, cred_uccs, kid, sig, cred_uccs, kid, 2, 34400 ); // Table 1, column 1
+    test_vectors( sig, cred_x509, x5t, sig, cred_x509, x5t, 2, 37400 ); // Table 1, column 4
+    test_vectors( sig, cred_x509, x5bag, sig, cred_x509, x5bag, 2, 37400 ); // Table 1, column 4
+
+
+//    // The four methods with COSE header parameters kid and x5t
+//    test_vectors( sdh, cred_uccs, kid, sdh, cred_uccs, kid, 2, 34400 ); // Table 1, column 1
 //    test_vectors( sdh, cred_uccs, kid, sig, cred_x509, x5t, 2, 27400 );
 //    test_vectors( sig, cred_x509, x5t, sdh, cred_uccs, kid, 2, 44400 );
 //    test_vectors( sig, cred_x509, x5t, sig, cred_x509, x5t, 2, 37400 ); // Table 1, column 4
