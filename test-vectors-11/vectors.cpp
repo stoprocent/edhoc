@@ -720,15 +720,15 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     vec message_4 = cbor( CIPHERTEXT_4 );
 
     // Derive OSCORE Master Secret and Salt
-    auto [ info_OSCORE_secret, OSCORE_secret ] = Export( "OSCORE_Master_Secret", vec{}, 16 );
-    auto [ info_OSCORE_salt,   OSCORE_salt ]   = Export( "OSCORE_Master_Salt",   vec{},  8 );
+    auto [ info_OSCORE_secret, OSCORE_secret ] = Export( "OSCORE_Secret", vec{}, 16 );
+    auto [ info_OSCORE_salt,   OSCORE_salt ]   = Export( "OSCORE_Salt",   vec{},  8 );
 
     // KeyUpdate funtion
     vec nonce = random_vector( 16 );
     vec PRK_4x3m_new = hkdf_extract( nonce, PRK_4x3m );
     auto Export2 = [=] ( string label, vec context, int length ) { return KDF( PRK_4x3m_new, TH_4, label, context, length ); };
-    auto [ info_OSCORE_secretFS, OSCORE_secretFS ] = Export2( "OSCORE_Master_Secret", vec{}, 16 );
-    auto [ info_OSCORE_saltFS,   OSCORE_saltFS ]   = Export2( "OSCORE_Master_Salt",   vec{},  8 );
+    auto [ info_OSCORE_secretFS, OSCORE_secretFS ] = Export2( "OSCORE_Secret", vec{}, 16 );
+    auto [ info_OSCORE_saltFS,   OSCORE_saltFS ]   = Export2( "OSCORE_Salt",   vec{},  8 );
 
     // Print stuff ////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
