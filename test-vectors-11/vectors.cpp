@@ -300,7 +300,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
             edhoc_mac_length_3 = 16;
     } else
     if ( selected_suite == 2 ) {
-        SUITES_I = cbor( 2 );
+        SUITES_I = cbor_arr( 2 ) + cbor( 6 ) + cbor( 2 );
         
         edhoc_hash_alg = SHA_256;
         edhoc_ecdh_curve = P_256;
@@ -436,10 +436,17 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
             bits = -1;
             break;
     }
-        
-    auto [ key_x, X, G_X ] = key_pair(PSA_ALG_ECDH, family, bits);
-    auto [ key_y, Y, G_Y ] = key_pair(PSA_ALG_ECDH, family, bits);
 
+    // auto [ key_x, X, G_X ] = key_pair(PSA_ALG_ECDH, family, bits);
+    // auto [ key_y, Y, G_Y ] = key_pair(PSA_ALG_ECDH, family, bits);
+
+    // PRKs
+    vec SK_X = vec { 0xC4, 0x84, 0x04, 0xC9, 0x12, 0xD6, 0x8A, 0xAD, 0x55, 0x7F, 0x1F, 0x02, 0xF7, 0x0C, 0x61, 0xC1, 0x9B, 0x1E, 0xA1, 0xD6, 0x2F, 0x1B, 0xD6, 0x46, 0x16, 0x04, 0x2D, 0xF5, 0xC4, 0xFE, 0x61, 0x95 };
+    vec SK_Y = vec { 0x3C, 0x5C, 0xE3, 0x2C, 0x6C, 0xFF, 0xC1, 0x4D, 0x14, 0x5C, 0x06, 0x18, 0x6F, 0x8D, 0xD1, 0x08, 0xF0, 0x85, 0xD8, 0x62, 0x7A, 0x0D, 0x16, 0x0B, 0xEE, 0x84, 0x8C, 0xFC, 0x42, 0xFD, 0x3E, 0x9F };
+    
+    auto [ key_x, X, G_X ] = key_pair2(PSA_ALG_ECDH, family, bits, SK_X);
+    auto [ key_y, Y, G_Y ] = key_pair2(PSA_ALG_ECDH, family, bits, SK_Y);
+    
     vec G_XY = shared_secret( key_x, G_Y );
 
     auto [ key_r, R, G_R ] = key_pair(PSA_ALG_ECDH, family, bits);
@@ -462,8 +469,8 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     vec PK_I = vec{ 0x04, 0x8A, 0x93, 0xCA, 0x7E, 0x1B, 0xC8, 0x46, 0x47, 0xD7, 0xE7, 0xEB, 0x4C, 0x61, 0x07, 0xC4, 0xDC, 0x4E, 0x53, 0xDF, 0x81, 0xDF, 0xD1, 0x98, 0x1C, 0x7F, 0x82, 0x4A, 0x7C, 0x1B, 0x61, 0xA6, 0xFC, 0x91, 0x36, 0x28, 0x13, 0xC2, 0x5D, 0xB6, 0xAF, 0x93, 0xBE, 0x22, 0xC3, 0x50, 0xCE, 0xB2, 0x51, 0x89, 0x5B, 0x9F, 0x3A, 0x8D, 0x85, 0xA3, 0x58, 0x23, 0xA2, 0x22, 0x2B, 0x9D, 0xE2, 0xC8, 0xC8};
     
     // PRKs
-    auto [ sing_key_r, SK_R_gen, PK_R_gen ] = key_pair2(PSA_ALG_ECDSA(PSA_ALG_SHA_256), family, bits, SK_R);
-    auto [ sing_key_i, SK_I_gen, PK_I_gen ] = key_pair2(PSA_ALG_ECDSA(PSA_ALG_SHA_256), family, bits, SK_I);
+    auto [ sing_key_r, SK_R_gen, PK_R_gen ] = key_pair2(PSA_ALG_DETERMINISTIC_ECDSA(PSA_ALG_SHA_256), family, bits, SK_R);
+    auto [ sing_key_i, SK_I_gen, PK_I_gen ] = key_pair2(PSA_ALG_DETERMINISTIC_ECDSA(PSA_ALG_SHA_256), family, bits, SK_I);
     
     auto hkdf_extract = [=] ( vec salt, vec IKM ) { return hmac( edhoc_hash_alg, salt, IKM ); };
     
