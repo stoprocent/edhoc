@@ -504,7 +504,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
                 vec v = random_vector( 2 + rand() % 2 );
                 return make_tuple( cbor( v ), (intVec)v );
             } else {
-                int j = (uint16_t)rand() % 16777216;
+                int j = rand() % 16777216;
                 return make_tuple( cbor( j ), (intVec)j );
             }
         else {
@@ -514,9 +514,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
                 return make_tuple( cbor( v ), (intVec)v );
             } else {
                 int j = i - 24;
-                vec a = vec { (uint8_t)j };
-                
-                return make_tuple( cbor(a), (intVec)j );
+                return make_tuple( cbor( j ), (intVec)j );
             }
         }
     };
