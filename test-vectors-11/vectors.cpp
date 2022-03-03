@@ -441,8 +441,8 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     // auto [ key_y, Y, G_Y ] = key_pair(PSA_ALG_ECDH, family, bits);
 
     // PRKs
-    vec SK_X = vec { 0xC4, 0x84, 0x04, 0xC9, 0x12, 0xD6, 0x8A, 0xAD, 0x55, 0x7F, 0x1F, 0x02, 0xF7, 0x0C, 0x61, 0xC1, 0x9B, 0x1E, 0xA1, 0xD6, 0x2F, 0x1B, 0xD6, 0x46, 0x16, 0x04, 0x2D, 0xF5, 0xC4, 0xFE, 0x61, 0x95 };
-    vec SK_Y = vec { 0x3C, 0x5C, 0xE3, 0x2C, 0x6C, 0xFF, 0xC1, 0x4D, 0x14, 0x5C, 0x06, 0x18, 0x6F, 0x8D, 0xD1, 0x08, 0xF0, 0x85, 0xD8, 0x62, 0x7A, 0x0D, 0x16, 0x0B, 0xEE, 0x84, 0x8C, 0xFC, 0x42, 0xFD, 0x3E, 0x9F };
+    vec SK_X = vec { 0x36, 0x8E, 0xC1, 0xF6, 0x9A, 0xEB, 0x65, 0x9B, 0xA3, 0x7D, 0x5A, 0x8D, 0x45, 0xB2, 0x1B, 0xDC, 0x02, 0x99, 0xDC, 0xEA, 0xA8, 0xEF, 0x23, 0x5F, 0x3C, 0xA4, 0x2C, 0xE3, 0x53, 0x0F, 0x95, 0x25 };
+    vec SK_Y = vec { 0xE2, 0xF4, 0x12, 0x67, 0x77, 0x20, 0x5E, 0x85, 0x3B, 0x43, 0x7D, 0x6E, 0xAC, 0xA1, 0xE1, 0xF7, 0x53, 0xCD, 0xCC, 0x3E, 0x2C, 0x69, 0xFA, 0x88, 0x4B, 0x0A, 0x1A, 0x64, 0x09, 0x77, 0xE4, 0x18 };
     
     auto [ key_x, X, G_X ] = key_pair2(PSA_ALG_ECDH, family, bits, SK_X);
     auto [ key_y, Y, G_Y ] = key_pair2(PSA_ALG_ECDH, family, bits, SK_Y);
@@ -455,6 +455,9 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     vec G_RX = shared_secret( key_r, G_X );
     vec G_IY = shared_secret( key_i, G_Y );
     
+    vec G_X_UNCOMPRESSED = G_X;
+    vec G_Y_UNCOMPRESSED = G_Y;
+        
     G_X = compress_PK(G_X, edhoc_sign_curve);
     G_Y = compress_PK(G_Y, edhoc_sign_curve);
 
@@ -745,6 +748,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print_json( "SUITES_I", SUITES_I );
         print_json( "x_raw", X );
         print_json( "g_x_raw", G_X );
+        print_json( "g_x_uncompressed_raw", G_X_UNCOMPRESSED );
         print_json( "g_x", cbor( G_X ) );
         if ( C_I_raw.index() == 0 ) {
             print_json( "c_i_raw", std::get<0>(C_I_raw) );
@@ -758,6 +762,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         // message_2
         print_json( "y_raw", Y );
         print_json( "g_y_raw", G_Y );
+        print_json( "g_y_uncompressed_raw", G_Y_UNCOMPRESSED );
         print_json( "g_y", cbor( G_Y ) );
         print_json( "g_xy_raw", G_XY );
         print_json( "salt_raw", salt );
@@ -878,6 +883,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print( "SUITES_I (CBOR Data Item)", SUITES_I );
         print( "X (Raw Value) (Initiator's ephemeral private key)", X );
         print( "G_X (Raw Value) (Initiator's ephemeral public key)", G_X );
+        print( "G_X (Uncompressed Raw Value) (Initiator's ephemeral public key)", G_X_UNCOMPRESSED );
         print( "G_X (CBOR Data Item) (Initiator's ephemeral public key)", cbor( G_X ) );
         if ( C_I_raw.index() == 0 ) {
             print( "C_I (Raw Value) (Connection identifier chosen by Initiator)", std::get<0>(C_I_raw) );
@@ -893,6 +899,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
 
         print( "Y (Raw Value) (Responder's ephemeral private key)", Y );
         print( "G_Y (Raw Value) (Responder's ephemeral public key)", G_Y );
+        print( "G_Y (Uncompressed Raw Value) (Responder's ephemeral public key)", G_Y_UNCOMPRESSED );
         print( "G_Y (CBOR Data Item) (Responder's ephemeral public key)", cbor( G_Y ) );
         print( "G_XY (Raw Value) (ECDH shared secret)", G_XY );
         print( "salt (Raw Value)", salt );
