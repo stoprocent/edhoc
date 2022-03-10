@@ -29,7 +29,7 @@ enum COSEKTP { x = -2, crv = -1, OKP = 1 };
 enum CWTClaims { sub = 2, cnf = 8 };
 enum ConfMethod { COSE_Key = 1 };
 
-const bool isjson = true;
+const bool isjson = false;
 int vector_nr = 1;
 
 // Concatenates two vectors
@@ -410,15 +410,21 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     
     auto compress_PK = [=] ( vec PK_X, int curve) {
         if (curve != P_256)
-            return PK_X;
+            return make_tuple( PK_X, PK_X );
         
-        vec PK_X_compressed;
+        vec PK_X_x;
         // https://github.com/lake-wg/edhoc/pull/256
         // PK_X_compressed.insert(PK_X_compressed.begin(), 1, 0x02 );
-        PK_X_compressed.insert(PK_X_compressed.begin(), PK_X.begin() + 1, PK_X.begin() + 33);
-            
-        return PK_X_compressed;
+        PK_X_x.insert(PK_X_x.begin(), PK_X.begin() + 1, PK_X.begin() + 33);
+        
+        vec PK_X_y;
+        // https://github.com/lake-wg/edhoc/pull/256
+        // PK_X_compressed.insert(PK_X_compressed.begin(), 1, 0x02 );
+        PK_X_y.insert(PK_X_y.begin(), PK_X.begin() + 33, PK_X.begin() + 65);
+        
+        return make_tuple( PK_X_x, PK_X_y );
     };
+    
         
     int family;
     size_t bits;
@@ -455,13 +461,13 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     
     vec G_RX = shared_secret( key_r, G_X );
     vec G_IY = shared_secret( key_i, G_Y );
-    
-    vec G_X_UNCOMPRESSED = G_X;
-    vec G_Y_UNCOMPRESSED = G_Y;
-        
-    G_X = compress_PK(G_X, edhoc_sign_curve);
-    G_Y = compress_PK(G_Y, edhoc_sign_curve);
+            
+    auto [ G_X_x, G_X_y ] = compress_PK(G_X, edhoc_sign_curve);
+    auto [ G_Y_x, G_Y_y ] = compress_PK(G_Y, edhoc_sign_curve);
 
+    G_X = G_X_x;
+    G_Y = G_Y_x;
+    
     // Responder Keys
     vec SK_R = vec{ 0x72, 0xCC, 0x47, 0x61, 0xDB, 0xD4, 0xC7, 0x8F, 0x75, 0x89, 0x31, 0xAA, 0x58, 0x9D, 0x34, 0x8D, 0x1E, 0xF8, 0x74, 0xA7, 0xE3, 0x03, 0xED, 0xE2, 0xF1, 0x40, 0xDC, 0xF3, 0xE6, 0xAA, 0x4A, 0xAC };
 
@@ -749,7 +755,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print_json( "SUITES_I", SUITES_I );
         print_json( "x_raw", X );
         print_json( "g_x_raw", G_X );
-        print_json( "g_x_uncompressed_raw", G_X_UNCOMPRESSED );
+        print_json( "g_x_raw_y_coordinate", G_X_y );
         print_json( "g_x", cbor( G_X ) );
         if ( C_I_raw.index() == 0 ) {
             print_json( "c_i_raw", std::get<0>(C_I_raw) );
@@ -763,7 +769,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         // message_2
         print_json( "y_raw", Y );
         print_json( "g_y_raw", G_Y );
-        print_json( "g_y_uncompressed_raw", G_Y_UNCOMPRESSED );
+        print_json( "g_y_raw_y_coordinate", G_Y_y );
         print_json( "g_y", cbor( G_Y ) );
         print_json( "g_xy_raw", G_XY );
         print_json( "salt_raw", salt );
@@ -883,8 +889,8 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print( "METHOD (CBOR Data Item)", METHOD );
         print( "SUITES_I (CBOR Data Item)", SUITES_I );
         print( "X (Raw Value) (Initiator's ephemeral private key)", X );
-        print( "G_X (Raw Value) (Initiator's ephemeral public key)", G_X );
-        print( "G_X (Uncompressed Raw Value) (Initiator's ephemeral public key)", G_X_UNCOMPRESSED );
+        print( "G_X (Raw Value) (Initiator's ephemeral public key, 'x'-coordinate)", G_X );
+        print( "Initiator's ephemeral public key ('y'-coordinate)", G_X_y );
         print( "G_X (CBOR Data Item) (Initiator's ephemeral public key)", cbor( G_X ) );
         if ( C_I_raw.index() == 0 ) {
             print( "C_I (Raw Value) (Connection identifier chosen by Initiator)", std::get<0>(C_I_raw) );
@@ -899,8 +905,8 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         // message_2 ////////////////////////////////////////////////////////////////////////////
 
         print( "Y (Raw Value) (Responder's ephemeral private key)", Y );
-        print( "G_Y (Raw Value) (Responder's ephemeral public key)", G_Y );
-        print( "G_Y (Uncompressed Raw Value) (Responder's ephemeral public key)", G_Y_UNCOMPRESSED );
+        print( "G_Y (Raw Value) (Responder's ephemeral public key, 'x'-coordinate)", G_Y );
+        print( "Responder's ephemeral public key ('y'-coordinate)", G_Y_y );
         print( "G_Y (CBOR Data Item) (Responder's ephemeral public key)", cbor( G_Y ) );
         print( "G_XY (Raw Value) (ECDH shared secret)", G_XY );
         print( "salt (Raw Value)", salt );
