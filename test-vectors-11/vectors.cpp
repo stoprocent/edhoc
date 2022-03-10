@@ -413,8 +413,9 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
             return PK_X;
         
         vec PK_X_compressed;
-        PK_X_compressed.insert(PK_X_compressed.begin(), 1, 0x02 );
-        PK_X_compressed.insert(PK_X_compressed.begin() + 1, PK_X.begin() + 1, PK_X.begin() + 33);
+        // https://github.com/lake-wg/edhoc/pull/256
+        // PK_X_compressed.insert(PK_X_compressed.begin(), 1, 0x02 );
+        PK_X_compressed.insert(PK_X_compressed.begin(), PK_X.begin() + 1, PK_X.begin() + 33);
             
         return PK_X_compressed;
     };
