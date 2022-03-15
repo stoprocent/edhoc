@@ -29,7 +29,7 @@ enum COSEKTP { x = -2, crv = -1, OKP = 1 };
 enum CWTClaims { sub = 2, cnf = 8 };
 enum ConfMethod { COSE_Key = 1 };
 
-const bool isjson = false;
+const bool isjson = true;
 int vector_nr = 1;
 
 // Concatenates two vectors
@@ -455,18 +455,9 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     auto [ key_y, Y, G_Y ] = key_pair2(PSA_ALG_ECDH, family, bits, SK_Y);
     
     vec G_XY = shared_secret( key_x, G_Y );
-
-    auto [ key_r, R, G_R ] = key_pair(PSA_ALG_ECDH, family, bits);
-    auto [ key_i, I, G_I ] = key_pair(PSA_ALG_ECDH, family, bits);
-    
-    vec G_RX = shared_secret( key_r, G_X );
-    vec G_IY = shared_secret( key_i, G_Y );
             
     auto [ G_X_x, G_X_y ] = compress_PK(G_X, edhoc_sign_curve);
     auto [ G_Y_x, G_Y_y ] = compress_PK(G_Y, edhoc_sign_curve);
-
-    G_X = G_X_x;
-    G_Y = G_Y_x;
     
     // Responder Keys
     vec SK_R = vec{ 0x72, 0xCC, 0x47, 0x61, 0xDB, 0xD4, 0xC7, 0x8F, 0x75, 0x89, 0x31, 0xAA, 0x58, 0x9D, 0x34, 0x8D, 0x1E, 0xF8, 0x74, 0xA7, 0xE3, 0x03, 0xED, 0xE2, 0xF1, 0x40, 0xDC, 0xF3, 0xE6, 0xAA, 0x4A, 0xAC };
@@ -477,6 +468,16 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     vec SK_I = vec{  0x8E, 0xA3, 0xAC, 0x17, 0x0F, 0xB9, 0x00, 0xAE, 0x50, 0x5B, 0x18, 0x74, 0x7F, 0xB5, 0x04, 0xDB, 0xDA, 0x74, 0x8C, 0x6D, 0x0C, 0x17, 0x60, 0x1D, 0x7B, 0xA3, 0x14, 0x30, 0xD7, 0x45, 0x17, 0x8A };
 
     vec PK_I = vec{ 0x04, 0x8A, 0x93, 0xCA, 0x7E, 0x1B, 0xC8, 0x46, 0x47, 0xD7, 0xE7, 0xEB, 0x4C, 0x61, 0x07, 0xC4, 0xDC, 0x4E, 0x53, 0xDF, 0x81, 0xDF, 0xD1, 0x98, 0x1C, 0x7F, 0x82, 0x4A, 0x7C, 0x1B, 0x61, 0xA6, 0xFC, 0x91, 0x36, 0x28, 0x13, 0xC2, 0x5D, 0xB6, 0xAF, 0x93, 0xBE, 0x22, 0xC3, 0x50, 0xCE, 0xB2, 0x51, 0x89, 0x5B, 0x9F, 0x3A, 0x8D, 0x85, 0xA3, 0x58, 0x23, 0xA2, 0x22, 0x2B, 0x9D, 0xE2, 0xC8, 0xC8};
+    
+    auto [ key_r, R, G_R ] = key_pair2(PSA_ALG_ECDH, family, bits, SK_R);
+    auto [ key_i, I, G_I ] = key_pair2(PSA_ALG_ECDH, family, bits, SK_I);
+    
+    vec G_RX = shared_secret( key_r, G_X );
+    vec G_IY = shared_secret( key_i, G_Y );
+    
+    // Raw Keys
+    G_X = G_X_x;
+    G_Y = G_Y_x;
     
     // PRKs
     auto [ sing_key_r, SK_R_gen, PK_R_gen ] = key_pair2(PSA_ALG_DETERMINISTIC_ECDSA(PSA_ALG_SHA_256), family, bits, SK_R);
@@ -1054,8 +1055,8 @@ int main( void ) {
         cout << endl  << endl << endl  << endl;
     }
 
-    test_vectors( sig, cred_x509, x5t, sig, cred_x509, x5t, 2, 37400 );
-    test_vectors( sig, cred_x509, x5bag, sig, cred_x509, x5bag, 2, 37400, false, false );
+    test_vectors( sdh, cred_x509, x5t, sdh, cred_x509, x5t, 2, 37400 );
+    test_vectors( sdh, cred_x509, x5bag, sdh, cred_x509, x5bag, 2, 37400, false, false );
 
 
 //    // The four methods with COSE header parameters kid and x5t
