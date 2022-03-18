@@ -25,7 +25,7 @@ enum COSEAlgorithm { SHA_256 = -16, SHA_256_64 = -15, EdDSA = -8, ES256 = -7, AE
 enum COSECurve { P_256 = 1, X25519 = 4, Ed25519 = 6 };
 enum COSECommon { kty = 1 };
 enum COSEKCP { kcp_kid = 2 };
-enum COSEKTP { x = -2, y = -3, crv = -1, OKP = 1 };
+enum COSEKTP { x = -2, y = -3, crv = -1, OKP = 1, EC2 = 2 };
 enum CWTClaims { sub = 2, cnf = 8 };
 enum ConfMethod { COSE_Key = 1 };
 
@@ -556,7 +556,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         + cbor( sub ) + cbor( name )
         + cbor( cnf ) + cbor_map( 1 )
         + cbor( COSE_Key ) + cbor_map( 5 )
-        + cbor( kty ) + cbor( OKP )
+        + cbor( kty ) + cbor( EC2 )
         + cbor( kcp_kid ) + kid_id
         + cbor( crv );
         
