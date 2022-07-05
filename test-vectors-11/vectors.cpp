@@ -492,29 +492,6 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     
     auto hkdf_extract = [=] ( vec salt, vec IKM ) { return hmac( edhoc_hash_alg, salt, IKM ); };
     
-    // According to draft-ietf-lake-edhoc/11/
-    // *  The salt SHALL be a zero-length byte string.  Note that [RFC5869]
-    //    specifies that if the salt is not provided, it is set to a string
-    //    of zeros (see Section 2.2 of [RFC5869]).  For implementation
-    //    purposes, not providing the salt is the same as setting the salt
-    //    to the zero-length byte string (0x).
-    //
-    // PSA does not work with 0 length salt but According to rfc5869
-    //
-    // salt     optional salt value (a non-secret random value);
-    //          if not provided, it is set to a string of HashLen zeros.
-    
-    vec salt(PSA_HASH_LENGTH(PSA_ALG_SHA_256)), PRK_2e;
-    PRK_2e = hkdf_extract( salt, G_XY );
-
-    vec PRK_3e2m = PRK_2e;
-    if ( type_R == sdh )
-        PRK_3e2m = hkdf_extract( PRK_2e, G_RX );
-
-    vec PRK_4x3m = PRK_3e2m;
-    if ( type_I == sdh )
-        PRK_4x3m = hkdf_extract( PRK_3e2m, G_IY );
-
     // Functions for kid and connection IDs.
     auto identifier = [=] () {
         if ( complex == true )
@@ -615,13 +592,6 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     auto A = [] ( vec protect, vec external_aad ) { return cbor_arr( 3 ) + cbor( "Encrypt0" ) + protect + external_aad; };
     auto M = [] ( vec protect, vec external_aad, vec payload ) { return cbor_arr( 4 ) + cbor( "Signature1" ) + protect + external_aad + payload; };
 
-    // Creates the info parameter and derives output key matrial with HKDF-Expand
-    auto KDF = [=] ( vec PRK, vec transcript_hash, string label, vec context, int length ) {
-        vec info = cbor( transcript_hash ) + cbor( label ) + cbor( context ) + cbor( length );
-        vec OKM = hkdf_expand( edhoc_hash_alg, PRK, info, length );
-        return make_tuple( info, OKM );
-    };
-
     auto AEAD = [=] ( vec K, vec N, vec P, vec A ) {
         if( A.size() > (42 * 16 - 2) )
             syntax_error( "AEAD()" );
@@ -676,9 +646,25 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     vec TH_2_input = cbor( hash_message_1 ) + cbor( G_Y ) + C_R;
     vec TH_2 = H( TH_2_input );
 
+    // Creates the info parameter and derives output key matrial with HKDF-Expand
+    auto EDHOC_KDF = [=] ( vec PRK, int label, vec context, int length ) {
+        vec info = cbor( label ) + cbor( context ) + cbor( length );
+        vec OKM = hkdf_expand( edhoc_hash_alg, PRK, info, length );
+        return make_tuple( info, OKM );
+    };
+        
+    vec salt(PSA_HASH_LENGTH(PSA_ALG_SHA_256)), PRK_2e;
+    PRK_2e = hkdf_extract( salt, G_XY );
+    
+    auto [ info_SALT_3e2m, SALT_3e2m ] = EDHOC_KDF(PRK_2e, 1, TH_2, PSA_HASH_LENGTH(PSA_ALG_SHA_256));
+    
+    vec PRK_3e2m = PRK_2e;
+    if ( type_R == sdh )
+        PRK_3e2m = hkdf_extract( SALT_3e2m, G_RX );
+        
     // Calculate MAC_2
-    vec MAC_2_context = ID_CRED_R + CRED_R + EAD_2;
-    auto [ info_MAC_2, MAC_2 ] = KDF( PRK_3e2m, TH_2, "MAC_2", MAC_2_context, edhoc_mac_length_2 );
+    vec MAC_2_context = ID_CRED_R + TH_2 + CRED_R + EAD_2;
+    auto [ info_MAC_2, MAC_2 ] = EDHOC_KDF( PRK_3e2m, 2, MAC_2_context, edhoc_mac_length_2 );
 
     // Calculate Signature_or_MAC_2
     vec protected_2 = cbor( ID_CRED_R ); // bstr wrap
@@ -690,7 +676,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
 
     // Calculate CIPHERTEXT_2
     vec PLAINTEXT_2 = compress_id_cred( ID_CRED_R ) + cbor( signature_or_MAC_2 ) + EAD_2;
-    auto [ info_KEYSTREAM_2, KEYSTREAM_2 ] = KDF( PRK_2e, TH_2, "KEYSTREAM_2", vec{}, PLAINTEXT_2.size() );
+    auto [ info_KEYSTREAM_2, KEYSTREAM_2 ] = EDHOC_KDF( PRK_2e, 0, TH_2, (int)PLAINTEXT_2.size() );
     vec CIPHERTEXT_2 = xor_encryption( KEYSTREAM_2, PLAINTEXT_2 );
 
     // Calculate message_2
@@ -703,9 +689,15 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     vec TH_3_input = cbor( TH_2 ) + cbor( CIPHERTEXT_2 );
     vec TH_3 = H( TH_3_input );
 
+    auto [ info_SALT_4e3m, SALT_4e3m ] = EDHOC_KDF(PRK_3e2m, 5, TH_3, PSA_HASH_LENGTH(PSA_ALG_SHA_256));
+    
+    vec PRK_4e3m = PRK_3e2m;
+    if ( type_I == sdh )
+        PRK_4e3m = hkdf_extract( SALT_4e3m, G_IY );
+    
     // Calculate MAC_3
     vec MAC_3_context = ID_CRED_I + CRED_I + EAD_3;
-    auto [ info_MAC_3, MAC_3 ] = KDF( PRK_4x3m, TH_3, "MAC_3", MAC_3_context, edhoc_mac_length_3 );
+    auto [ info_MAC_3, MAC_3 ] = EDHOC_KDF( PRK_4e3m, 6, MAC_3_context, edhoc_mac_length_3 );
 
     // Calculate Signature_or_MAC_3
     vec protected_3 = cbor( ID_CRED_I ); // bstr wrap
@@ -718,8 +710,8 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     // Calculate CIPHERTEXT_3
     vec P_3 = compress_id_cred( ID_CRED_I ) + cbor( signature_or_MAC_3 ) + EAD_3;
     vec A_3 = A( cbor( vec{} ), cbor( TH_3 ) );
-    auto [ info_K_3,   K_3 ] = KDF( PRK_3e2m, TH_3, "K_3",  vec{}, 16 );
-    auto [ info_IV_3, IV_3 ] = KDF( PRK_3e2m, TH_3, "IV_3", vec{}, 13 );
+    auto [ info_K_3,   K_3 ] = EDHOC_KDF( PRK_3e2m, 3, TH_3, 16 );
+    auto [ info_IV_3, IV_3 ] = EDHOC_KDF( PRK_3e2m, 4, TH_3, 13 );
     vec CIPHERTEXT_3 = AEAD( K_3, IV_3, P_3, A_3 );
 
     // Calculate message_3
@@ -731,27 +723,34 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     vec TH_4_input = cbor( TH_3 ) + message_3;
     vec TH_4 = H( TH_4_input );
 
+    auto [ info_PRK_out, PRK_out ] = EDHOC_KDF( PRK_4e3m, 7, TH_4, PSA_HASH_LENGTH(PSA_ALG_SHA_256));
+    
+    auto [ info_PRK_exporter, PRK_exporter ] = EDHOC_KDF( PRK_out, 10, vec{}, PSA_HASH_LENGTH(PSA_ALG_SHA_256));
+    
     // Export funtion
-    auto Export = [=] ( string label, vec context, int length ) { return KDF( PRK_4x3m, TH_4, label, context, length ); };
+    auto EDHOC_Export = [ PRK_exporter = PRK_exporter, EDHOC_KDF] ( int label, vec context, int length ) { return EDHOC_KDF( PRK_exporter, label, context, length ); };
 
     // Calculate message_4
     vec P_4 = EAD_4;
     vec A_4 = A( cbor( vec{} ), cbor( TH_4 ) );
-    auto [ info_K_4,   K_4 ] = Export( "EDHOC_K_4",   vec{}, 16 );
-    auto [ info_IV_4, IV_4 ] = Export( "EDHOC_IV_4", vec{}, 13 );
+    auto [ info_K_4,   K_4 ] = EDHOC_KDF( PRK_4e3m, 8, TH_4, 16 );
+    auto [ info_IV_4, IV_4 ] = EDHOC_KDF( PRK_4e3m, 9, TH_4, 13 );
     vec CIPHERTEXT_4 = AEAD( K_4, IV_4, P_4, A_4 );
     vec message_4 = cbor( CIPHERTEXT_4 );
 
     // Derive OSCORE Master Secret and Salt
-    auto [ info_OSCORE_secret, OSCORE_secret ] = Export( "OSCORE_Secret", vec{}, 16 );
-    auto [ info_OSCORE_salt,   OSCORE_salt ]   = Export( "OSCORE_Salt",   vec{},  8 );
+    auto [ info_OSCORE_secret, OSCORE_secret ] = EDHOC_Export( 0, vec {}, 16 );
+    auto [ info_OSCORE_salt,   OSCORE_salt ]   = EDHOC_Export( 1, vec {},  8 );
 
     // KeyUpdate funtion
-    vec nonce = random_vector( 16 );
-    vec PRK_4x3m_new = hkdf_extract( nonce, PRK_4x3m );
-    auto Export2 = [=] ( string label, vec context, int length ) { return KDF( PRK_4x3m_new, TH_4, label, context, length ); };
-    auto [ info_OSCORE_secretFS, OSCORE_secretFS ] = Export2( "OSCORE_Secret", vec{}, 16 );
-    auto [ info_OSCORE_saltFS,   OSCORE_saltFS ]   = Export2( "OSCORE_Salt",   vec{},  8 );
+    auto [ info_PRK_out_new, PRK_out_new ] = EDHOC_KDF( PRK_out, 11, vec{}, PSA_HASH_LENGTH(PSA_ALG_SHA_256) );
+    auto [ info_PRK_exporter_new, PRK_exporter_new ] = EDHOC_KDF( PRK_out_new, 10, vec{}, PSA_HASH_LENGTH(PSA_ALG_SHA_256));
+    
+    // Export funtion
+    auto EDHOC_Export2 = [PRK_exporter_new = PRK_exporter_new, EDHOC_KDF] ( int label, vec context, int length ) { return EDHOC_KDF( PRK_exporter_new, label, context, length ); };
+    
+    auto [ info_OSCORE_secretFS, OSCORE_secretFS ] = EDHOC_Export2( 0, vec{}, 16 );
+    auto [ info_OSCORE_saltFS,   OSCORE_saltFS ]   = EDHOC_Export2( 1, vec{},  8 );
 
     // Print stuff ////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -782,6 +781,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print_json( "g_xy_raw", G_XY );
         print_json( "salt_raw", salt );
         print_json( "prk_2e_raw", PRK_2e );
+        print_json( "salt_3e2m", SALT_3e2m );
         if ( type_R == sig ) {
             print_json( "sk_r_raw", SK_R );
             print_json( "pk_r_raw", PK_R );
@@ -832,7 +832,8 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
             print_json( "g_i_raw_y_coordinate", G_I_y );
             print_json( "g_iy_raw", G_IY );
         }
-        print_json( "prk_4x3m_raw", PRK_4x3m );
+        print_json( "salt_4e3m", SALT_4e3m );
+        print_json( "prk_4e3m_raw", PRK_4e3m );
         print_json( "input_TH_3", TH_3_input );
         print_json( "th_3_raw", TH_3);
         print_json( "th_3", cbor( TH_3) );
@@ -872,6 +873,9 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print_json( "ciphertext_4", cbor( CIPHERTEXT_4 ) );
         print_json( "message_4", message_4 );
 
+        print_json( "prk_out", PRK_out );
+        print_json( "prk_exporter", PRK_exporter );
+        
         print_json( "oscore_aead_alg", oscore_aead_alg );
         print_json( "oscore_hash_alg", oscore_hash_alg );
         print_json( "client_sender_id_raw", OSCORE_id( C_R ) );
@@ -881,8 +885,9 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print_json( "info_oscore_salt", info_OSCORE_salt );
         print_json( "oscore_salt_raw", OSCORE_salt );
 
-        print_json( "key_update_nonce_raw", nonce );
-        print_json( "prk_4x3m_key_update_raw", PRK_4x3m_new );
+        print_json( "prk_out_updated", PRK_out_new );
+        print_json( "prk_exporter_update", PRK_exporter_new );
+        
         print_json( "oscore_secret_key_update_raw", OSCORE_secretFS );
         print_json( "oscore_salt_key_update_raw", OSCORE_saltFS, false ); // No comma in JSON
 
@@ -931,6 +936,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
             print( "Responder's public authentication key ('y'-coordinate)", G_R_y );
             print( "G_RX (Raw Value) (ECDH shared secret)", G_RX );
         }
+        print( "SALT_3e2m (Raw Value)", SALT_3e2m );
         print( "PRK_3e2m (Raw Value)", PRK_3e2m );
         if ( C_R_raw.index() == 0 ) {
             print( "C_R (Raw Value) (Connection identifier chosen by Responder)", std::get<0>(C_R_raw) );
@@ -973,7 +979,8 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
             print( "Initiator's public authentication key ('y'-coordinate)", G_I_y );
             print( "G_IY (Raw Value) (ECDH shared secret)", G_IY );
         }
-        print( "PRK_4x3m (Raw Value)", PRK_4x3m );
+        print( "SALT_4e3m (Raw Value)", SALT_4e3m );
+        print( "prk_4e3m (Raw Value)", PRK_4e3m );
         print( "Input to calculate TH_3 (CBOR Sequence)", TH_3_input );
         print( "TH_3 (Raw Value)", TH_3);
         print( "TH_3 (CBOR Data Item)", cbor( TH_3) );
@@ -1014,6 +1021,9 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print( "CIPHERTEXT_4", CIPHERTEXT_4 );
         print( "CIPHERTEXT_4 (CBOR Data Item)", cbor( CIPHERTEXT_4 ) );
         print( "message_4 (CBOR Sequence)", message_4 );
+        
+        print( "PRK_out (Raw Value)", PRK_out );
+        print( "PRK_exporter (Raw Value)", PRK_exporter );
 
         print( "OSCORE AEAD Algorithm", oscore_aead_alg );
         print( "OSCORE Hash Algorithm", oscore_hash_alg );
@@ -1024,8 +1034,8 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print( "info for OSCORE Master Salt (CBOR Sequence)", info_OSCORE_salt );
         print( "OSCORE Master Salt (Raw Value)", OSCORE_salt );
 
-        print( "KeyUpdate Nonce (Raw Value)", nonce );
-        print( "PRK_4x3m  after KeyUpdate (Raw Value)", PRK_4x3m_new );
+        print( "PRK_out after KeyUpdate (Raw Value)", PRK_out_new );
+        print( "PRK_exporter after KeyUpdate (Raw Value)", PRK_exporter_new );
         print( "OSCORE Master Secret after KeyUpdate (Raw Value)", OSCORE_secretFS );
         print( "OSCORE Master Salt after KeyUpdate (Raw Value)", OSCORE_saltFS );
         cout << endl  << endl << endl  << endl;
