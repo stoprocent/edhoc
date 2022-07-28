@@ -29,7 +29,7 @@ enum COSEKTP { x = -2, y = -3, crv = -1, OKP = 1, EC2 = 2 };
 enum CWTClaims { sub = 2, cnf = 8 };
 enum ConfMethod { COSE_Key = 1 };
 
-const bool isjson = true;
+const bool isjson = false;
 int vector_nr = 1;
 
 // Concatenates two vectors
@@ -251,7 +251,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
                    EDHOCKeyType type_R, COSECred credtype_R, COSEHeader attr_R,
                    int selected_suite, int seed, bool complex = false, bool comma = true ) {
     
-    if ( psa_crypto_init() != PSA_SUCCESS )
+    if   ( psa_crypto_init() != PSA_SUCCESS )
         syntax_error( "psa_crypto_init()" );
     
     // METHOD and seed random number generation
@@ -300,7 +300,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
             edhoc_mac_length_3 = 16;
     } else
     if ( selected_suite == 2 ) {
-        SUITES_I = cbor_arr( 2 ) + cbor( 6 ) + cbor( 2 );
+        SUITES_I = cbor( 2 );
         
         edhoc_hash_alg = SHA_256;
         edhoc_ecdh_curve = P_256;
@@ -447,6 +447,11 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     // auto [ key_x, X, G_X ] = key_pair(PSA_ALG_ECDH, family, bits);
     // auto [ key_y, Y, G_Y ] = key_pair(PSA_ALG_ECDH, family, bits);
 
+    vec CA_I_CN = vec { 0x45, 0x44, 0x48, 0x4F, 0x43, 0x20, 0x52, 0x6F, 0x6F, 0x74 };
+    vec CA_R_CN = CA_I_CN;
+    vec CA_I_PK = vec { 0x04, 0x27, 0xEC, 0xF4, 0xB4, 0x66, 0xD3, 0xCD, 0x61, 0x14, 0x4C, 0x94, 0x40, 0x21, 0x83, 0x8D, 0x57, 0xBF, 0x67, 0x01, 0x97, 0x33, 0x78, 0xA1, 0x5B, 0x3F, 0x5D, 0x27, 0x57, 0x5D, 0x34, 0xC4, 0xA9, 0x7B, 0x79, 0xE0, 0xF2, 0x4B, 0x44, 0x6B, 0xCA, 0x67, 0xE1, 0x3D, 0x75, 0xD0, 0x95, 0x73, 0x12, 0x4B, 0x49, 0xB8, 0x38, 0xB1, 0x09, 0x73, 0xF0, 0xFB, 0x67, 0xE1, 0x26, 0x05, 0x1C, 0x95, 0x95 };
+    vec CA_R_PK = CA_I_PK;
+    
     // PRKs
     vec SK_X = vec { 0x36, 0x8E, 0xC1, 0xF6, 0x9A, 0xEB, 0x65, 0x9B, 0xA3, 0x7D, 0x5A, 0x8D, 0x45, 0xB2, 0x1B, 0xDC, 0x02, 0x99, 0xDC, 0xEA, 0xA8, 0xEF, 0x23, 0x5F, 0x3C, 0xA4, 0x2C, 0xE3, 0x53, 0x0F, 0x95, 0x25 };
     vec SK_Y = vec { 0xE2, 0xF4, 0x12, 0x67, 0x77, 0x20, 0x5E, 0x85, 0x3B, 0x43, 0x7D, 0x6E, 0xAC, 0xA1, 0xE1, 0xF7, 0x53, 0xCD, 0xCC, 0x3E, 0x2C, 0x69, 0xFA, 0x88, 0x4B, 0x0A, 0x1A, 0x64, 0x09, 0x77, 0xE4, 0x18 };
@@ -517,11 +522,12 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     // Calculate C_I, C_R
     auto [ C_I, C_I_raw ] = identifier();
     auto [ C_R, C_R_raw ] = identifier();
-    if ( seed == 34400 ) {
-        vec v = vec{};
-        C_R =  cbor( v );
-        C_R_raw = (intVec)v;
-    }
+//    // TODO: Not sure about this if
+//    //    if ( seed == 34400 ) {
+//    vec v = vec{};
+//    C_R =  cbor( v );
+//    C_R_raw = (intVec)v;
+//    //    }
     if ( C_I == C_R ) { // Not allowed for OSCORE
         syntax_error( "C_I == C_R" );
     }
@@ -560,6 +566,8 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
                 ID_CRED = ID_CRED + cbor_arr( 2 ) + cbor( SHA_256_64 ) + cbor( HASH( SHA_256_64, X509 ) );
             if ( attr == x5u )
                 ID_CRED = ID_CRED + cbor_tag( 32 ) + cbor( uri );
+            if ( attr == kid )
+                ID_CRED = ID_CRED + kid_id;
         } else {
             syntax_error( "ID_CRED_x, CRED_x combination not supported" );
         }
@@ -643,7 +651,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
 
     // Calculate data_2 and TH_2
     vec hash_message_1 = H( message_1 );
-    vec TH_2_input = cbor( hash_message_1 ) + cbor( G_Y ) + C_R;
+    vec TH_2_input = cbor( G_Y ) + C_R + cbor( hash_message_1 ); // C_R is already CBOR
     vec TH_2 = H( TH_2_input );
 
     // Creates the info parameter and derives output key matrial with HKDF-Expand
@@ -663,7 +671,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         PRK_3e2m = hkdf_extract( SALT_3e2m, G_RX );
         
     // Calculate MAC_2
-    vec MAC_2_context = ID_CRED_R + TH_2 + CRED_R + EAD_2;
+    vec MAC_2_context = ID_CRED_R + cbor( TH_2 ) + CRED_R + EAD_2;
     auto [ info_MAC_2, MAC_2 ] = EDHOC_KDF( PRK_3e2m, 2, MAC_2_context, edhoc_mac_length_2 );
 
     // Calculate Signature_or_MAC_2
@@ -686,7 +694,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
    // message_3 ////////////////////////////////////////////////////////////////////////////
 
     // Calculate data_3 and TH_3
-    vec TH_3_input = cbor( TH_2 ) + cbor( CIPHERTEXT_2 );
+    vec TH_3_input = cbor( TH_2 ) + ( PLAINTEXT_2 );
     vec TH_3 = H( TH_3_input );
 
     auto [ info_SALT_4e3m, SALT_4e3m ] = EDHOC_KDF(PRK_3e2m, 5, TH_3, PSA_HASH_LENGTH(PSA_ALG_SHA_256));
@@ -696,7 +704,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         PRK_4e3m = hkdf_extract( SALT_4e3m, G_IY );
     
     // Calculate MAC_3
-    vec MAC_3_context = ID_CRED_I + CRED_I + EAD_3;
+    vec MAC_3_context = ID_CRED_I + cbor( TH_3 ) + CRED_I + EAD_3;
     auto [ info_MAC_3, MAC_3 ] = EDHOC_KDF( PRK_4e3m, 6, MAC_3_context, edhoc_mac_length_3 );
 
     // Calculate Signature_or_MAC_3
@@ -720,7 +728,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     // message_4 and Exporter ////////////////////////////////////////////////////////////////////////////
 
     // Calculate TH_4
-    vec TH_4_input = cbor( TH_3 ) + message_3;
+    vec TH_4_input = cbor( TH_3 ) + ( P_3 );
     vec TH_4 = H( TH_4_input );
 
     auto [ info_PRK_out, PRK_out ] = EDHOC_KDF( PRK_4e3m, 7, TH_4, PSA_HASH_LENGTH(PSA_ALG_SHA_256));
@@ -757,7 +765,6 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
 
     if ( isjson == true ) {
         cout << endl << "   \"test_vector_" << dec << vector_nr++ << "\": {";
-        // message_1
         print_json( "method", METHOD );
         print_json( "SUITES_I", SUITES_I );
         print_json( "x_raw", X );
@@ -806,6 +813,11 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print_json( "th_2", cbor( TH_2 ) );
         print_json( "id_cred_r", ID_CRED_R );
         print_json( "cred_r", CRED_R );
+        if ( credtype_R == cred_x509 ) {
+            print_json( "ca_r_cn", CA_R_CN);
+            print_json( "ca_r_pk", CA_R_PK );
+        }
+        // message_1
         print_json( "ead_2", EAD_2 );
         print_json( "info_mac_2", info_MAC_2 );
         print_json( "mac_2_raw", MAC_2 );
@@ -839,6 +851,10 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print_json( "th_3", cbor( TH_3) );
         print_json( "id_cred_i", ID_CRED_I );
         print_json( "cred_i", CRED_I );
+        if ( credtype_I == cred_x509 ) {
+            print_json( "ca_i_cn", CA_I_CN);
+            print_json( "ca_i_pk", CA_I_PK );
+        }
         print_json( "ead_3", EAD_3 );
         print_json( "info_mac_3", info_MAC_3 );
         print_json( "mac_3_raw", MAC_3 );
@@ -900,7 +916,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         cout << endl << "---------------------------------------------------------------" << endl;
 
         // message_1 ////////////////////////////////////////////////////////////////////////////
-
+        
         print( "METHOD (CBOR Data Item)", METHOD );
         print( "SUITES_I (CBOR Data Item)", SUITES_I );
         print( "X (Raw Value) (Initiator's ephemeral private key)", X );
@@ -951,6 +967,10 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print( "TH_2 (CBOR Data Item)", cbor( TH_2 ) );
         print( "ID_CRED_R (CBOR Data Item)", ID_CRED_R );
         print( "CRED_R (CBOR Data Item)", CRED_R );
+        if ( credtype_I == cred_x509 ) {
+            print( "Responder's Certificate CA Subject Common Name (CN)", CA_R_CN);
+            print( "Responder's Certificate CA Public Key", CA_R_PK );
+        }
         print( "EAD_2 (CBOR Sequence)", EAD_2 );
         print( "info for MAC_2 (CBOR Sequence)", info_MAC_2 );
         print( "MAC_2 (Raw Value)", MAC_2 );
@@ -986,6 +1006,10 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print( "TH_3 (CBOR Data Item)", cbor( TH_3) );
         print( "ID_CRED_I (CBOR Data Item)", ID_CRED_I );
         print( "CRED_I (CBOR Data Item)", CRED_I );
+        if ( credtype_I == cred_x509 ) {
+            print( "Initiator's Certificate CA Subject Common Name (CN)", CA_I_CN);
+            print( "Initiator's Certificate CA Public Key", CA_I_PK );
+        }
         print( "EAD_3 (CBOR Sequence)", EAD_3 );
         print( "info for MAC_3 (CBOR Sequence)", info_MAC_3 );
         print( "MAC_3 (Raw Value)", MAC_3 );
@@ -1038,6 +1062,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print( "PRK_exporter after KeyUpdate (Raw Value)", PRK_exporter_new );
         print( "OSCORE Master Secret after KeyUpdate (Raw Value)", OSCORE_secretFS );
         print( "OSCORE Master Salt after KeyUpdate (Raw Value)", OSCORE_saltFS );
+        
         cout << endl  << endl << endl  << endl;
     }
     
@@ -1076,14 +1101,19 @@ int main( void ) {
         cout << endl  << endl << endl  << endl;
     }
 
-    test_vectors( sdh, cred_uccs, kid, sdh, cred_uccs, kid, 2, 37400 );
-//    test_vectors( sdh, cred_x509, x5bag, sdh, cred_x509, x5bag, 2, 37400, false, false );
-
+//
+//    test_vectors( sig, cred_x509, x5bag, sig, cred_x509, x5bag, 2, 37400 );
+    test_vectors( sig, cred_x509, x5chain, sig, cred_x509, x5chain, 2, 37400 );
+    test_vectors( sig, cred_x509, x5t, sig, cred_x509, x5t, 2, 37400 );
+    test_vectors( sig, cred_x509, x5bag, sig, cred_x509, x5bag, 2, 44400 );
+    test_vectors( sig, cred_x509, kid, sig, cred_x509, kid, 2, 37400 );
+    test_vectors( sdh, cred_x509, kid, sdh, cred_x509, kid, 2, 44400 );
+    test_vectors( sdh, cred_uccs, kid, sdh, cred_x509, kid, 2, 44400, false, false );
 
 //    // The four methods with COSE header parameters kid and x5t
 //    test_vectors( sdh, cred_uccs, kid, sdh, cred_uccs, kid, 2, 34400 ); // Table 1, column 1
 //    test_vectors( sdh, cred_uccs, kid, sig, cred_x509, x5t, 2, 27400 );
-//    test_vectors( sig, cred_x509, x5t, sdh, cred_uccs, kid, 2, 44400 );
+//
 //    test_vectors( sig, cred_x509, x5t, sig, cred_x509, x5t, 2, 37400 ); // Table 1, column 4
 //
 //    // Other COSE header parameters
