@@ -2,6 +2,7 @@
    "test_vector_1": {
       "method": "00",
       "SUITES_I": "02",
+      "SUITES_R": "02",
       "x_raw": "368ec1f69aeb659ba37d5a8d45b21bdc0299dceaa8ef235f3ca42ce3530f9525",
       "g_x_raw": "8af6f430ebe18d34184017a9a11bf511c8dff8f834730b96c1b7c8dbca2fc3b6",
       "g_x_raw_y_coordinate": "51e8af6c6edb781601ad1d9c5fa8bf7aa15716c7c06a5d038503c614ff80c9b3",
@@ -103,6 +104,7 @@
    "test_vector_2": {
       "method": "00",
       "SUITES_I": "02",
+      "SUITES_R": "02",
       "x_raw": "368ec1f69aeb659ba37d5a8d45b21bdc0299dceaa8ef235f3ca42ce3530f9525",
       "g_x_raw": "8af6f430ebe18d34184017a9a11bf511c8dff8f834730b96c1b7c8dbca2fc3b6",
       "g_x_raw_y_coordinate": "51e8af6c6edb781601ad1d9c5fa8bf7aa15716c7c06a5d038503c614ff80c9b3",
@@ -204,6 +206,7 @@
    "test_vector_3": {
       "method": "00",
       "SUITES_I": "02",
+      "SUITES_R": "02",
       "x_raw": "368ec1f69aeb659ba37d5a8d45b21bdc0299dceaa8ef235f3ca42ce3530f9525",
       "g_x_raw": "8af6f430ebe18d34184017a9a11bf511c8dff8f834730b96c1b7c8dbca2fc3b6",
       "g_x_raw_y_coordinate": "51e8af6c6edb781601ad1d9c5fa8bf7aa15716c7c06a5d038503c614ff80c9b3",
@@ -305,6 +308,7 @@
    "test_vector_4": {
       "method": "00",
       "SUITES_I": "02",
+      "SUITES_R": "02",
       "x_raw": "368ec1f69aeb659ba37d5a8d45b21bdc0299dceaa8ef235f3ca42ce3530f9525",
       "g_x_raw": "8af6f430ebe18d34184017a9a11bf511c8dff8f834730b96c1b7c8dbca2fc3b6",
       "g_x_raw_y_coordinate": "51e8af6c6edb781601ad1d9c5fa8bf7aa15716c7c06a5d038503c614ff80c9b3",
@@ -406,6 +410,7 @@
    "test_vector_5": {
       "method": "03",
       "SUITES_I": "02",
+      "SUITES_R": "02",
       "x_raw": "368ec1f69aeb659ba37d5a8d45b21bdc0299dceaa8ef235f3ca42ce3530f9525",
       "g_x_raw": "8af6f430ebe18d34184017a9a11bf511c8dff8f834730b96c1b7c8dbca2fc3b6",
       "g_x_raw_y_coordinate": "51e8af6c6edb781601ad1d9c5fa8bf7aa15716c7c06a5d038503c614ff80c9b3",
@@ -509,6 +514,7 @@
    "test_vector_6": {
       "method": "03",
       "SUITES_I": "02",
+      "SUITES_R": "02",
       "x_raw": "368ec1f69aeb659ba37d5a8d45b21bdc0299dceaa8ef235f3ca42ce3530f9525",
       "g_x_raw": "8af6f430ebe18d34184017a9a11bf511c8dff8f834730b96c1b7c8dbca2fc3b6",
       "g_x_raw_y_coordinate": "51e8af6c6edb781601ad1d9c5fa8bf7aa15716c7c06a5d038503c614ff80c9b3",

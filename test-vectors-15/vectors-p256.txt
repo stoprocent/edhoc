@@ -43,6 +43,9 @@ METHOD (CBOR Data Item) (1 bytes)
 SUITES_I (CBOR Data Item) (1 bytes)
 02
 
+SUITES_R (CBOR Data Item) (1 bytes)
+02
+
 X (Raw Value) (Initiator's ephemeral private key) (32 bytes)
 36 8e c1 f6 9a eb 65 9b a3 7d 5a 8d 45 b2 1b dc 02 99 dc ea a8 ef 23
 5f 3c a4 2c e3 53 0f 95 25
@@ -772,6 +775,9 @@ METHOD (CBOR Data Item) (1 bytes)
 SUITES_I (CBOR Data Item) (1 bytes)
 02
 
+SUITES_R (CBOR Data Item) (1 bytes)
+02
+
 X (Raw Value) (Initiator's ephemeral private key) (32 bytes)
 36 8e c1 f6 9a eb 65 9b a3 7d 5a 8d 45 b2 1b dc 02 99 dc ea a8 ef 23
 5f 3c a4 2c e3 53 0f 95 25
@@ -1287,6 +1293,9 @@ METHOD (CBOR Data Item) (1 bytes)
 00
 
 SUITES_I (CBOR Data Item) (1 bytes)
+02
+
+SUITES_R (CBOR Data Item) (1 bytes)
 02
 
 X (Raw Value) (Initiator's ephemeral private key) (32 bytes)
@@ -2018,6 +2027,9 @@ METHOD (CBOR Data Item) (1 bytes)
 SUITES_I (CBOR Data Item) (1 bytes)
 02
 
+SUITES_R (CBOR Data Item) (1 bytes)
+02
+
 X (Raw Value) (Initiator's ephemeral private key) (32 bytes)
 36 8e c1 f6 9a eb 65 9b a3 7d 5a 8d 45 b2 1b dc 02 99 dc ea a8 ef 23
 5f 3c a4 2c e3 53 0f 95 25
@@ -2528,6 +2540,9 @@ METHOD (CBOR Data Item) (1 bytes)
 SUITES_I (CBOR Data Item) (1 bytes)
 02
 
+SUITES_R (CBOR Data Item) (1 bytes)
+02
+
 X (Raw Value) (Initiator's ephemeral private key) (32 bytes)
 36 8e c1 f6 9a eb 65 9b a3 7d 5a 8d 45 b2 1b dc 02 99 dc ea a8 ef 23
 5f 3c a4 2c e3 53 0f 95 25
@@ -2972,6 +2987,9 @@ METHOD (CBOR Data Item) (1 bytes)
 03
 
 SUITES_I (CBOR Data Item) (1 bytes)
+02
+
+SUITES_R (CBOR Data Item) (1 bytes)
 02
 
 X (Raw Value) (Initiator's ephemeral private key) (32 bytes)
