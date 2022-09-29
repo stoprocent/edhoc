@@ -251,7 +251,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
                    EDHOCKeyType type_R, COSECred credtype_R, COSEHeader attr_R,
                    int selected_suite, int seed, bool complex = false, bool comma = true ) {
     
-    if   ( psa_crypto_init() != PSA_SUCCESS )
+    if ( psa_crypto_init() != PSA_SUCCESS )
         syntax_error( "psa_crypto_init()" );
     
     // METHOD and seed random number generation
@@ -269,10 +269,12 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
 
     int edhoc_aead_alg, edhoc_mac_length_2 = 32, edhoc_mac_length_3 = 32;
     vec SUITES_I;
+    vec SUITES_R;
     
     // supported suites = 0, 2, 1, 3, 4, 5
     if ( selected_suite == 0 ) {
         SUITES_I = cbor( 0 );
+        SUITES_R = cbor( 0 );
         
         edhoc_hash_alg = SHA_256;
         edhoc_ecdh_curve = X25519;
@@ -287,6 +289,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     } else
     if ( selected_suite == 1 ) {
         SUITES_I = cbor_arr( 3 ) + cbor( 0 ) + cbor( 2 ) + cbor( 1 );
+        SUITES_R = cbor( 1 );
         
         edhoc_hash_alg = SHA_256;
         edhoc_ecdh_curve = X25519;
@@ -301,6 +304,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     } else
     if ( selected_suite == 2 ) {
         SUITES_I = cbor( 2 );
+        SUITES_R = cbor( 2 );
         
         edhoc_hash_alg = SHA_256;
         edhoc_ecdh_curve = P_256;
@@ -315,6 +319,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     } else
     if ( selected_suite == 3 ) {
         SUITES_I = cbor_arr( 2 ) + cbor( 2 ) + cbor( 3 );
+        SUITES_R = cbor( 3 );
         
         edhoc_hash_alg = SHA_256;
         edhoc_ecdh_curve = P_256;
@@ -447,8 +452,8 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     // auto [ key_x, X, G_X ] = key_pair(PSA_ALG_ECDH, family, bits);
     // auto [ key_y, Y, G_Y ] = key_pair(PSA_ALG_ECDH, family, bits);
 
-    vec CA_I_CN = vec { 0x45, 0x44, 0x48, 0x4F, 0x43, 0x20, 0x52, 0x6F, 0x6F, 0x74 };
-    vec CA_R_CN = CA_I_CN;
+    vec CA_I = vec { 0x30, 0x82, 0x01, 0x18, 0x30, 0x81, 0xC0, 0xA0, 0x03, 0x02, 0x01, 0x02, 0x02, 0x04, 0x61, 0xE9, 0x97, 0xC5, 0x30, 0x0A, 0x06, 0x08, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x03, 0x02, 0x30, 0x15, 0x31, 0x13, 0x30, 0x11, 0x06, 0x03, 0x55, 0x04, 0x03, 0x0C, 0x0A, 0x45, 0x44, 0x48, 0x4F, 0x43, 0x20, 0x52, 0x6F, 0x6F, 0x74, 0x30, 0x1E, 0x17, 0x0D, 0x32, 0x32, 0x30, 0x31, 0x32, 0x30, 0x31, 0x37, 0x31, 0x31, 0x33, 0x33, 0x5A, 0x17, 0x0D, 0x32, 0x39, 0x31, 0x32, 0x33, 0x31, 0x32, 0x33, 0x30, 0x30, 0x30, 0x30, 0x5A, 0x30, 0x15, 0x31, 0x13, 0x30, 0x11, 0x06, 0x03, 0x55, 0x04, 0x03, 0x0C, 0x0A, 0x45, 0x44, 0x48, 0x4F, 0x43, 0x20, 0x52, 0x6F, 0x6F, 0x74, 0x30, 0x59, 0x30, 0x13, 0x06, 0x07, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x02, 0x01, 0x06, 0x08, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x03, 0x01, 0x07, 0x03, 0x42, 0x00, 0x04, 0x27, 0xEC, 0xF4, 0xB4, 0x66, 0xD3, 0xCD, 0x61, 0x14, 0x4C, 0x94, 0x40, 0x21, 0x83, 0x8D, 0x57, 0xBF, 0x67, 0x01, 0x97, 0x33, 0x78, 0xA1, 0x5B, 0x3F, 0x5D, 0x27, 0x57, 0x5D, 0x34, 0xC4, 0xA9, 0x7B, 0x79, 0xE0, 0xF2, 0x4B, 0x44, 0x6B, 0xCA, 0x67, 0xE1, 0x3D, 0x75, 0xD0, 0x95, 0x73, 0x12, 0x4B, 0x49, 0xB8, 0x38, 0xB1, 0x09, 0x73, 0xF0, 0xFB, 0x67, 0xE1, 0x26, 0x05, 0x1C, 0x95, 0x95, 0x30, 0x0A, 0x06, 0x08, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x04, 0x03, 0x02, 0x03, 0x47, 0x00, 0x30, 0x44, 0x02, 0x20, 0x13, 0x73, 0x43, 0x26, 0xF2, 0xCA, 0x35, 0xD1, 0xAE, 0xDB, 0x6D, 0x5E, 0x1C, 0x8E, 0xB7, 0xB9, 0x65, 0xDA, 0x67, 0xEA, 0xD3, 0x31, 0x4E, 0x50, 0x29, 0x09, 0xB9, 0xD7, 0x57, 0xCB, 0xA1, 0x68, 0x02, 0x20, 0x49, 0xBA, 0x0B, 0xA4, 0xF0, 0x6E, 0xFE, 0x8C, 0x0D, 0x9C, 0x3D, 0x31, 0x15, 0xEB, 0x9C, 0x96, 0xCA, 0x46, 0xD1, 0x28, 0x49, 0x9B, 0x68, 0x95, 0x7D, 0x0A, 0x85, 0xAF, 0x13, 0x6B, 0xF3, 0x06 };
+    vec CA_R = CA_I;
     vec CA_I_PK = vec { 0x04, 0x27, 0xEC, 0xF4, 0xB4, 0x66, 0xD3, 0xCD, 0x61, 0x14, 0x4C, 0x94, 0x40, 0x21, 0x83, 0x8D, 0x57, 0xBF, 0x67, 0x01, 0x97, 0x33, 0x78, 0xA1, 0x5B, 0x3F, 0x5D, 0x27, 0x57, 0x5D, 0x34, 0xC4, 0xA9, 0x7B, 0x79, 0xE0, 0xF2, 0x4B, 0x44, 0x6B, 0xCA, 0x67, 0xE1, 0x3D, 0x75, 0xD0, 0x95, 0x73, 0x12, 0x4B, 0x49, 0xB8, 0x38, 0xB1, 0x09, 0x73, 0xF0, 0xFB, 0x67, 0xE1, 0x26, 0x05, 0x1C, 0x95, 0x95 };
     vec CA_R_PK = CA_I_PK;
     
@@ -662,7 +667,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     };
         
     vec salt(PSA_HASH_LENGTH(PSA_ALG_SHA_256)), PRK_2e;
-    PRK_2e = hkdf_extract( salt, G_XY );
+    PRK_2e = hkdf_extract( TH_2, G_XY );
     
     auto [ info_SALT_3e2m, SALT_3e2m ] = EDHOC_KDF(PRK_2e, 1, TH_2, PSA_HASH_LENGTH(PSA_ALG_SHA_256));
     
@@ -694,7 +699,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
    // message_3 ////////////////////////////////////////////////////////////////////////////
 
     // Calculate data_3 and TH_3
-    vec TH_3_input = cbor( TH_2 ) + ( PLAINTEXT_2 );
+    vec TH_3_input = cbor( TH_2 ) + ( PLAINTEXT_2 ) + CRED_R;
     vec TH_3 = H( TH_3_input );
 
     auto [ info_SALT_4e3m, SALT_4e3m ] = EDHOC_KDF(PRK_3e2m, 5, TH_3, PSA_HASH_LENGTH(PSA_ALG_SHA_256));
@@ -728,7 +733,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
     // message_4 and Exporter ////////////////////////////////////////////////////////////////////////////
 
     // Calculate TH_4
-    vec TH_4_input = cbor( TH_3 ) + ( P_3 );
+    vec TH_4_input = cbor( TH_3 ) + ( P_3 ) + CRED_I;
     vec TH_4 = H( TH_4_input );
 
     auto [ info_PRK_out, PRK_out ] = EDHOC_KDF( PRK_4e3m, 7, TH_4, PSA_HASH_LENGTH(PSA_ALG_SHA_256));
@@ -767,6 +772,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         cout << endl << "   \"test_vector_" << dec << vector_nr++ << "\": {";
         print_json( "method", METHOD );
         print_json( "SUITES_I", SUITES_I );
+        print_json( "SUITES_R", SUITES_R );
         print_json( "x_raw", X );
         print_json( "g_x_raw", G_X );
         print_json( "g_x_raw_y_coordinate", G_X_y );
@@ -814,7 +820,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print_json( "id_cred_r", ID_CRED_R );
         print_json( "cred_r", CRED_R );
         if ( credtype_R == cred_x509 ) {
-            print_json( "ca_r_cn", CA_R_CN);
+            print_json( "ca_r", CA_R);
             print_json( "ca_r_pk", CA_R_PK );
         }
         // message_1
@@ -852,7 +858,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print_json( "id_cred_i", ID_CRED_I );
         print_json( "cred_i", CRED_I );
         if ( credtype_I == cred_x509 ) {
-            print_json( "ca_i_cn", CA_I_CN);
+            print_json( "ca_i", CA_I);
             print_json( "ca_i_pk", CA_I_PK );
         }
         print_json( "ead_3", EAD_3 );
@@ -919,6 +925,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         
         print( "METHOD (CBOR Data Item)", METHOD );
         print( "SUITES_I (CBOR Data Item)", SUITES_I );
+        print( "SUITES_R (CBOR Data Item)", SUITES_R );
         print( "X (Raw Value) (Initiator's ephemeral private key)", X );
         print( "G_X (Raw Value) (Initiator's ephemeral public key, 'x'-coordinate)", G_X );
         print( "Initiator's ephemeral public key ('y'-coordinate)", G_X_y );
@@ -968,7 +975,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print( "ID_CRED_R (CBOR Data Item)", ID_CRED_R );
         print( "CRED_R (CBOR Data Item)", CRED_R );
         if ( credtype_I == cred_x509 ) {
-            print( "Responder's Certificate CA Subject Common Name (CN)", CA_R_CN);
+            print( "Responder's Certificate CA Certificate", CA_R);
             print( "Responder's Certificate CA Public Key", CA_R_PK );
         }
         print( "EAD_2 (CBOR Sequence)", EAD_2 );
@@ -1007,7 +1014,7 @@ void test_vectors( EDHOCKeyType type_I, COSECred credtype_I, COSEHeader attr_I,
         print( "ID_CRED_I (CBOR Data Item)", ID_CRED_I );
         print( "CRED_I (CBOR Data Item)", CRED_I );
         if ( credtype_I == cred_x509 ) {
-            print( "Initiator's Certificate CA Subject Common Name (CN)", CA_I_CN);
+            print( "Initiator's Certificate CA Certificate", CA_I);
             print( "Initiator's Certificate CA Public Key", CA_I_PK );
         }
         print( "EAD_3 (CBOR Sequence)", EAD_3 );
